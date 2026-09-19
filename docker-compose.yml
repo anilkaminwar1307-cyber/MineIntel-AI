@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Relational Database for Enterprise Deployment
+  postgres:
+    image: postgres:16-alpine
+    container_name: mineintel_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mineintel_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mineintel_password}
+      POSTGRES_DB: ${POSTGRES_DB:-mineintel_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mineintel_user} -d ${POSTGRES_DB:-mineintel_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mineintel_backend
+    restart: unless-stopped
+    environment:
+      APP_NAME: MineIntel
+      APP_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-mineintel_user}:${POSTGRES_PASSWORD:-mineintel_password}@postgres:5432/${POSTGRES_DB:-mineintel_db}
+      UPLOAD_DIR: /app/data/uploads
+      REPORT_DIR: /app/data/reports
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      CORS_ORIGINS: http://localhost:5173,http://localhost:80,http://localhost:3000
+    volumes:
+      - backend_uploads:/app/data/uploads
+      - backend_reports:/app/data/reports
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Frontend Web Client
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mineintel_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  backend_uploads:
+  backend_reports:

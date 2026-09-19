@@ -1,0 +1,1007 @@
+fact_id,metric_code,metric_name,numeric_value,unit,subsidiary,mine,coalfield,reporting_period,confidence_score,validation_status,sheet_name,cell_reference,page_number
+465b5a71-7931-4d85-9391-bd4782939be6,DRILLING,Drilling,1.0,m,DETAI,"txt
+CENTRAL MINE",,FY 2023-24,0.9,EXTRACTED,,,1
+bd2f513e-8b45-4a23-990c-000e385c379f,COAL_PRODUCTION,Coal Production,35.4,MT,ECL,"txt
+CENTRAL MINE",,FY 2023-24,0.9,EXTRACTED,,,1
+045189f6-e91d-495b-8223-b2fb316c6d29,COAL_PRODUCTION,Coal Production,167.0,MT,SECL,"txt
+CENTRAL MINE",,FY 2023-24,0.9,EXTRACTED,,,1
+c94b9282-0b57-4c81-9fd6-f607ea56bb8d,DRILLING,Drilling,12450.0,m,METRI,"txt
+CENTRAL MINE",,FY 2023-24,0.9,EXTRACTED,,,1
+ee104abb-b919-4836-86af-8815e2c4bce7,OVERBURDEN_REMOVAL,Overburden Removal,48.5,Mm3,SECL,"txt
+CENTRAL MINE",,FY 2023-24,0.9,EXTRACTED,,,1
+3a3739d1-e588-4539-8c0b-2adab0e29db6,COAL_STOCK,Coal Stock,8.4,MT,Coal,"txt
+CENTRAL MINE",,FY 2023-24,0.9,EXTRACTED,,,1
+3311389a-0f25-4933-8ccd-30f9616c0dd9,COAL_PRODUCTION,Coal Production,9.85,MT,ECL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+5805ee17-7258-4aa8-9e83-8ca5e7b98790,OVERBURDEN_REMOVAL,Overburden Removal,34.2,Mm3,ECL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+4630d2a1-c78b-46ed-87b0-fcd3e5ab90d2,COAL_DISPATCH,Coal Dispatch,9.6,MT,ECL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+a93a2bb4-a83f-468f-bddb-c42ca5f0b336,COAL_PRODUCTION,Coal Production,10.2,MT,BCCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+d46b43ce-e5cd-429d-a31a-369d9e8fd0de,OVERBURDEN_REMOVAL,Overburden Removal,41.8,Mm3,BCCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+c283a503-05eb-4409-a9e3-596b4e1b8666,COAL_DISPATCH,Coal Dispatch,10.1,MT,BCCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+16a74557-c136-45f3-9edb-9ee47d44f852,COAL_PRODUCTION,Coal Production,18.45,MT,CCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+839e9078-197d-489c-9005-d370ed6ba4b5,OVERBURDEN_REMOVAL,Overburden Removal,31.5,Mm3,CCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+61bae9d9-3cfe-4f66-a06f-611dbdbf9876,COAL_DISPATCH,Coal Dispatch,19.2,MT,CCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+3ba741ea-aa53-4a00-8a12-5b751f48aae5,COAL_PRODUCTION,Coal Production,34.8,MT,NCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+1bbd9261-565f-4e9b-83d1-0510b967628b,OVERBURDEN_REMOVAL,Overburden Removal,118.5,Mm3,NCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+3e0026de-ad36-400c-803d-3c54ab7bdc6e,COAL_DISPATCH,Coal Dispatch,35.1,MT,NCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+feaff96a-b25d-4db5-ba45-2a4bf46b9e16,COAL_PRODUCTION,Coal Production,12.6,MT,WCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+2037b5de-5539-4bb2-be04-858b1859d5e3,OVERBURDEN_REMOVAL,Overburden Removal,52.4,Mm3,WCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+a77c6099-2b46-4c50-8f0c-e78bad24d9e3,COAL_DISPATCH,Coal Dispatch,13.1,MT,WCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+20b2ec19-5d79-4caf-a71e-6b10befdf478,COAL_PRODUCTION,Coal Production,38.9,MT,SECL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+f16d3c00-e50e-4dc5-baf6-3ebd82e888ae,OVERBURDEN_REMOVAL,Overburden Removal,68.2,Mm3,SECL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+b67bc9be-05a0-4af6-b1ee-9e3e73ec265e,COAL_DISPATCH,Coal Dispatch,39.4,MT,SECL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+d6487f38-719b-43a8-96e6-b4cb347aba9c,COAL_PRODUCTION,Coal Production,48.5,MT,MCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+b52a763f-d065-4d86-a6ea-16ef9480f6b6,OVERBURDEN_REMOVAL,Overburden Removal,56.7,Mm3,MCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+39e5d664-1b1d-4abc-a6d8-d24e91e17176,COAL_DISPATCH,Coal Dispatch,49.1,MT,MCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+fd59fd67-3274-4ec4-be4d-c3e53885d081,COAL_PRODUCTION,Coal Production,0.12,MT,MCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+22c0b858-d94f-4ef5-bb31-6b21a8dbd3bd,OVERBURDEN_REMOVAL,Overburden Removal,0.45,Mm3,MCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+39e6b018-6d32-4b87-b094-26a52647695c,COAL_DISPATCH,Coal Dispatch,0.11,MT,MCL,,,FY 2024-25,0.99,EXTRACTED,CSV_DATA,,
+2e1a0e4e-878b-4b72-a780-cb401dd57f15,COAL_PRODUCTION,Coal Production,52.5,MT,SECL,Gevra OCP,,FY 2023-24,0.99,HIGH_CONFIDENCE,Mine_Production,C2,
+195edf71-1f13-4c08-9568-5ae75e6bc19f,OVERBURDEN_REMOVAL,Overburden Removal,85.0,Mm3,SECL,Gevra OCP,,FY 2023-24,0.99,HIGH_CONFIDENCE,Mine_Production,D2,
+294d75ba-adec-4876-9170-c927370fa4ce,COAL_PRODUCTION,Coal Production,45.0,MT,SECL,Kusmunda OCP,,FY 2023-24,0.99,HIGH_CONFIDENCE,Mine_Production,C3,
+55a676b1-fffc-4c12-9805-56099eb1441f,OVERBURDEN_REMOVAL,Overburden Removal,72.4,Mm3,SECL,Kusmunda OCP,,FY 2023-24,0.99,HIGH_CONFIDENCE,Mine_Production,D3,
+ed30edbf-2ece-4f7a-ae15-664e17fd6515,COAL_PRODUCTION,Coal Production,38.2,MT,SECL,Dipka OCP,,FY 2023-24,0.99,HIGH_CONFIDENCE,Mine_Production,C4,
+6584fa39-dde4-4abf-9303-fc322bd62bd6,OVERBURDEN_REMOVAL,Overburden Removal,60.1,Mm3,SECL,Dipka OCP,,FY 2023-24,0.99,HIGH_CONFIDENCE,Mine_Production,D4,
+b4e258ad-7e6c-45f9-a9c6-de6a2317a22c,OVERBURDEN_REMOVAL,Overburden Removal,6.0,Mm3,label,,,,0.78,NEEDS_REVIEW,,,4
+7a33fe72-4c39-4947-9115-36519c112c72,OVERBURDEN_REMOVAL,Overburden Removal,6.0,Mm3,label,,,,0.78,NEEDS_REVIEW,,,4
+fact-1d7c6a7442ba4a,COAL_PRODUCTION,Raw Coal Production,15.99,MT,CCL,Piparwar OC,West Bokaro,FY 2021-22,0.55,REVIEW_REQUIRED,,,12
+fact-8c0d0e8125954f,COAL_PRODUCTION,Raw Coal Production,24.32,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),FY 2019-20,0.97,VERIFIED,Sheet1,R201,
+fact-23d42c99203244,COAL_PRODUCTION,Raw Coal Production,35.97,MT,CMPDI,RI-IV Nagpur,Central Drilling Reserves,FY 2019-20,0.91,VERIFIED,,,10
+fact-d5932cbd387341,COAL_PRODUCTION,Raw Coal Production,34.84,MT,SECL,Chhal OC,Korba,FY 2019-20,0.95,VERIFIED,Sheet1,R120,
+fact-481999dbe65d4b,COAL_PRODUCTION,Raw Coal Production,4.17,MT,NCL,Khadia OC,Singrauli,2016-17-Q4,0.84,NEEDS_REVIEW,,,7
+fact-17f61ceedbd24a,COAL_PRODUCTION,Raw Coal Production,21.23,MT,WCL,Umrer OC,Pench-Kanhan,FY 2020-21,0.87,NEEDS_REVIEW,,,9
+fact-2724f3d102ef4a,COAL_PRODUCTION,Raw Coal Production,28.88,MT,WCL,Pathakhera UG,Pench-Kanhan,FY 2016-17,0.94,VERIFIED,,,6
+fact-39a3f97a15d940,COAL_PRODUCTION,Raw Coal Production,20.5,MT,CCL,Magadh OC,South Karanpura,2022-23-Q3,0.77,NEEDS_REVIEW,,,4
+fact-33703f87727e4c,COAL_PRODUCTION,Raw Coal Production,10.97,MT,BCCL,Barora OC,Jharia,FY 2017-18,0.96,VERIFIED,,,1
+fact-fbdb8be8d2534f,COAL_PRODUCTION,Raw Coal Production,41.86,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2025-26,0.8,NEEDS_REVIEW,Sheet_2,E124,
+fact-bcc45242f44349,COAL_PRODUCTION,Raw Coal Production,30.02,MT,BCCL,Lodna OC,Raniganj West,FY 2020-21,0.96,VERIFIED,,,17
+fact-18e076c07e6949,COAL_PRODUCTION,Raw Coal Production,39.49,MT,CCL,Rajrappa OC,West Bokaro,2024-25-Q1,0.97,VERIFIED,,,4
+fact-798b8e0c0f4a42,COAL_PRODUCTION,Raw Coal Production,37.95,MT,NCL,Dudhichua OC,Singrauli,FY 2023-24,0.76,NEEDS_REVIEW,,,2
+fact-f1ff08194dad49,COAL_PRODUCTION,Raw Coal Production,32.94,MT,CMPDI,RI-VII Bhubaneswar,All CIL Coalfields (Exploration),September 2024-25,0.66,REVIEW_REQUIRED,Sheet1,R16,
+fact-bd25b16148a447,COAL_PRODUCTION,Raw Coal Production,1.45,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2018-19,0.83,NEEDS_REVIEW,Sheet_3,C24,
+fact-e504e8855d524b,COAL_PRODUCTION,Raw Coal Production,11.16,MT,CMPDI,RI-I Asansol,All CIL Coalfields (Exploration),FY 2022-23,0.93,VERIFIED,,,10
+fact-0c7ff87267ca4b,COAL_PRODUCTION,Raw Coal Production,13.18,MT,BCCL,Barora OC,Raniganj West,October 2023-24,0.93,VERIFIED,,,14
+fact-723a3c31409b4b,COAL_PRODUCTION,Raw Coal Production,17.01,MT,BCCL,Katras OC,Jharia,2025-26-Q1,0.91,VERIFIED,Sheet_1,J93,
+fact-4669c373add047,COAL_PRODUCTION,Raw Coal Production,29.39,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2022-23,0.95,VERIFIED,,,4
+fact-dcf8438aa3d041,COAL_PRODUCTION,Raw Coal Production,2.85,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),2018-19-Q4,0.97,VERIFIED,Sheet_3,B126,
+fact-94c8da24a65c46,COAL_PRODUCTION,Raw Coal Production,28.59,MT,ECL,Pandaveswar UG,Raniganj,FY 2019-20,0.91,VERIFIED,,,16
+fact-556ee86f1a044b,COAL_PRODUCTION,Raw Coal Production,16.97,MT,ECL,Kottadih UG/OC,Raniganj,2021-22-Q2,0.93,VERIFIED,,,1
+fact-928f1252578f49,COAL_PRODUCTION,Raw Coal Production,25.23,MT,NCL,Jayant OC,Singrauli,FY 2022-23,0.91,VERIFIED,,,5
+fact-5e40d1c1d82c47,COAL_PRODUCTION,Raw Coal Production,27.59,MT,SECL,Bijuri UG,Mand-Raigarh,2016-17-Q2,0.85,NEEDS_REVIEW,Sheet_5,H90,
+fact-aa751a0e642b45,COAL_PRODUCTION,Raw Coal Production,13.26,MT,WCL,Pench UG,Wardha Valley,2019-20-Q1,0.94,VERIFIED,,,5
+fact-18a824d1632b4d,COAL_PRODUCTION,Raw Coal Production,11.97,MT,MCL,Lakhanpur OC,Talcher,FY 2021-22,0.92,VERIFIED,,,2
+fact-66277a7be9c748,COAL_PRODUCTION,Raw Coal Production,16.64,MT,NCL,Nigahi OC,Singrauli,FY 2018-19,0.86,NEEDS_REVIEW,,,1
+fact-78fa82d33c4644,COAL_PRODUCTION,Raw Coal Production,8.47,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2024-25,0.83,NEEDS_REVIEW,,,8
+fact-f5d9287239b246,COAL_PRODUCTION,Raw Coal Production,15.38,MT,SECL,Dipka OC,Sohagpur,FY 2019-20,0.98,VERIFIED,Sheet1,R128,
+fact-a97b9bffd56941,COAL_PRODUCTION,Raw Coal Production,34.23,MT,ECL,Rajmahal OC,Raniganj,FY 2021-22,0.91,VERIFIED,,,3
+fact-14d5fc2785414f,COAL_PRODUCTION,Raw Coal Production,25.46,MT,NCL,Amlohri OC,Singrauli,FY 2025-26,0.91,VERIFIED,,,10
+fact-175b58dc2af348,COAL_PRODUCTION,Raw Coal Production,28.13,MT,CIL,Leddo OC,Pan-India Mining Operations,2023-24-Q1,0.92,VERIFIED,Sheet_1,D22,
+fact-b7655a3a594c49,COAL_PRODUCTION,Raw Coal Production,24.76,MT,BCCL,Barora OC,Raniganj West,FY 2019-20,0.67,REVIEW_REQUIRED,,,19
+fact-b4c281cdeda940,COAL_PRODUCTION,Raw Coal Production,21.16,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,2016-17-Q3,0.84,NEEDS_REVIEW,Sheet_1,D123,
+fact-b839aaedcd0242,COAL_PRODUCTION,Raw Coal Production,17.01,MT,SECL,Chhal OC,Sohagpur,FY 2016-17,0.9,VERIFIED,,,2
+fact-11f37f93624e41,COAL_PRODUCTION,Raw Coal Production,23.09,MT,MCL,Lakhanpur OC,Ib Valley,FY 2020-21,0.79,NEEDS_REVIEW,,,14
+fact-e5c2e5d3de5f46,COAL_PRODUCTION,Raw Coal Production,17.96,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2025-26,0.91,VERIFIED,,,27
+fact-873a96c0dce34d,COAL_PRODUCTION,Raw Coal Production,21.95,MT,ECL,Khottadih UG,Raniganj,FY 2022-23,0.96,VERIFIED,Sheet_2,D136,
+fact-03c413c973db46,COAL_PRODUCTION,Raw Coal Production,16.93,MT,ECL,Chitra OC,Raniganj,FY 2017-18,0.97,VERIFIED,,,22
+fact-042efc8df17b49,COAL_PRODUCTION,Raw Coal Production,10.01,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,July 2024-25,0.61,REVIEW_REQUIRED,,,5
+fact-7f7322180a2f45,COAL_PRODUCTION,Raw Coal Production,19.85,MT,NCL,Krishnashila OC,Singrauli,June 2017-18,0.97,VERIFIED,,,1
+fact-11368186224e4f,COAL_PRODUCTION,Raw Coal Production,6.77,MT,CCL,Kuju OC,East Bokaro,July 2017-18,0.75,NEEDS_REVIEW,Sheet_2,J119,
+fact-bf8fe121bb0d4b,COAL_PRODUCTION,Raw Coal Production,9.34,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2023-24,0.95,VERIFIED,Sheet_2,J60,
+fact-f4cb683d92374d,COAL_PRODUCTION,Raw Coal Production,26.65,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2021-22,0.98,VERIFIED,,,8
+fact-14b0a5925d7244,COAL_PRODUCTION,Raw Coal Production,34.09,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2019-20,0.6,REVIEW_REQUIRED,,,4
+fact-6eea49dff3774c,COAL_PRODUCTION,Raw Coal Production,21.82,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),FY 2020-21,0.97,VERIFIED,,,1
+fact-1b782eff9b2642,COAL_PRODUCTION,Raw Coal Production,22.24,MT,CCL,Amrapali OC,East Bokaro,2021-22-Q3,0.79,NEEDS_REVIEW,,,4
+fact-7ce509d8127642,COAL_PRODUCTION,Raw Coal Production,31.7,MT,NCL,Krishnashila OC,Singrauli,November 2021-22,0.83,NEEDS_REVIEW,Sheet1,R101,
+fact-a48d23d9408e42,COAL_PRODUCTION,Raw Coal Production,16.2,MT,ECL,Rajmahal OC,Rajmahal,2020-21-Q1,0.97,VERIFIED,,,3
+fact-2e6c0cf0422c48,COAL_PRODUCTION,Raw Coal Production,18.01,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2017-18,0.83,NEEDS_REVIEW,,,6
+fact-a742df5ac03549,COAL_PRODUCTION,Raw Coal Production,26.9,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2017-18,0.83,NEEDS_REVIEW,Sheet1,R43,
+fact-dc49dac47a644b,COAL_PRODUCTION,Raw Coal Production,34.12,MT,BCCL,Block II OC,Raniganj West,FY 2024-25,0.84,NEEDS_REVIEW,Sheet_4,J99,
+fact-221289a7f4a845,COAL_PRODUCTION,Raw Coal Production,27.78,MT,CCL,Rajrappa OC,North Karanpura,2016-17-Q3,0.91,VERIFIED,Sheet_2,D123,
+fact-b889236b3e2a46,COAL_PRODUCTION,Raw Coal Production,3.72,MT,BCCL,Barora OC,Raniganj West,FY 2023-24,0.77,NEEDS_REVIEW,,,8
+fact-200126a7de7e43,COAL_PRODUCTION,Raw Coal Production,15.87,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2020-21,0.73,NEEDS_REVIEW,Sheet_2,E78,
+fact-845db3ba3c914a,COAL_PRODUCTION,Raw Coal Production,32.62,MT,SECL,Dipka OC,Hasdeo,FY 2017-18,0.74,NEEDS_REVIEW,,,4
+fact-f58e1f488c0246,COAL_PRODUCTION,Raw Coal Production,14.18,MT,MCL,Bhubaneswari OC,Talcher,FY 2024-25,0.94,VERIFIED,,,9
+fact-57a654edae6f44,COAL_PRODUCTION,Raw Coal Production,38.54,MT,CMPDI,RI-II Dhanbad,Geological Directorate,FY 2024-25,0.94,VERIFIED,Sheet1,R8,
+fact-4bff79797a924d,COAL_PRODUCTION,Raw Coal Production,9.99,MT,MCL,Ananta OC,Talcher,FY 2023-24,0.94,VERIFIED,,,2
+fact-e07078d2918244,COAL_PRODUCTION,Raw Coal Production,23.32,MT,SECL,Bijuri UG,Sohagpur,FY 2019-20,0.94,VERIFIED,Sheet1,R79,
+fact-351b5532000c4c,COAL_PRODUCTION,Raw Coal Production,25.87,MT,ECL,Kottadih UG/OC,Rajmahal,FY 2018-19,0.94,VERIFIED,Sheet_1,G157,
+fact-a0d04ad44ec942,COAL_PRODUCTION,Raw Coal Production,2.63,MT,NCL,Bina OC,Singrauli,2025-26-Q3,0.94,VERIFIED,,,9
+fact-ec8c47fad5244a,COAL_PRODUCTION,Raw Coal Production,14.95,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2020-21,0.88,NEEDS_REVIEW,,,12
+fact-23a5eabf566244,COAL_PRODUCTION,Raw Coal Production,4.02,MT,BCCL,Lodna OC,Raniganj West,2016-17-Q4,0.96,VERIFIED,Sheet1,R89,
+fact-e597085fa89947,COAL_PRODUCTION,Raw Coal Production,9.97,MT,ECL,Chitra OC,Raniganj,FY 2016-17,0.98,VERIFIED,Sheet_3,G50,
+fact-f5e01f73e2f649,COAL_PRODUCTION,Raw Coal Production,8.15,MT,BCCL,Kusunda OC,Jharia,FY 2025-26,0.66,REVIEW_REQUIRED,Sheet_5,D160,
+fact-73929c501f8545,COAL_PRODUCTION,Raw Coal Production,13.35,MT,CCL,Dhori OC,East Bokaro,FY 2021-22,0.91,VERIFIED,,,3
+fact-658dffdc0dd546,COAL_PRODUCTION,Raw Coal Production,16.61,MT,NCL,Bina OC,Singrauli,FY 2016-17,0.99,VERIFIED,Sheet_2,B71,
+fact-ebe628018b714a,COAL_PRODUCTION,Raw Coal Production,19.01,MT,CCL,Magadh OC,West Bokaro,FY 2025-26,0.86,NEEDS_REVIEW,,,5
+fact-8bc40fd537ce4b,COAL_PRODUCTION,Raw Coal Production,9.78,MT,WCL,Chandrapur OC,Pench-Kanhan,2020-21-Q1,0.98,VERIFIED,,,15
+fact-8eb847e837364a,COAL_PRODUCTION,Raw Coal Production,21.94,MT,ECL,Rajmahal OC,Raniganj,FY 2020-21,0.83,NEEDS_REVIEW,,,8
+fact-f1fa558ee5ea4e,COAL_PRODUCTION,Raw Coal Production,12.07,MT,BCCL,Katras OC,Raniganj West,2017-18-Q4,0.98,VERIFIED,Sheet1,R145,
+fact-71e242f47a7d4d,COAL_PRODUCTION,Raw Coal Production,5.04,MT,ECL,Chitra OC,Raniganj,FY 2021-22,0.55,REVIEW_REQUIRED,,,2
+fact-62c3a2993b3e44,COAL_PRODUCTION,Raw Coal Production,35.22,MT,BCCL,Bastacolla OC,Raniganj West,2019-20-Q4,0.98,VERIFIED,Sheet_2,H82,
+fact-21b3399b50d741,COAL_PRODUCTION,Raw Coal Production,22.16,MT,BCCL,Bastacolla OC,Jharia,FY 2018-19,0.98,VERIFIED,,,9
+fact-50997309dddd4c,COAL_PRODUCTION,Raw Coal Production,30.56,MT,ECL,Jhanjra UG,Raniganj,FY 2024-25,0.95,VERIFIED,,,1
+fact-7ee46cc6caa646,COAL_PRODUCTION,Raw Coal Production,15.06,MT,BCCL,Lodna OC,Jharia,FY 2019-20,0.95,VERIFIED,Sheet_3,C39,
+fact-b5bd43b8ef954b,COAL_PRODUCTION,Raw Coal Production,4.65,MT,NCL,Amlohri OC,Singrauli,FY 2016-17,0.95,VERIFIED,Sheet1,R21,
+fact-520be7484b3343,COAL_PRODUCTION,Raw Coal Production,3.68,MT,WCL,Nagpur Area OC,Umrer,FY 2025-26,0.82,NEEDS_REVIEW,,,10
+fact-d888bb564b8041,COAL_PRODUCTION,Raw Coal Production,40.72,MT,NCL,Jayant OC,Singrauli,August 2022-23,0.66,REVIEW_REQUIRED,,,11
+fact-248893f729254e,COAL_PRODUCTION,Raw Coal Production,24.67,MT,NCL,Dudhichua OC,Singrauli,FY 2022-23,0.91,VERIFIED,,,2
+fact-9d76a9c0d7f54c,COAL_PRODUCTION,Raw Coal Production,36.51,MT,BCCL,Moonidih UG,Raniganj West,FY 2025-26,0.66,VERIFIED,Sheet_2,F111,
+fact-55f5c9eaaf6e48,COAL_PRODUCTION,Raw Coal Production,11.27,MT,CCL,Piparwar OC,South Karanpura,FY 2017-18,0.93,VERIFIED,,,2
+fact-c90846edcf1244,COAL_PRODUCTION,Raw Coal Production,18.02,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),2017-18-Q2,0.93,VERIFIED,Sheet1,R192,
+fact-65bcd6fdef464c,COAL_PRODUCTION,Raw Coal Production,14.6,MT,ECL,Khottadih UG,Raniganj,2019-20-Q2,0.96,VERIFIED,,,10
+fact-c513c6d62a2441,COAL_PRODUCTION,Raw Coal Production,18.44,MT,MCL,Jagannath OC,Talcher,FY 2016-17,1.0,VERIFIED,,,1
+fact-f31bec450c3a43,COAL_PRODUCTION,Raw Coal Production,32.29,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2024-25,0.88,NEEDS_REVIEW,,,10
+fact-d64c99725b134d,COAL_PRODUCTION,Raw Coal Production,16.46,MT,MCL,Jagannath OC,Talcher,2018-19-Q2,0.91,VERIFIED,,,6
+fact-b7a40623060042,COAL_PRODUCTION,Raw Coal Production,32.06,MT,CIL,Tikak OC,Consolidated Indian Coalfields,2018-19-Q1,0.91,VERIFIED,Sheet_2,J155,
+fact-ba3df86387f646,COAL_PRODUCTION,Raw Coal Production,41.99,MT,BCCL,Moonidih UG,Raniganj West,FY 2025-26,0.74,REJECTED,Sheet_1,B111,
+fact-1e806857a4904d,COAL_PRODUCTION,Raw Coal Production,19.48,MT,MCL,Lakhanpur OC,Ib Valley,2023-24-Q3,0.95,VERIFIED,,,9
+fact-ac455018bb524d,COAL_PRODUCTION,Raw Coal Production,27.76,MT,SECL,Gevra OC,Sohagpur,FY 2024-25,0.91,VERIFIED,Sheet_3,B169,
+fact-de2f4cc770bb4b,COAL_PRODUCTION,Raw Coal Production,10.79,MT,BCCL,Kusunda OC,Raniganj West,2016-17-Q1,0.97,VERIFIED,,,6
+fact-3aff4b4ee8a242,COAL_PRODUCTION,Raw Coal Production,2.76,MT,ECL,Chitra OC,Rajmahal,FY 2024-25,0.96,VERIFIED,,,15
+fact-9402d69819b44f,COAL_PRODUCTION,Raw Coal Production,26.52,MT,CCL,Dhori OC,South Karanpura,FY 2019-20,0.9,VERIFIED,,,12
+fact-9c53cd91ba2b40,COAL_PRODUCTION,Raw Coal Production,0.75,MT,CCL,Kuju OC,West Bokaro,FY 2016-17,0.67,REVIEW_REQUIRED,Sheet_1,E110,
+fact-4edeb5ad96824b,COAL_PRODUCTION,Raw Coal Production,48.68,MT,CMPDI,RI-II Dhanbad,Geological Directorate,October 2025-26,0.93,VERIFIED,,,6
+fact-2bcffafd14b748,COAL_PRODUCTION,Raw Coal Production,20.12,MT,NCL,Kakri OC,Singrauli,FY 2022-23,0.93,VERIFIED,,,2
+fact-79f34a4129fc4c,COAL_PRODUCTION,Raw Coal Production,26.07,MT,CCL,Piparwar OC,South Karanpura,FY 2016-17,0.92,VERIFIED,Sheet_4,J6,
+fact-0938ed142ff74a,COAL_PRODUCTION,Raw Coal Production,15.52,MT,CCL,Magadh OC,South Karanpura,April 2016-17,0.99,VERIFIED,Sheet_2,H86,
+fact-eb8fc8d6f87e4f,COAL_PRODUCTION,Raw Coal Production,38.71,MT,CMPDI,RI-I Asansol,Geological Directorate,FY 2021-22,0.58,REVIEW_REQUIRED,Sheet_5,E56,
+fact-e7ef4679be6a4a,COAL_PRODUCTION,Raw Coal Production,24.36,MT,WCL,Umrer OC,Pench-Kanhan,FY 2018-19,0.94,VERIFIED,,,1
+fact-f0f06a268bdb4d,COAL_PRODUCTION,Raw Coal Production,15.41,MT,CCL,Piparwar OC,North Karanpura,2019-20-Q4,0.74,NEEDS_REVIEW,,,8
+fact-2394b1e307a44a,COAL_PRODUCTION,Raw Coal Production,6.96,MT,NCL,Dudhichua OC,Singrauli,FY 2022-23,0.94,VERIFIED,,,2
+fact-4218adebc9384c,COAL_PRODUCTION,Raw Coal Production,20.55,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2018-19,0.97,VERIFIED,Sheet_2,E118,
+fact-48fe122c8d4d43,COAL_PRODUCTION,Raw Coal Production,10.29,MT,ECL,Khottadih UG,Raniganj,FY 2019-20,0.82,NEEDS_REVIEW,,,16
+fact-e89bf8ec75cd43,COAL_PRODUCTION,Raw Coal Production,31.7,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2019-20,0.86,NEEDS_REVIEW,,,2
+fact-9e60f981f65548,COAL_PRODUCTION,Raw Coal Production,14.36,MT,BCCL,Katras OC,Raniganj West,FY 2021-22,0.96,VERIFIED,Sheet1,R199,
+fact-a87da99515a84b,COAL_PRODUCTION,Raw Coal Production,9.6,MT,MCL,Jagannath OC,Talcher,FY 2018-19,0.92,VERIFIED,,,1
+fact-608c192dc8b148,COAL_PRODUCTION,Raw Coal Production,43.89,MT,NCL,Bina OC,Singrauli,2023-24-Q4,0.88,NEEDS_REVIEW,Sheet1,R192,
+fact-551d8cf96cd74d,COAL_PRODUCTION,Raw Coal Production,4.06,MT,NCL,Kakri OC,Singrauli,2019-20-Q2,0.98,VERIFIED,,,3
+fact-475a51ae85b64d,COAL_PRODUCTION,Raw Coal Production,9.21,MT,MCL,Hingula OC,Talcher,FY 2024-25,0.91,VERIFIED,Sheet_3,F81,
+fact-23781505fa1c41,COAL_PRODUCTION,Raw Coal Production,18.2,MT,CCL,Piparwar OC,North Karanpura,FY 2019-20,0.71,REVIEW_REQUIRED,Sheet_2,C58,
+fact-0239e9b432af45,COAL_PRODUCTION,Raw Coal Production,1.77,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2017-18,0.9,VERIFIED,,,14
+fact-593e0b7607bb43,COAL_PRODUCTION,Raw Coal Production,11.16,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2022-23,0.95,NEEDS_REVIEW,,,9
+fact-1e271ea9856f44,COAL_PRODUCTION,Raw Coal Production,26.09,MT,MCL,Bhubaneswari OC,Ib Valley,FY 2020-21,0.55,REVIEW_REQUIRED,,,4
+fact-e3c8744982ad43,COAL_PRODUCTION,Raw Coal Production,2.09,MT,NCL,Kakri OC,Singrauli,FY 2025-26,0.89,NEEDS_REVIEW,Sheet1,R20,
+fact-b94a66e5ba2646,COAL_PRODUCTION,Raw Coal Production,9.8,MT,MCL,Jagannath OC,Talcher,FY 2017-18,0.89,NEEDS_REVIEW,Sheet_3,D68,
+fact-a3467cc8b90d40,COAL_PRODUCTION,Raw Coal Production,46.49,MT,CCL,Kathara OC,North Karanpura,July 2024-25,0.95,VERIFIED,Sheet_3,J53,
+fact-db8c673e077440,COAL_PRODUCTION,Raw Coal Production,34.67,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,2020-21-Q2,0.82,NEEDS_REVIEW,Sheet_4,B51,
+fact-55ab0cc4eb6d48,COAL_PRODUCTION,Raw Coal Production,53.5,MT,CMPDI,RI-IV Nagpur,Geological Directorate,July 2025-26,0.97,VERIFIED,,,4
+fact-5c9cb5706da943,COAL_PRODUCTION,Raw Coal Production,5.3,MT,BCCL,Moonidih UG,Raniganj West,FY 2023-24,0.96,VERIFIED,Sheet1,R85,
+fact-2ce63d9ec0c24b,COAL_PRODUCTION,Raw Coal Production,16.65,MT,ECL,Pandaveswar UG,Raniganj,FY 2021-22,0.94,VERIFIED,Sheet_2,D80,
+fact-7e9c0307bf0d43,COAL_PRODUCTION,Raw Coal Production,21.51,MT,ECL,Jhanjra UG,Raniganj,FY 2016-17,0.65,REVIEW_REQUIRED,Sheet_4,C174,
+fact-d1c7e0477c1044,COAL_PRODUCTION,Raw Coal Production,21.78,MT,ECL,Kottadih UG/OC,Rajmahal,FY 2016-17,0.81,NEEDS_REVIEW,,,20
+fact-bf1182c873474c,COAL_PRODUCTION,Raw Coal Production,26.63,MT,CCL,Magadh OC,North Karanpura,FY 2016-17,0.88,NEEDS_REVIEW,Sheet_1,D58,
+fact-66a52813fcd241,COAL_PRODUCTION,Raw Coal Production,6.14,MT,CCL,Kuju OC,North Karanpura,FY 2019-20,0.74,NEEDS_REVIEW,Sheet1,R139,
+fact-90f4aba5c1904d,COAL_PRODUCTION,Raw Coal Production,23.5,MT,CMPDI,RI-IV Nagpur,Geological Directorate,FY 2020-21,0.94,VERIFIED,,,1
+fact-4b921f8ba7f748,COAL_PRODUCTION,Raw Coal Production,32.01,MT,CMPDI,RI-VII Bhubaneswar,Geological Directorate,FY 2022-23,0.93,VERIFIED,Sheet_2,H53,
+fact-5ca84dbe52414d,COAL_PRODUCTION,Raw Coal Production,11.68,MT,CMPDI,RI-I Asansol,All CIL Coalfields (Exploration),FY 2019-20,0.98,VERIFIED,,,16
+fact-a3d0950980f54a,COAL_PRODUCTION,Raw Coal Production,35.27,MT,BCCL,Barora OC,Raniganj West,July 2018-19,0.86,NEEDS_REVIEW,,,3
+fact-f0a3de1c02254f,COAL_PRODUCTION,Raw Coal Production,19.23,MT,NCL,Dudhichua OC,Singrauli,FY 2019-20,0.78,NEEDS_REVIEW,,,2
+fact-2f36bc00a55542,COAL_PRODUCTION,Raw Coal Production,28.38,MT,CIL,Tikak OC,Pan-India Mining Operations,November 2024-25,0.95,VERIFIED,,,1
+fact-a4df5ae2586643,COAL_PRODUCTION,Raw Coal Production,2.26,MT,ECL,Chitra OC,Raniganj,FY 2024-25,0.71,CONFLICT,,,2
+fact-c665057c30274a,COAL_PRODUCTION,Raw Coal Production,32.64,MT,ECL,Khottadih UG,Raniganj,2022-23-Q3,0.68,REVIEW_REQUIRED,Sheet_5,F43,
+fact-7a2ac9c4bb6246,COAL_PRODUCTION,Raw Coal Production,1.36,MT,WCL,Majri OC,Umrer,December 2016-17,0.95,VERIFIED,,,3
+fact-b807797d6d024e,COAL_PRODUCTION,Raw Coal Production,7.3,MT,CIL,Leddo OC,Consolidated Indian Coalfields,November 2017-18,0.67,REVIEW_REQUIRED,Sheet_2,C90,
+fact-15eddb806c4046,COAL_PRODUCTION,Raw Coal Production,8.0,MT,BCCL,Barora OC,Jharia,2018-19-Q2,0.9,VERIFIED,,,12
+fact-d87588ab21174e,COAL_PRODUCTION,Raw Coal Production,31.82,MT,SECL,Dipka OC,Hasdeo,FY 2025-26,0.94,VERIFIED,Sheet1,R114,
+fact-6400cc6135014f,COAL_PRODUCTION,Raw Coal Production,3.75,MT,CCL,Dhori OC,East Bokaro,FY 2017-18,0.99,VERIFIED,Sheet_3,F99,
+fact-15687682894d41,COAL_PRODUCTION,Raw Coal Production,33.38,MT,MCL,Jagannath OC,Ib Valley,February 2017-18,0.73,NEEDS_REVIEW,Sheet_3,D127,
+fact-65c912df637345,COAL_PRODUCTION,Raw Coal Production,32.08,MT,NCL,Krishnashila OC,Singrauli,FY 2019-20,0.81,NEEDS_REVIEW,,,7
+fact-a4b8c0db9c8b4a,COAL_PRODUCTION,Raw Coal Production,10.81,MT,MCL,Lakhanpur OC,Talcher,FY 2023-24,0.62,REVIEW_REQUIRED,,,12
+fact-ec9ea752e4bd44,COAL_PRODUCTION,Raw Coal Production,2.85,MT,ECL,Chitra OC,Raniganj,2022-23-Q3,0.92,VERIFIED,Sheet1,R17,
+fact-6d9c6b6e8e184f,COAL_PRODUCTION,Raw Coal Production,24.24,MT,ECL,Sonepur Bazari OC,Rajmahal,FY 2022-23,0.95,VERIFIED,Sheet_3,H150,
+fact-339ffc370aaf4c,COAL_PRODUCTION,Raw Coal Production,10.03,MT,NCL,Khadia OC,Singrauli,FY 2016-17,0.93,VERIFIED,Sheet1,R123,
+fact-1ef2cb7531c942,COAL_PRODUCTION,Raw Coal Production,8.59,MT,NCL,Amlohri OC,Singrauli,FY 2018-19,0.96,VERIFIED,,,12
+fact-182b6d2d950f4f,COAL_PRODUCTION,Raw Coal Production,30.17,MT,NCL,Kakri OC,Singrauli,October 2017-18,0.7,REVIEW_REQUIRED,,,9
+fact-90fe2e8c0d0849,COAL_PRODUCTION,Raw Coal Production,5.11,MT,WCL,Pench UG,Pench-Kanhan,FY 2016-17,0.93,VERIFIED,Sheet_2,B113,
+fact-6d7d4271498741,COAL_PRODUCTION,Raw Coal Production,36.11,MT,BCCL,Kusunda OC,Jharia,FY 2024-25,0.56,REVIEW_REQUIRED,Sheet_5,H47,
+fact-184e9998778a47,COAL_PRODUCTION,Raw Coal Production,37.95,MT,NCL,Dudhichua OC,Singrauli,FY 2023-24,0.97,NEEDS_REVIEW,,,8
+fact-5c0e41c2f85946,COAL_PRODUCTION,Raw Coal Production,6.85,MT,ECL,Bankola UG,Raniganj,FY 2024-25,0.7,REVIEW_REQUIRED,,,13
+fact-728db6f78fdc4a,COAL_PRODUCTION,Raw Coal Production,21.8,MT,CMPDI,RI-II Dhanbad,Central Drilling Reserves,FY 2018-19,0.73,NEEDS_REVIEW,,,6
+fact-3583919cdc2e4d,COAL_PRODUCTION,Raw Coal Production,12.74,MT,NCL,Amlohri OC,Singrauli,October 2017-18,0.79,NEEDS_REVIEW,,,1
+fact-0526f4a195944a,COAL_PRODUCTION,Raw Coal Production,37.73,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),FY 2019-20,0.95,VERIFIED,,,15
+fact-d0df588fc8524e,COAL_PRODUCTION,Raw Coal Production,31.58,MT,NCL,Jayant OC,Singrauli,FY 2016-17,0.91,VERIFIED,,,10
+fact-ebaa60782f2141,COAL_PRODUCTION,Raw Coal Production,6.37,MT,CIL,Leddo OC,Pan-India Mining Operations,2018-19-Q3,0.96,VERIFIED,Sheet1,R217,
+fact-ba97fbff89b443,COAL_PRODUCTION,Raw Coal Production,17.71,MT,NCL,Kakri OC,Singrauli,February 2017-18,0.94,VERIFIED,,,6
+fact-227b117b274841,COAL_PRODUCTION,Raw Coal Production,23.47,MT,SECL,Manikpur OC,Sohagpur,FY 2018-19,0.69,REVIEW_REQUIRED,,,10
+fact-4f88fb2b6c234d,COAL_PRODUCTION,Raw Coal Production,15.19,MT,CMPDI,RI-IV Nagpur,Geological Directorate,FY 2019-20,0.56,REVIEW_REQUIRED,,,10
+fact-a0baf3dbae5b4b,COAL_PRODUCTION,Raw Coal Production,0.85,MT,NCL,Jayant OC,Singrauli,FY 2019-20,0.91,VERIFIED,,,9
+fact-de80b0f306274f,COAL_PRODUCTION,Raw Coal Production,33.98,MT,CCL,Rajrappa OC,East Bokaro,2019-20-Q2,0.81,NEEDS_REVIEW,,,4
+fact-cf6e2e9c4d2c46,COAL_PRODUCTION,Raw Coal Production,47.01,MT,WCL,Pench UG,Umrer,FY 2023-24,0.97,VERIFIED,,,3
+fact-f7072e6af89244,COAL_PRODUCTION,Raw Coal Production,16.17,MT,CMPDI,RI-IV Nagpur,Central Drilling Reserves,FY 2019-20,0.98,VERIFIED,Sheet_4,E35,
+fact-73477d8a456448,COAL_PRODUCTION,Raw Coal Production,16.77,MT,MCL,Bhubaneswari OC,Talcher,FY 2022-23,0.76,NEEDS_REVIEW,Sheet_4,C121,
+fact-3dd8ded025ac40,COAL_PRODUCTION,Raw Coal Production,20.46,MT,CCL,Piparwar OC,East Bokaro,FY 2024-25,0.93,VERIFIED,Sheet_2,B20,
+fact-b07abd70ce8e4f,COAL_PRODUCTION,Raw Coal Production,46.82,MT,CCL,Kuju OC,East Bokaro,FY 2023-24,0.72,NEEDS_REVIEW,,,3
+fact-3b7f6beae84745,COAL_PRODUCTION,Raw Coal Production,36.62,MT,NCL,Kakri OC,Singrauli,2020-21-Q2,0.8,NEEDS_REVIEW,Sheet_2,B69,
+fact-5ac8cb11e09a40,COAL_PRODUCTION,Raw Coal Production,20.68,MT,CIL,Leddo OC,Consolidated Indian Coalfields,2017-18-Q2,0.91,VERIFIED,Sheet_1,E26,
+fact-9c0004021f7342,COAL_PRODUCTION,Raw Coal Production,36.81,MT,CIL,Tikak OC,Consolidated Indian Coalfields,February 2025-26,0.98,VERIFIED,,,27
+fact-9793853d8d804c,COAL_PRODUCTION,Raw Coal Production,9.82,MT,CMPDI,RI-I Asansol,Geological Directorate,FY 2022-23,0.68,CONFLICT,,,12
+fact-17238bf966604d,COAL_PRODUCTION,Raw Coal Production,26.04,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2020-21,0.74,NEEDS_REVIEW,,,11
+fact-6f1f86efe82a4c,COAL_PRODUCTION,Raw Coal Production,25.28,MT,CMPDI,RI-III Ranchi,Geological Directorate,FY 2024-25,0.73,NEEDS_REVIEW,,,14
+fact-d42f539abd714f,COAL_PRODUCTION,Raw Coal Production,6.81,MT,WCL,Majri OC,Pench-Kanhan,2016-17-Q2,0.69,REVIEW_REQUIRED,Sheet_5,G39,
+fact-9b719adbc9644e,COAL_PRODUCTION,Raw Coal Production,4.7,MT,MCL,Jagannath OC,Ib Valley,FY 2024-25,0.95,VERIFIED,Sheet1,R154,
+fact-0a3f8538112b4e,COAL_PRODUCTION,Raw Coal Production,3.56,MT,NCL,Khadia OC,Singrauli,FY 2017-18,0.85,NEEDS_REVIEW,,,1
+fact-355a532b4d8343,COAL_PRODUCTION,Raw Coal Production,29.57,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2016-17,0.97,VERIFIED,Sheet_1,E59,
+fact-5dae20cf1ef747,COAL_PRODUCTION,Raw Coal Production,9.43,MT,MCL,Belpahar OC,Talcher,FY 2016-17,0.9,VERIFIED,,,2
+fact-6c9bbe84277d4b,COAL_PRODUCTION,Raw Coal Production,7.67,MT,NCL,Dudhichua OC,Singrauli,2019-20-Q4,0.91,VERIFIED,Sheet_4,H8,
+fact-01e95a5988564b,COAL_PRODUCTION,Raw Coal Production,31.38,MT,WCL,Majri OC,Umrer,FY 2016-17,0.98,VERIFIED,Sheet_3,F179,
+fact-d865ae4bd4e345,COAL_PRODUCTION,Raw Coal Production,17.38,MT,CMPDI,RI-II Dhanbad,Central Drilling Reserves,FY 2023-24,0.95,VERIFIED,,,2
+fact-7b9bef14d83b4e,COAL_PRODUCTION,Raw Coal Production,29.75,MT,CIL,Tikak OC,Pan-India Mining Operations,2017-18-Q1,0.64,REVIEW_REQUIRED,,,12
+fact-7100670c38e54b,COAL_PRODUCTION,Raw Coal Production,1.43,MT,CMPDI,RI-III Ranchi,Central Drilling Reserves,FY 2024-25,0.92,VERIFIED,Sheet1,R11,
+fact-13619a2bc72142,COAL_PRODUCTION,Raw Coal Production,9.84,MT,BCCL,Lodna OC,Raniganj West,FY 2019-20,0.75,NEEDS_REVIEW,,,9
+fact-58c90089bd674f,COAL_PRODUCTION,Raw Coal Production,2.52,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2017-18,0.57,REVIEW_REQUIRED,,,26
+fact-cf1d014e811645,COAL_PRODUCTION,Raw Coal Production,12.71,MT,CMPDI,RI-VI Singrauli,Central Drilling Reserves,FY 2021-22,0.88,NEEDS_REVIEW,,,6
+fact-594dcd94dc5246,COAL_PRODUCTION,Raw Coal Production,12.22,MT,CCL,Dhori OC,South Karanpura,FY 2024-25,0.69,REVIEW_REQUIRED,,,14
+fact-ad68728e54cc46,COAL_PRODUCTION,Raw Coal Production,11.46,MT,ECL,Bankola UG,Rajmahal,FY 2024-25,0.9,VERIFIED,,,2
+fact-ecd4e28944824a,COAL_PRODUCTION,Raw Coal Production,12.5,MT,BCCL,Govindpur OC,Raniganj West,FY 2023-24,0.9,VERIFIED,,,4
+fact-772c593cd15c4a,COAL_PRODUCTION,Raw Coal Production,47.97,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),FY 2024-25,0.98,VERIFIED,,,10
+fact-7b3ad5f06db04c,COAL_PRODUCTION,Raw Coal Production,36.24,MT,CIL,Leddo OC,Pan-India Mining Operations,2019-20-Q1,0.93,VERIFIED,,,3
+fact-ba6fe020228040,COAL_PRODUCTION,Raw Coal Production,15.73,MT,BCCL,Bastacolla OC,Raniganj West,FY 2024-25,0.95,VERIFIED,Sheet_5,E92,
+fact-b83ae2c640d64e,COAL_PRODUCTION,Raw Coal Production,23.07,MT,NCL,Jayant OC,Singrauli,2021-22-Q1,0.62,REVIEW_REQUIRED,Sheet_2,E21,
+fact-9fed78d6544941,COAL_PRODUCTION,Raw Coal Production,13.5,MT,SECL,Bijuri UG,Mand-Raigarh,FY 2016-17,0.9,VERIFIED,,,5
+fact-3af5577bbbfa40,COAL_PRODUCTION,Raw Coal Production,47.97,MT,CMPDI,RI-VI Singrauli,Geological Directorate,FY 2025-26,0.92,VERIFIED,,,2
+fact-05efa878c01148,COAL_PRODUCTION,Raw Coal Production,3.9,MT,CIL,Leddo OC,Consolidated Indian Coalfields,September 2025-26,0.62,REVIEW_REQUIRED,,,28
+fact-2aeeb802c89344,COAL_PRODUCTION,Raw Coal Production,21.83,MT,MCL,Bhubaneswari OC,Talcher,FY 2019-20,0.91,VERIFIED,,,10
+fact-258f3ea4a4bc41,COAL_PRODUCTION,Raw Coal Production,13.13,MT,CCL,Ashoka OC,East Bokaro,FY 2023-24,0.92,VERIFIED,,,2
+fact-7d8d9796536746,COAL_PRODUCTION,Raw Coal Production,48.72,MT,WCL,Wani OC,Wardha Valley,FY 2024-25,0.97,VERIFIED,,,4
+fact-a96d262a97b14c,COAL_PRODUCTION,Raw Coal Production,15.79,MT,SECL,Shivani UG,Mand-Raigarh,FY 2016-17,0.97,VERIFIED,,,27
+fact-78c4c01b91504f,COAL_PRODUCTION,Raw Coal Production,17.59,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),2022-23-Q3,0.58,REVIEW_REQUIRED,,,12
+fact-be40bd712e8f4b,COAL_PRODUCTION,Raw Coal Production,3.72,MT,CCL,Rajrappa OC,North Karanpura,2025-26-Q1,0.92,VERIFIED,Sheet1,R204,
+fact-1f9d7d07c7bd46,COAL_PRODUCTION,Raw Coal Production,35.66,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2022-23,0.99,VERIFIED,,,12
+fact-2d5c2657ad3b45,COAL_PRODUCTION,Raw Coal Production,30.5,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2017-18,0.98,VERIFIED,Sheet_1,J163,
+fact-ce6481102fe64f,COAL_PRODUCTION,Raw Coal Production,28.01,MT,CCL,Kathara OC,East Bokaro,FY 2024-25,0.59,REVIEW_REQUIRED,Sheet1,R181,
+fact-beb947bb21f84a,COAL_PRODUCTION,Raw Coal Production,20.63,MT,CCL,Kathara OC,South Karanpura,October 2022-23,0.98,VERIFIED,,,7
+fact-90137a89e08d45,COAL_PRODUCTION,Raw Coal Production,20.76,MT,BCCL,Govindpur OC,Raniganj West,FY 2018-19,0.91,VERIFIED,,,1
+fact-e196db5736d148,COAL_PRODUCTION,Raw Coal Production,23.15,MT,NCL,Krishnashila OC,Singrauli,FY 2019-20,0.91,VERIFIED,,,6
+fact-3ec530d98bbe40,COAL_PRODUCTION,Raw Coal Production,24.4,MT,WCL,Chandrapur OC,Umrer,FY 2019-20,0.94,VERIFIED,,,5
+fact-e4ff73051a8141,COAL_PRODUCTION,Raw Coal Production,14.26,MT,NCL,Amlohri OC,Singrauli,FY 2017-18,0.99,VERIFIED,,,1
+fact-e5d465d186f94e,COAL_PRODUCTION,Raw Coal Production,35.14,MT,ECL,Jhanjra UG,Rajmahal,FY 2024-25,0.69,CONFLICT,,,1
+fact-189632ba88f243,COAL_PRODUCTION,Raw Coal Production,13.76,MT,NCL,Khadia OC,Singrauli,November 2016-17,0.99,VERIFIED,,,6
+fact-56fd50b0a3fd4e,COAL_PRODUCTION,Raw Coal Production,35.66,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2022-23,0.98,NEEDS_REVIEW,,,20
+fact-45e364c7e25746,COAL_PRODUCTION,Raw Coal Production,7.06,MT,CCL,Dhori OC,North Karanpura,2021-22-Q1,0.92,VERIFIED,,,12
+fact-e7165efa4dd34c,COAL_PRODUCTION,Raw Coal Production,28.22,MT,BCCL,Moonidih UG,Raniganj West,FY 2023-24,0.82,NEEDS_REVIEW,Sheet1,R162,
+fact-cbfe87046e7b46,COAL_PRODUCTION,Raw Coal Production,10.13,MT,BCCL,Barora OC,Raniganj West,FY 2016-17,0.94,VERIFIED,Sheet1,R27,
+fact-bab07bbf2c6849,COAL_PRODUCTION,Raw Coal Production,29.55,MT,NCL,Dudhichua OC,Singrauli,FY 2016-17,0.92,VERIFIED,,,8
+fact-17b51458756148,COAL_PRODUCTION,Raw Coal Production,18.93,MT,CMPDI,RI-III Ranchi,Central Drilling Reserves,FY 2016-17,0.92,VERIFIED,Sheet_1,H21,
+fact-c13ee266c0614c,COAL_PRODUCTION,Raw Coal Production,22.47,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,2022-23-Q1,0.91,VERIFIED,,,7
+fact-227a948e9b1849,COAL_PRODUCTION,Raw Coal Production,29.88,MT,WCL,Kanhan UG,Pench-Kanhan,FY 2016-17,0.99,VERIFIED,,,4
+fact-a4faeb1f262540,COAL_PRODUCTION,Raw Coal Production,11.32,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2025-26,0.84,NEEDS_REVIEW,,,5
+fact-3857c3c3b43d45,COAL_PRODUCTION,Raw Coal Production,29.86,MT,NCL,Jayant OC,Singrauli,August 2022-23,0.9,VERIFIED,,,9
+fact-267b096ec5c94f,COAL_PRODUCTION,Raw Coal Production,11.83,MT,NCL,Jayant OC,Singrauli,FY 2017-18,0.91,VERIFIED,,,1
+fact-826dfbbe07ea49,COAL_PRODUCTION,Raw Coal Production,20.23,MT,CCL,Amrapali OC,North Karanpura,FY 2022-23,0.96,VERIFIED,Sheet1,R145,
+fact-f51d5e57553346,COAL_PRODUCTION,Raw Coal Production,13.93,MT,WCL,Umrer OC,Pench-Kanhan,FY 2017-18,0.95,VERIFIED,Sheet1,R158,
+fact-fdca582737ac49,COAL_PRODUCTION,Raw Coal Production,18.23,MT,BCCL,Kusunda OC,Jharia,2018-19-Q3,0.96,VERIFIED,,,8
+fact-8ec2cfcc9c4145,COAL_PRODUCTION,Raw Coal Production,9.19,MT,WCL,Wani OC,Wardha Valley,FY 2024-25,0.95,VERIFIED,Sheet_1,F20,
+fact-af802d6e327a4e,COAL_PRODUCTION,Raw Coal Production,29.55,MT,CMPDI,RI-IV Nagpur,Geological Directorate,FY 2023-24,0.98,VERIFIED,Sheet_5,E47,
+fact-e8a1680e76044f,COAL_PRODUCTION,Raw Coal Production,29.96,MT,CCL,Amrapali OC,North Karanpura,FY 2023-24,0.8,NEEDS_REVIEW,,,12
+fact-6376bd39f9394f,COAL_PRODUCTION,Raw Coal Production,32.01,MT,WCL,Pench UG,Umrer,FY 2017-18,0.87,NEEDS_REVIEW,Sheet_4,H65,
+fact-030ae4d1f02e49,COAL_PRODUCTION,Raw Coal Production,21.68,MT,NCL,Amlohri OC,Singrauli,2023-24-Q1,0.82,NEEDS_REVIEW,Sheet1,R189,
+fact-1a243a2b500c44,COAL_PRODUCTION,Raw Coal Production,16.58,MT,SECL,Chhal OC,Mand-Raigarh,2016-17-Q4,0.86,NEEDS_REVIEW,,,1
+fact-d704d69a0b6546,COAL_PRODUCTION,Raw Coal Production,21.95,MT,ECL,Khottadih UG,Rajmahal,FY 2022-23,0.79,NEEDS_REVIEW,,,16
+fact-9ab87468565642,COAL_PRODUCTION,Raw Coal Production,23.98,MT,CCL,Piparwar OC,North Karanpura,November 2023-24,0.93,VERIFIED,,,6
+fact-cd728b59e10840,COAL_PRODUCTION,Raw Coal Production,9.7,MT,NCL,Amlohri OC,Singrauli,FY 2020-21,0.97,VERIFIED,Sheet_5,D37,
+fact-5c4c16bd0d9f4a,COAL_PRODUCTION,Raw Coal Production,25.35,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2024-25,0.91,VERIFIED,,,7
+fact-f9bef10b100841,COAL_PRODUCTION,Raw Coal Production,39.93,MT,WCL,Chandrapur OC,Umrer,FY 2024-25,0.94,VERIFIED,Sheet_2,H43,
+fact-8b1af95d3c7c4e,COAL_PRODUCTION,Raw Coal Production,23.85,MT,CIL,Tikak OC,Consolidated Indian Coalfields,2021-22-Q1,0.91,VERIFIED,,,2
+fact-039d20aca1444b,COAL_PRODUCTION,Raw Coal Production,15.51,MT,BCCL,Kusunda OC,Jharia,FY 2023-24,0.99,VERIFIED,,,15
+fact-43ed1ebfc59546,COAL_PRODUCTION,Raw Coal Production,20.54,MT,ECL,Rajmahal OC,Raniganj,FY 2023-24,0.56,REVIEW_REQUIRED,,,8
+fact-afead8de17cb44,COAL_PRODUCTION,Raw Coal Production,28.26,MT,CMPDI,RI-IV Nagpur,Central Drilling Reserves,FY 2019-20,0.87,NEEDS_REVIEW,Sheet_4,B160,
+fact-5ae19c23377c41,COAL_PRODUCTION,Raw Coal Production,28.82,MT,NCL,Amlohri OC,Singrauli,FY 2019-20,0.76,NEEDS_REVIEW,,,1
+fact-4e7919b1b84844,COAL_PRODUCTION,Raw Coal Production,26.91,MT,BCCL,Govindpur OC,Raniganj West,2018-19-Q4,0.64,REVIEW_REQUIRED,,,3
+fact-eb47dbdb5a624d,COAL_PRODUCTION,Raw Coal Production,41.71,MT,ECL,Khottadih UG,Rajmahal,2025-26-Q1,0.9,VERIFIED,Sheet_5,E149,
+fact-62010a8e913d4f,COAL_PRODUCTION,Raw Coal Production,46.66,MT,NCL,Krishnashila OC,Singrauli,FY 2023-24,0.91,VERIFIED,,,3
+fact-930844a2bd4e46,COAL_PRODUCTION,Raw Coal Production,1.41,MT,CCL,Piparwar OC,South Karanpura,2016-17-Q3,0.97,VERIFIED,,,2
+fact-d24376aa788644,COAL_PRODUCTION,Raw Coal Production,23.83,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2016-17,0.92,VERIFIED,Sheet_1,D46,
+fact-26238f8c865a41,COAL_PRODUCTION,Raw Coal Production,24.0,MT,WCL,Majri OC,Wardha Valley,FY 2025-26,0.93,VERIFIED,Sheet_4,C96,
+fact-5fb9277e1b8249,COAL_PRODUCTION,Raw Coal Production,28.18,MT,WCL,Chandrapur OC,Umrer,2025-26-Q3,0.88,NEEDS_REVIEW,Sheet_3,C166,
+fact-5f458be0f54f48,COAL_PRODUCTION,Raw Coal Production,18.03,MT,NCL,Jayant OC,Singrauli,2018-19-Q2,0.93,VERIFIED,Sheet1,R46,
+fact-0a328b525a7d42,COAL_PRODUCTION,Raw Coal Production,5.28,MT,NCL,Amlohri OC,Singrauli,2019-20-Q2,0.96,VERIFIED,,,1
+fact-733aab53203842,COAL_PRODUCTION,Raw Coal Production,33.71,MT,CCL,Dhori OC,North Karanpura,FY 2022-23,0.65,REVIEW_REQUIRED,Sheet1,R75,
+fact-e2918ec4340348,COAL_PRODUCTION,Raw Coal Production,21.8,MT,ECL,Bankola UG,Rajmahal,FY 2023-24,0.91,VERIFIED,,,7
+fact-5029c862f2174a,COAL_PRODUCTION,Raw Coal Production,12.05,MT,MCL,Bhubaneswari OC,Talcher,FY 2022-23,0.88,NEEDS_REVIEW,Sheet1,R67,
+fact-48ba5e16f7ab4c,COAL_PRODUCTION,Raw Coal Production,17.12,MT,WCL,Majri OC,Wardha Valley,FY 2017-18,0.95,VERIFIED,,,28
+fact-7ecd61f97f6b42,COAL_PRODUCTION,Raw Coal Production,14.27,MT,CMPDI,RI-VII Bhubaneswar,Geological Directorate,2020-21-Q4,0.94,VERIFIED,,,6
+fact-35cca39551c04b,COAL_PRODUCTION,Raw Coal Production,32.53,MT,CCL,Kuju OC,North Karanpura,FY 2021-22,0.79,NEEDS_REVIEW,,,18
+fact-d536285e769c46,COAL_PRODUCTION,Raw Coal Production,22.7,MT,WCL,Nagpur Area OC,Wardha Valley,FY 2019-20,0.95,VERIFIED,,,3
+fact-93c87d53929d47,COAL_PRODUCTION,Raw Coal Production,41.86,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2025-26,0.75,NEEDS_REVIEW,Sheet_2,D103,
+fact-812d6482ff9546,COAL_PRODUCTION,Raw Coal Production,7.76,MT,CCL,Ashoka OC,West Bokaro,February 2022-23,0.91,VERIFIED,Sheet1,R128,
+fact-5f7c2193ad3947,COAL_PRODUCTION,Raw Coal Production,17.19,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2020-21,0.75,CONFLICT,Sheet_3,C91,
+fact-58ef772aa4c74a,COAL_PRODUCTION,Raw Coal Production,39.16,MT,SECL,Bijuri UG,Hasdeo,December 2022-23,0.98,VERIFIED,,,2
+fact-1f92cb53d1394d,COAL_PRODUCTION,Raw Coal Production,6.26,MT,CMPDI,RI-III Ranchi,Geological Directorate,2016-17-Q2,0.91,VERIFIED,Sheet_2,G120,
+fact-85e1cb01cbe345,COAL_PRODUCTION,Raw Coal Production,32.89,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2024-25,0.58,REVIEW_REQUIRED,,,3
+fact-2374177de6694a,COAL_PRODUCTION,Raw Coal Production,3.34,MT,ECL,Kottadih UG/OC,Raniganj,FY 2022-23,0.94,VERIFIED,Sheet_2,H101,
+fact-d429fc2ff0b942,COAL_PRODUCTION,Raw Coal Production,2.19,MT,MCL,Belpahar OC,Talcher,FY 2022-23,0.56,REVIEW_REQUIRED,Sheet_2,G20,
+fact-1edf6787c6cf4c,COAL_PRODUCTION,Raw Coal Production,35.45,MT,SECL,Kusmunda OC,Sohagpur,FY 2025-26,0.96,VERIFIED,Sheet1,R5,
+fact-4275700f3a6c49,COAL_PRODUCTION,Raw Coal Production,22.18,MT,WCL,Wani OC,Umrer,FY 2017-18,0.9,VERIFIED,Sheet_3,C109,
+fact-b38bfe75cd2e4c,COAL_PRODUCTION,Raw Coal Production,32.01,MT,BCCL,Katras OC,Jharia,2025-26-Q3,0.82,NEEDS_REVIEW,Sheet1,R166,
+fact-0533462f007b4b,COAL_PRODUCTION,Raw Coal Production,17.38,MT,CMPDI,RI-II Dhanbad,All CIL Coalfields (Exploration),FY 2023-24,0.94,NEEDS_REVIEW,Sheet_3,F75,
+fact-f6ce228ba65a48,COAL_PRODUCTION,Raw Coal Production,27.97,MT,BCCL,Lodna OC,Raniganj West,FY 2017-18,0.94,VERIFIED,Sheet1,R101,
+fact-79b953329d0e43,COAL_PRODUCTION,Raw Coal Production,24.23,MT,CMPDI,RI-III Ranchi,Central Drilling Reserves,FY 2024-25,0.62,REVIEW_REQUIRED,,,9
+fact-905596f935224d,COAL_PRODUCTION,Raw Coal Production,1.34,MT,WCL,Wani OC,Pench-Kanhan,FY 2017-18,0.91,VERIFIED,Sheet1,R233,
+fact-e6fa40c0cec044,COAL_PRODUCTION,Raw Coal Production,45.76,MT,MCL,Lakhanpur OC,Talcher,FY 2024-25,0.97,VERIFIED,,,22
+fact-065d2f8e5a994a,COAL_PRODUCTION,Raw Coal Production,0.56,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,October 2021-22,0.97,VERIFIED,,,2
+fact-33ca4f75f4b445,COAL_PRODUCTION,Raw Coal Production,31.03,MT,NCL,Nigahi OC,Singrauli,2019-20-Q2,0.93,VERIFIED,Sheet_4,F110,
+fact-3e10b1b2bf724d,COAL_PRODUCTION,Raw Coal Production,34.64,MT,SECL,Jamuna Kotma UG,Hasdeo,FY 2025-26,0.9,VERIFIED,,,3
+fact-c46aba4a98c149,COAL_PRODUCTION,Raw Coal Production,33.34,MT,WCL,Chandrapur OC,Pench-Kanhan,FY 2017-18,0.72,NEEDS_REVIEW,,,20
+fact-0eaf63b2bc3f4c,COAL_PRODUCTION,Raw Coal Production,13.88,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2024-25,0.73,NEEDS_REVIEW,,,8
+fact-e174d199111448,COAL_PRODUCTION,Raw Coal Production,8.34,MT,NCL,Nigahi OC,Singrauli,FY 2022-23,0.95,VERIFIED,,,21
+fact-d3a090d43b114c,COAL_PRODUCTION,Raw Coal Production,41.12,MT,CCL,Magadh OC,West Bokaro,2023-24-Q4,0.91,VERIFIED,,,16
+fact-db82bf11e0d346,COAL_PRODUCTION,Raw Coal Production,19.66,MT,WCL,Nagpur Area OC,Umrer,FY 2020-21,0.72,NEEDS_REVIEW,,,11
+fact-20ee29d1b81e42,COAL_PRODUCTION,Raw Coal Production,8.17,MT,ECL,Khottadih UG,Raniganj,May 2018-19,0.96,VERIFIED,,,12
+fact-146fae5ad88343,COAL_PRODUCTION,Raw Coal Production,27.02,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,FY 2022-23,0.87,NEEDS_REVIEW,,,3
+fact-7cb4c0901ba249,COAL_PRODUCTION,Raw Coal Production,39.34,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),FY 2024-25,0.67,CONFLICT,Sheet1,R62,
+fact-d6fe6a70c04f46,COAL_PRODUCTION,Raw Coal Production,25.16,MT,ECL,Rajmahal OC,Raniganj,FY 2019-20,0.92,VERIFIED,,,12
+fact-f7e2bbafc9da49,COAL_PRODUCTION,Raw Coal Production,39.35,MT,SECL,Gevra OC,Mand-Raigarh,FY 2022-23,0.92,VERIFIED,Sheet_4,B131,
+fact-adfae2b2ca3a48,COAL_PRODUCTION,Raw Coal Production,7.26,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2017-18,0.9,VERIFIED,,,6
+fact-c0e4da6a4fc146,COAL_PRODUCTION,Raw Coal Production,20.27,MT,BCCL,Govindpur OC,Raniganj West,2025-26-Q1,0.93,VERIFIED,Sheet_3,B62,
+fact-c3b0a1afde4447,COAL_PRODUCTION,Raw Coal Production,15.81,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2025-26,0.94,VERIFIED,,,11
+fact-a3f373c498ff42,COAL_PRODUCTION,Raw Coal Production,11.07,MT,CCL,Piparwar OC,South Karanpura,FY 2022-23,0.75,NEEDS_REVIEW,,,3
+fact-5dbf3c9d11de47,COAL_PRODUCTION,Raw Coal Production,15.24,MT,CCL,Amrapali OC,West Bokaro,FY 2019-20,0.86,NEEDS_REVIEW,,,22
+fact-c18c84ed7e3845,COAL_PRODUCTION,Raw Coal Production,13.88,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2024-25,0.97,NEEDS_REVIEW,,,11
+fact-b239f8b477204d,COAL_PRODUCTION,Raw Coal Production,31.2,MT,SECL,Shivani UG,Mand-Raigarh,FY 2025-26,0.97,VERIFIED,Sheet1,R127,
+fact-4fbd8a78159545,COAL_PRODUCTION,Raw Coal Production,40.6,MT,ECL,Rajmahal OC,Rajmahal,FY 2022-23,0.99,VERIFIED,Sheet1,R215,
+fact-e24dc037b69e4b,COAL_PRODUCTION,Raw Coal Production,34.42,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2022-23,0.98,VERIFIED,,,16
+fact-04571a3f670341,COAL_PRODUCTION,Raw Coal Production,13.8,MT,WCL,Umrer OC,Umrer,FY 2016-17,0.96,VERIFIED,Sheet_2,H85,
+fact-7c7a15173de145,COAL_PRODUCTION,Raw Coal Production,22.82,MT,ECL,Pandaveswar UG,Rajmahal,FY 2016-17,0.74,NEEDS_REVIEW,,,11
+fact-7a29298ddc3c47,COAL_PRODUCTION,Raw Coal Production,1.4,MT,WCL,Nagpur Area OC,Umrer,FY 2025-26,0.92,VERIFIED,Sheet_3,J116,
+fact-9cc18b2df3234d,COAL_PRODUCTION,Raw Coal Production,3.16,MT,BCCL,Barora OC,Raniganj West,August 2017-18,0.9,VERIFIED,,,9
+fact-06418bc295fb41,COAL_PRODUCTION,Raw Coal Production,16.08,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2017-18,0.99,VERIFIED,,,15
+fact-9919bf162a7940,COAL_PRODUCTION,Raw Coal Production,8.68,MT,NCL,Jayant OC,Singrauli,FY 2021-22,0.94,VERIFIED,Sheet_1,J89,
+fact-4c061bd16a6b4c,COAL_PRODUCTION,Raw Coal Production,37.0,MT,WCL,Kanhan UG,Pench-Kanhan,August 2020-21,0.97,VERIFIED,,,9
+fact-2fe6a50d58cd44,COAL_PRODUCTION,Raw Coal Production,0.69,MT,MCL,Bharatpur OC,Ib Valley,2024-25-Q2,0.96,VERIFIED,,,10
+fact-217f0cc702504e,COAL_PRODUCTION,Raw Coal Production,23.49,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2020-21,0.94,VERIFIED,Sheet_1,F90,
+fact-ed93eaf035df41,COAL_PRODUCTION,Raw Coal Production,24.59,MT,ECL,Chitra OC,Rajmahal,FY 2020-21,0.92,VERIFIED,,,3
+fact-0cfb0702b93f46,COAL_PRODUCTION,Raw Coal Production,12.14,MT,WCL,Umrer OC,Wardha Valley,FY 2016-17,0.73,CONFLICT,,,21
+fact-0dd50dad353e44,COAL_PRODUCTION,Raw Coal Production,20.46,MT,ECL,Jhanjra UG,Raniganj,FY 2022-23,0.98,VERIFIED,Sheet_2,J99,
+fact-de71a6f4f6c645,COAL_PRODUCTION,Raw Coal Production,0.95,MT,BCCL,Lodna OC,Jharia,FY 2019-20,0.99,VERIFIED,Sheet_3,G37,
+fact-e85ca4ff782b4f,COAL_PRODUCTION,Raw Coal Production,5.53,MT,WCL,Chandrapur OC,Wardha Valley,FY 2016-17,0.83,NEEDS_REVIEW,,,11
+fact-f58c1018d67342,COAL_PRODUCTION,Raw Coal Production,24.85,MT,MCL,Lakhanpur OC,Ib Valley,FY 2017-18,0.77,NEEDS_REVIEW,Sheet_2,E98,
+fact-dc692f9e49874b,COAL_PRODUCTION,Raw Coal Production,33.44,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2017-18,0.7,REVIEW_REQUIRED,Sheet_3,D97,
+fact-95e24d7bf2564f,COAL_PRODUCTION,Raw Coal Production,19.55,MT,CCL,Kathara OC,East Bokaro,FY 2020-21,0.91,VERIFIED,,,9
+fact-b234d90490e341,COAL_PRODUCTION,Raw Coal Production,29.3,MT,CCL,Amrapali OC,West Bokaro,FY 2023-24,0.83,NEEDS_REVIEW,Sheet1,R100,
+fact-34a837c7a79542,COAL_PRODUCTION,Raw Coal Production,21.35,MT,BCCL,Kusunda OC,Jharia,FY 2017-18,0.76,NEEDS_REVIEW,Sheet1,R120,
+fact-eb2fcc5c7d4647,COAL_PRODUCTION,Raw Coal Production,17.91,MT,ECL,Rajmahal OC,Raniganj,2023-24-Q2,0.92,VERIFIED,Sheet_2,F106,
+fact-bb76e2d89ffe4c,COAL_PRODUCTION,Raw Coal Production,10.19,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2020-21,0.77,NEEDS_REVIEW,Sheet_2,J160,
+fact-ea368b054bc84d,COAL_PRODUCTION,Raw Coal Production,40.47,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2022-23,0.93,VERIFIED,,,6
+fact-d110402b51534a,COAL_PRODUCTION,Raw Coal Production,17.69,MT,WCL,Chandrapur OC,Umrer,FY 2020-21,0.92,VERIFIED,,,16
+fact-528bd7d5e0db43,COAL_PRODUCTION,Raw Coal Production,40.32,MT,SECL,Shivani UG,Sohagpur,FY 2024-25,0.96,VERIFIED,,,4
+fact-25d04a73bb2244,COAL_PRODUCTION,Raw Coal Production,8.56,MT,ECL,Kottadih UG/OC,Raniganj,FY 2016-17,0.68,REVIEW_REQUIRED,Sheet_3,D21,
+fact-61ee0f168e2c4c,COAL_PRODUCTION,Raw Coal Production,25.9,MT,NCL,Jayant OC,Singrauli,FY 2016-17,0.72,CONFLICT,Sheet1,R201,
+fact-394660f229fb40,COAL_PRODUCTION,Raw Coal Production,37.26,MT,ECL,Jhanjra UG,Raniganj,2020-21-Q1,0.96,VERIFIED,,,2
+fact-2f4fe1c088f94f,COAL_PRODUCTION,Raw Coal Production,3.44,MT,NCL,Nigahi OC,Singrauli,2020-21-Q3,0.91,VERIFIED,Sheet_1,F141,
+fact-79e52f3adc1c47,COAL_PRODUCTION,Raw Coal Production,35.1,MT,CMPDI,RI-II Dhanbad,Central Drilling Reserves,FY 2019-20,0.94,VERIFIED,Sheet1,R85,
+fact-a8fdd1c0981743,COAL_PRODUCTION,Raw Coal Production,30.61,MT,CCL,Kuju OC,East Bokaro,FY 2021-22,0.96,VERIFIED,,,1
+fact-11b7de23150f44,COAL_PRODUCTION,Raw Coal Production,26.98,MT,SECL,Kusmunda OC,Korba,FY 2016-17,0.75,NEEDS_REVIEW,,,9
+fact-6ca843a260794b,COAL_PRODUCTION,Raw Coal Production,28.26,MT,CMPDI,RI-IV Nagpur,Geological Directorate,FY 2019-20,0.99,NEEDS_REVIEW,,,3
+fact-73a14e44e63041,COAL_PRODUCTION,Raw Coal Production,23.92,MT,NCL,Kakri OC,Singrauli,October 2016-17,0.95,VERIFIED,,,11
+fact-0fdd04324b074b,COAL_PRODUCTION,Raw Coal Production,20.02,MT,NCL,Bina OC,Singrauli,January 2016-17,0.92,VERIFIED,Sheet1,R92,
+fact-997c9b2054af42,COAL_PRODUCTION,Raw Coal Production,30.54,MT,CIL,Tikak OC,Consolidated Indian Coalfields,2022-23-Q1,0.91,VERIFIED,,,2
+fact-94aa34b8e0fe43,COAL_PRODUCTION,Raw Coal Production,42.52,MT,BCCL,Lodna OC,Raniganj West,2025-26-Q3,0.94,VERIFIED,Sheet_3,G21,
+fact-48724b63b0a541,COAL_PRODUCTION,Raw Coal Production,54.28,MT,ECL,Bankola UG,Rajmahal,FY 2025-26,0.96,VERIFIED,,,4
+fact-e1452504f0f441,COAL_PRODUCTION,Raw Coal Production,50.61,MT,MCL,Kaniha OC,Talcher,FY 2024-25,0.6,REVIEW_REQUIRED,,,22
+fact-ca82d93f094b4b,COAL_PRODUCTION,Raw Coal Production,15.52,MT,MCL,Bhubaneswari OC,Ib Valley,February 2020-21,0.88,NEEDS_REVIEW,,,16
+fact-d73acd6ea8b146,COAL_PRODUCTION,Raw Coal Production,25.4,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2024-25,0.97,VERIFIED,Sheet1,R6,
+fact-49852570976b44,COAL_PRODUCTION,Raw Coal Production,2.66,MT,CCL,Dhori OC,North Karanpura,FY 2017-18,0.84,NEEDS_REVIEW,Sheet_1,H62,
+fact-045cb79a0a6647,COAL_PRODUCTION,Raw Coal Production,8.56,MT,NCL,Kakri OC,Singrauli,FY 2016-17,0.93,VERIFIED,,,28
+fact-0649fa9487d54a,COAL_PRODUCTION,Raw Coal Production,7.45,MT,WCL,Umrer OC,Pench-Kanhan,FY 2017-18,0.97,VERIFIED,Sheet1,R133,
+fact-591be334e64247,COAL_PRODUCTION,Raw Coal Production,41.72,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),FY 2023-24,0.62,REVIEW_REQUIRED,,,1
+fact-731e4f2cf5404f,COAL_PRODUCTION,Raw Coal Production,18.79,MT,SECL,Gevra OC,Sohagpur,2022-23-Q3,0.99,VERIFIED,Sheet_3,E142,
+fact-ec2a6732a52649,COAL_PRODUCTION,Raw Coal Production,33.87,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),FY 2020-21,0.78,NEEDS_REVIEW,Sheet_1,G113,
+fact-d6a2c174b90342,COAL_PRODUCTION,Raw Coal Production,2.29,MT,ECL,Kottadih UG/OC,Rajmahal,October 2016-17,0.97,VERIFIED,Sheet_1,F20,
+fact-7180dec7df5847,COAL_PRODUCTION,Raw Coal Production,27.25,MT,WCL,Majri OC,Pench-Kanhan,FY 2019-20,0.99,VERIFIED,,,2
+fact-cc5a0604dc6347,COAL_PRODUCTION,Raw Coal Production,40.07,MT,SECL,Chhal OC,Mand-Raigarh,FY 2019-20,0.74,CONFLICT,,,5
+fact-04078f90f74a43,COAL_PRODUCTION,Raw Coal Production,35.74,MT,ECL,Khottadih UG,Raniganj,FY 2019-20,0.8,NEEDS_REVIEW,,,14
+fact-fcf22c48df5444,COAL_PRODUCTION,Raw Coal Production,23.71,MT,CMPDI,RI-III Ranchi,Geological Directorate,FY 2024-25,0.71,REVIEW_REQUIRED,,,14
+fact-3ce86135032845,COAL_PRODUCTION,Raw Coal Production,27.84,MT,CMPDI,RI-I Asansol,Geological Directorate,FY 2018-19,0.95,VERIFIED,,,10
+fact-938508e0e7d942,COAL_PRODUCTION,Raw Coal Production,21.15,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2023-24,0.92,VERIFIED,,,2
+fact-d1887d3d911341,COAL_PRODUCTION,Raw Coal Production,22.45,MT,CCL,Kuju OC,South Karanpura,2018-19-Q2,0.95,VERIFIED,Sheet1,R188,
+fact-f4527755fe7242,COAL_PRODUCTION,Raw Coal Production,23.41,MT,NCL,Kakri OC,Singrauli,FY 2023-24,0.99,VERIFIED,,,8
+fact-a4af77f32c054d,COAL_PRODUCTION,Raw Coal Production,15.08,MT,MCL,Bhubaneswari OC,Ib Valley,2019-20-Q2,0.94,VERIFIED,Sheet_4,J41,
+fact-5722385248eb45,COAL_PRODUCTION,Raw Coal Production,23.8,MT,NCL,Khadia OC,Singrauli,January 2017-18,0.99,VERIFIED,,,13
+fact-775a0fd4b62f47,COAL_PRODUCTION,Raw Coal Production,41.72,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),FY 2023-24,0.91,NEEDS_REVIEW,Sheet_2,D79,
+fact-fec2b652fb9143,COAL_PRODUCTION,Raw Coal Production,24.79,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,FY 2021-22,0.91,VERIFIED,,,6
+fact-be26af84224d42,COAL_PRODUCTION,Raw Coal Production,41.01,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2022-23,0.79,CONFLICT,,,13
+fact-f711e6a0a88443,COAL_PRODUCTION,Raw Coal Production,16.63,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2021-22,0.94,VERIFIED,,,4
+fact-c1661bbdf5614c,COAL_PRODUCTION,Raw Coal Production,2.48,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),FY 2021-22,0.97,VERIFIED,,,2
+fact-f51605a46b0d40,COAL_PRODUCTION,Raw Coal Production,8.36,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),FY 2020-21,0.86,NEEDS_REVIEW,Sheet_3,F119,
+fact-c58d30e823d146,COAL_PRODUCTION,Raw Coal Production,13.11,MT,ECL,Bankola UG,Raniganj,FY 2018-19,0.98,VERIFIED,Sheet1,R249,
+fact-e1285933cc1c4d,COAL_PRODUCTION,Raw Coal Production,48.25,MT,MCL,Kaniha OC,Ib Valley,2024-25-Q3,0.95,VERIFIED,Sheet1,R71,
+fact-904e4728db8b40,COAL_PRODUCTION,Raw Coal Production,26.54,MT,BCCL,Katras OC,Raniganj West,FY 2019-20,0.93,VERIFIED,,,1
+fact-db6e11d2712c41,COAL_PRODUCTION,Raw Coal Production,26.63,MT,NCL,Jayant OC,Singrauli,FY 2019-20,0.76,NEEDS_REVIEW,,,1
+fact-bde75fc6e01041,COAL_PRODUCTION,Raw Coal Production,10.54,MT,CCL,Magadh OC,West Bokaro,FY 2022-23,0.95,VERIFIED,,,11
+fact-10369cfc050947,COAL_PRODUCTION,Raw Coal Production,14.08,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2018-19,0.68,REVIEW_REQUIRED,Sheet_3,D100,
+fact-2a3d7fb5aee94e,COAL_PRODUCTION,Raw Coal Production,18.22,MT,CMPDI,RI-III Ranchi,Geological Directorate,FY 2022-23,0.81,NEEDS_REVIEW,,,2
+fact-2a988a49893742,COAL_PRODUCTION,Raw Coal Production,32.4,MT,CCL,Dhori OC,South Karanpura,2017-18-Q1,0.74,NEEDS_REVIEW,,,1
+fact-1efc4ae4aa0b46,COAL_PRODUCTION,Raw Coal Production,6.89,MT,BCCL,Bastacolla OC,Raniganj West,FY 2025-26,0.66,REVIEW_REQUIRED,Sheet_2,J98,
+fact-cd258abe3c5b46,COAL_PRODUCTION,Raw Coal Production,21.03,MT,NCL,Dudhichua OC,Singrauli,FY 2021-22,0.93,VERIFIED,Sheet1,R73,
+fact-9ca304731dbe42,COAL_PRODUCTION,Raw Coal Production,31.51,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,2016-17-Q2,0.91,VERIFIED,,,1
+fact-2e6a92fcb06e46,COAL_PRODUCTION,Raw Coal Production,30.73,MT,BCCL,Lodna OC,Raniganj West,FY 2016-17,0.56,REVIEW_REQUIRED,,,2
+fact-ad622d0f74fa40,COAL_PRODUCTION,Raw Coal Production,15.98,MT,ECL,Sonepur Bazari OC,Rajmahal,FY 2024-25,0.93,VERIFIED,,,1
+fact-8c41b2ba39244b,COAL_PRODUCTION,Raw Coal Production,6.14,MT,CCL,Kuju OC,North Karanpura,FY 2019-20,0.97,NEEDS_REVIEW,Sheet_1,H99,
+fact-cd3332915e444b,COAL_PRODUCTION,Raw Coal Production,15.44,MT,CCL,Kathara OC,East Bokaro,2019-20-Q1,0.95,VERIFIED,Sheet_4,J103,
+fact-79dc6cc7051242,COAL_PRODUCTION,Raw Coal Production,28.9,MT,SECL,Bijuri UG,Sohagpur,FY 2017-18,0.97,VERIFIED,,,4
+fact-d3d535f91fa341,COAL_PRODUCTION,Raw Coal Production,15.81,MT,CMPDI,RI-IV Nagpur,Geological Directorate,FY 2020-21,0.92,VERIFIED,,,8
+fact-486726123d0d44,COAL_PRODUCTION,Raw Coal Production,27.45,MT,CCL,Magadh OC,North Karanpura,2022-23-Q3,0.92,VERIFIED,,,3
+fact-b74dc9348dfa4c,COAL_PRODUCTION,Raw Coal Production,33.26,MT,CCL,Kathara OC,South Karanpura,FY 2020-21,0.91,VERIFIED,,,8
+fact-188b18935b1b49,COAL_PRODUCTION,Raw Coal Production,14.08,MT,BCCL,Block II OC,Jharia,FY 2021-22,0.95,VERIFIED,Sheet1,R27,
+fact-894f742ace0f4e,COAL_PRODUCTION,Raw Coal Production,26.8,MT,BCCL,Govindpur OC,Jharia,2017-18-Q1,0.98,VERIFIED,,,13
+fact-8c2cb84e38a24c,COAL_PRODUCTION,Raw Coal Production,47.58,MT,CMPDI,RI-VI Singrauli,Geological Directorate,FY 2024-25,0.64,REVIEW_REQUIRED,,,13
+fact-6d5bc084c6074a,COAL_PRODUCTION,Raw Coal Production,3.93,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2016-17,0.6,REVIEW_REQUIRED,,,11
+fact-eb6011255dba48,COAL_PRODUCTION,Raw Coal Production,23.5,MT,CMPDI,RI-V Bilaspur,Geological Directorate,FY 2020-21,0.93,VERIFIED,,,11
+fact-953488c8f08e4e,COAL_PRODUCTION,Raw Coal Production,35.09,MT,CMPDI,RI-I Asansol,All CIL Coalfields (Exploration),FY 2019-20,0.98,VERIFIED,,,6
+fact-55358b3d35984c,COAL_PRODUCTION,Raw Coal Production,20.45,MT,CIL,Leddo OC,Pan-India Mining Operations,February 2021-22,0.91,VERIFIED,,,10
+fact-cd9e3e3aaaf044,COAL_PRODUCTION,Raw Coal Production,27.02,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,March 2020-21,0.96,VERIFIED,Sheet_4,D29,
+fact-554fe656760248,COAL_PRODUCTION,Raw Coal Production,20.07,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2016-17,0.99,VERIFIED,Sheet_3,G113,
+fact-70e9e5ad093d45,COAL_PRODUCTION,Raw Coal Production,5.33,MT,NCL,Nigahi OC,Singrauli,2022-23-Q3,0.79,NEEDS_REVIEW,,,2
+fact-b598eb9635b54f,COAL_PRODUCTION,Raw Coal Production,12.28,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),FY 2021-22,0.96,VERIFIED,,,5
+fact-26ef7bc557c943,COAL_PRODUCTION,Raw Coal Production,1.63,MT,BCCL,Barora OC,Raniganj West,FY 2018-19,0.91,VERIFIED,,,6
+fact-fd3d377e4e2247,COAL_PRODUCTION,Raw Coal Production,27.9,MT,SECL,Dipka OC,Hasdeo,2022-23-Q2,0.58,REVIEW_REQUIRED,,,11
+fact-2d7d407bdfe741,COAL_PRODUCTION,Raw Coal Production,52.88,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),FY 2025-26,0.95,VERIFIED,,,1
+fact-d54a7725b2c845,COAL_PRODUCTION,Raw Coal Production,33.24,MT,NCL,Dudhichua OC,Singrauli,November 2019-20,0.92,VERIFIED,,,4
+fact-4d3c6585060440,COAL_PRODUCTION,Raw Coal Production,12.52,MT,CCL,Amrapali OC,West Bokaro,FY 2016-17,0.61,REVIEW_REQUIRED,Sheet_1,D15,
+fact-2fec632d007b4e,COAL_PRODUCTION,Raw Coal Production,15.13,MT,NCL,Bina OC,Singrauli,FY 2017-18,0.91,VERIFIED,Sheet_4,G11,
+fact-1a3ef076ea774b,COAL_PRODUCTION,Raw Coal Production,27.07,MT,CMPDI,RI-III Ranchi,Geological Directorate,October 2020-21,0.92,VERIFIED,,,7
+fact-9ef4d0f89e4f47,COAL_PRODUCTION,Raw Coal Production,21.33,MT,CCL,Kathara OC,East Bokaro,2024-25-Q4,0.96,VERIFIED,Sheet_2,J59,
+fact-3b29c05072f24a,COAL_PRODUCTION,Raw Coal Production,14.45,MT,CCL,Kathara OC,West Bokaro,October 2023-24,0.62,REVIEW_REQUIRED,,,1
+fact-9a24592bb0624e,COAL_PRODUCTION,Raw Coal Production,46.31,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2025-26,0.88,NEEDS_REVIEW,,,8
+fact-82537b2f849449,COAL_PRODUCTION,Raw Coal Production,54.55,MT,NCL,Nigahi OC,Singrauli,March 2025-26,0.98,VERIFIED,,,1
+fact-e83cda79e6f948,COAL_PRODUCTION,Raw Coal Production,38.38,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,FY 2025-26,0.95,VERIFIED,,,1
+fact-931193a505ee48,COAL_PRODUCTION,Raw Coal Production,19.16,MT,MCL,Belpahar OC,Ib Valley,FY 2017-18,0.73,NEEDS_REVIEW,Sheet_5,E98,
+fact-06a0994e3e8e47,COAL_PRODUCTION,Raw Coal Production,4.14,MT,MCL,Kaniha OC,Talcher,June 2024-25,0.92,VERIFIED,Sheet1,R73,
+fact-9d2f26cec0c84a,COAL_PRODUCTION,Raw Coal Production,50.14,MT,BCCL,Lodna OC,Jharia,FY 2025-26,0.93,VERIFIED,Sheet_2,G91,
+fact-c4df78884c2f4a,COAL_PRODUCTION,Raw Coal Production,12.36,MT,MCL,Belpahar OC,Ib Valley,2024-25-Q3,0.84,NEEDS_REVIEW,Sheet_1,G155,
+fact-ff5cfc20818a49,COAL_PRODUCTION,Raw Coal Production,19.1,MT,ECL,Kottadih UG/OC,Raniganj,FY 2018-19,0.95,VERIFIED,,,16
+fact-de7c96aca8a04b,COAL_PRODUCTION,Raw Coal Production,17.84,MT,MCL,Hingula OC,Ib Valley,FY 2022-23,0.93,VERIFIED,Sheet1,R189,
+fact-7adeddc399964c,COAL_PRODUCTION,Raw Coal Production,35.42,MT,CCL,Dhori OC,South Karanpura,2023-24-Q4,0.98,VERIFIED,,,8
+fact-aa8364ac054c43,COAL_PRODUCTION,Raw Coal Production,4.52,MT,CIL,Tikak OC,Consolidated Indian Coalfields,September 2018-19,0.95,VERIFIED,Sheet_4,C155,
+fact-528aef66ebcb41,COAL_PRODUCTION,Raw Coal Production,40.53,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2025-26,0.75,NEEDS_REVIEW,,,5
+fact-056f9ab84acf4c,COAL_PRODUCTION,Raw Coal Production,27.31,MT,ECL,Bankola UG,Rajmahal,FY 2022-23,0.97,VERIFIED,,,13
+fact-be8a1729ab464f,COAL_PRODUCTION,Raw Coal Production,18.59,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),2022-23-Q1,0.92,VERIFIED,Sheet_2,J88,
+fact-03dc6efd5f984d,COAL_PRODUCTION,Raw Coal Production,33.57,MT,NCL,Khadia OC,Singrauli,FY 2020-21,0.93,VERIFIED,Sheet_3,B84,
+fact-828873660aaa42,COAL_PRODUCTION,Raw Coal Production,8.88,MT,CCL,Piparwar OC,West Bokaro,October 2018-19,0.93,VERIFIED,Sheet1,R197,
+fact-6ece12cdd80440,COAL_PRODUCTION,Raw Coal Production,2.5,MT,MCL,Belpahar OC,Talcher,May 2023-24,0.92,VERIFIED,,,2
+fact-56821b73debd47,COAL_PRODUCTION,Raw Coal Production,34.18,MT,NCL,Bina OC,Singrauli,FY 2022-23,0.89,NEEDS_REVIEW,,,10
+fact-869a4da6baee44,COAL_PRODUCTION,Raw Coal Production,5.36,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,2016-17-Q4,0.84,NEEDS_REVIEW,,,2
+fact-92f8195be05849,COAL_PRODUCTION,Raw Coal Production,18.22,MT,CMPDI,RI-III Ranchi,Central Drilling Reserves,FY 2022-23,0.78,NEEDS_REVIEW,Sheet_3,J145,
+fact-7b7e389c379148,COAL_PRODUCTION,Raw Coal Production,28.33,MT,CMPDI,RI-VI Singrauli,Central Drilling Reserves,2023-24-Q2,0.91,VERIFIED,,,2
+fact-99c022be2bb24b,COAL_PRODUCTION,Raw Coal Production,9.18,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2023-24,0.99,VERIFIED,Sheet1,R238,
+fact-2343c8e771f449,COAL_PRODUCTION,Raw Coal Production,25.4,MT,MCL,Ananta OC,Ib Valley,September 2016-17,0.57,REVIEW_REQUIRED,Sheet_3,B42,
+fact-f0021141fae440,COAL_PRODUCTION,Raw Coal Production,20.33,MT,MCL,Jagannath OC,Talcher,FY 2022-23,0.92,VERIFIED,Sheet_4,D24,
+fact-bb8af86d55a442,COAL_PRODUCTION,Raw Coal Production,0.8,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2016-17,0.9,VERIFIED,Sheet_3,B28,
+fact-8680a1c4f0aa43,COAL_PRODUCTION,Raw Coal Production,19.5,MT,BCCL,Kusunda OC,Raniganj West,August 2023-24,0.96,VERIFIED,,,14
+fact-98a3c241ded24d,COAL_PRODUCTION,Raw Coal Production,21.68,MT,SECL,Chhal OC,Hasdeo,FY 2020-21,0.97,VERIFIED,,,1
+fact-31a5099e62bc44,COAL_PRODUCTION,Raw Coal Production,46.19,MT,CIL,Tikak OC,Consolidated Indian Coalfields,2023-24-Q1,0.97,VERIFIED,Sheet1,R32,
+fact-a13c53e405a241,COAL_PRODUCTION,Raw Coal Production,2.15,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2021-22,0.93,VERIFIED,,,4
+fact-5fafd0262ab644,COAL_PRODUCTION,Raw Coal Production,36.85,MT,MCL,Lakhanpur OC,Talcher,2019-20-Q2,0.9,VERIFIED,Sheet_2,D113,
+fact-f588d0abfd5e43,COAL_PRODUCTION,Raw Coal Production,6.7,MT,WCL,Majri OC,Wardha Valley,FY 2019-20,0.95,VERIFIED,Sheet1,R151,
+fact-cf26336637e343,COAL_PRODUCTION,Raw Coal Production,35.41,MT,CCL,Dhori OC,South Karanpura,FY 2023-24,0.93,VERIFIED,,,2
+fact-7501e8f3225b4d,COAL_PRODUCTION,Raw Coal Production,29.34,MT,NCL,Nigahi OC,Singrauli,2023-24-Q1,0.93,VERIFIED,Sheet1,R44,
+fact-9754c0fed9ce4f,COAL_PRODUCTION,Raw Coal Production,27.93,MT,BCCL,Bastacolla OC,Jharia,2018-19-Q1,0.94,VERIFIED,,,6
+fact-9f2569beb6a249,COAL_PRODUCTION,Raw Coal Production,17.22,MT,WCL,Majri OC,Wardha Valley,FY 2023-24,0.91,VERIFIED,,,20
+fact-8901e684b48f4c,COAL_PRODUCTION,Raw Coal Production,34.33,MT,CCL,Kuju OC,West Bokaro,FY 2019-20,0.92,VERIFIED,,,19
+fact-9a8ea9becb0b43,COAL_PRODUCTION,Raw Coal Production,4.48,MT,MCL,Kaniha OC,Ib Valley,FY 2019-20,0.94,VERIFIED,Sheet_2,C81,
+fact-f3340ec35dc94a,COAL_PRODUCTION,Raw Coal Production,2.16,MT,SECL,Manikpur OC,Sohagpur,FY 2016-17,0.93,VERIFIED,Sheet_2,H175,
+fact-a4d13d82d2bb43,COAL_PRODUCTION,Raw Coal Production,4.52,MT,SECL,Shivani UG,Korba,2023-24-Q3,0.88,NEEDS_REVIEW,Sheet1,R149,
+fact-878f2e9b2dae4e,COAL_PRODUCTION,Raw Coal Production,4.26,MT,SECL,Kusmunda OC,Mand-Raigarh,2022-23-Q1,0.92,VERIFIED,Sheet_1,E75,
+fact-18709d99f3204d,COAL_PRODUCTION,Raw Coal Production,14.98,MT,MCL,Kaniha OC,Ib Valley,FY 2016-17,0.96,VERIFIED,,,7
+fact-f7dbfea99e3740,COAL_PRODUCTION,Raw Coal Production,1.34,MT,WCL,Wani OC,Umrer,FY 2017-18,0.62,NEEDS_REVIEW,Sheet_3,G54,
+fact-b49ed56da8c349,COAL_PRODUCTION,Raw Coal Production,2.45,MT,CCL,Magadh OC,West Bokaro,FY 2020-21,0.96,VERIFIED,Sheet1,R138,
+fact-a4cc1d5181314f,COAL_PRODUCTION,Raw Coal Production,32.77,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,February 2024-25,0.7,REVIEW_REQUIRED,,,15
+fact-1737edd91c234b,COAL_PRODUCTION,Raw Coal Production,21.67,MT,SECL,Shivani UG,Hasdeo,February 2018-19,0.72,NEEDS_REVIEW,,,2
+fact-e1ecfb8ffd9744,COAL_PRODUCTION,Raw Coal Production,16.63,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2021-22,0.92,NEEDS_REVIEW,,,2
+fact-d171ee129b7d4b,COAL_PRODUCTION,Raw Coal Production,5.2,MT,NCL,Dudhichua OC,Singrauli,FY 2019-20,0.91,VERIFIED,,,12
+fact-af487f7aab694c,COAL_PRODUCTION,Raw Coal Production,26.95,MT,CCL,Ashoka OC,West Bokaro,FY 2023-24,0.96,VERIFIED,,,14
+fact-0fda9cdbba464c,COAL_PRODUCTION,Raw Coal Production,9.68,MT,ECL,Khottadih UG,Rajmahal,September 2022-23,0.91,VERIFIED,Sheet_3,E125,
+fact-6dbfaf30451f4a,COAL_PRODUCTION,Raw Coal Production,17.08,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),2018-19-Q2,0.75,NEEDS_REVIEW,,,9
+fact-3d7cfe1d7cd04d,COAL_PRODUCTION,Raw Coal Production,19.48,MT,ECL,Rajmahal OC,Rajmahal,FY 2024-25,0.92,VERIFIED,Sheet1,R47,
+fact-726361ff52204b,COAL_PRODUCTION,Raw Coal Production,26.25,MT,ECL,Kottadih UG/OC,Raniganj,FY 2020-21,0.95,VERIFIED,,,6
+fact-3e488e00d45b4b,COAL_PRODUCTION,Raw Coal Production,40.8,MT,MCL,Bhubaneswari OC,Ib Valley,FY 2023-24,0.61,REVIEW_REQUIRED,,,2
+fact-e86bf08d222945,COAL_PRODUCTION,Raw Coal Production,24.9,MT,BCCL,Govindpur OC,Raniganj West,FY 2016-17,0.68,REVIEW_REQUIRED,,,5
+fact-431a8653ee3943,COAL_PRODUCTION,Raw Coal Production,21.44,MT,NCL,Krishnashila OC,Singrauli,FY 2021-22,0.88,NEEDS_REVIEW,,,4
+fact-44ce6eb6f55e44,COAL_PRODUCTION,Raw Coal Production,1.84,MT,WCL,Chandrapur OC,Umrer,2019-20-Q1,0.73,NEEDS_REVIEW,,,3
+fact-0820beda0cf748,COAL_PRODUCTION,Raw Coal Production,25.61,MT,CMPDI,RI-II Dhanbad,Central Drilling Reserves,2021-22-Q1,0.97,VERIFIED,Sheet_5,E8,
+fact-4a6a1a29d8384d,COAL_PRODUCTION,Raw Coal Production,16.98,MT,NCL,Bina OC,Singrauli,FY 2023-24,0.86,NEEDS_REVIEW,,,5
+fact-f8ba56c098f641,COAL_PRODUCTION,Raw Coal Production,46.26,MT,BCCL,Lodna OC,Jharia,FY 2023-24,0.96,VERIFIED,Sheet_1,F25,
+fact-34e0f00fe53c46,COAL_PRODUCTION,Raw Coal Production,10.74,MT,CCL,Kathara OC,South Karanpura,FY 2019-20,0.93,VERIFIED,Sheet_2,J130,
+fact-4403c4438eb74e,COAL_PRODUCTION,Raw Coal Production,17.12,MT,BCCL,Lodna OC,Jharia,FY 2017-18,0.75,NEEDS_REVIEW,,,5
+fact-62c315e3b0d14b,COAL_PRODUCTION,Raw Coal Production,20.65,MT,BCCL,Moonidih UG,Jharia,FY 2024-25,0.75,NEEDS_REVIEW,Sheet1,R227,
+fact-63af3459562848,COAL_PRODUCTION,Raw Coal Production,20.97,MT,CMPDI,RI-II Dhanbad,All CIL Coalfields (Exploration),March 2019-20,0.97,VERIFIED,Sheet_3,E99,
+fact-af6c474353464b,COAL_PRODUCTION,Raw Coal Production,31.7,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2019-20,0.92,NEEDS_REVIEW,,,7
+fact-6574f6cccbe44b,COAL_PRODUCTION,Raw Coal Production,3.34,MT,NCL,Khadia OC,Singrauli,FY 2016-17,0.95,VERIFIED,Sheet_1,G37,
+fact-ad45e5319d7447,COAL_PRODUCTION,Raw Coal Production,8.62,MT,BCCL,Moonidih UG,Jharia,FY 2018-19,0.99,VERIFIED,,,12
+fact-7ad7652d6cf74a,COAL_PRODUCTION,Raw Coal Production,2.39,MT,MCL,Hingula OC,Talcher,FY 2022-23,0.92,VERIFIED,Sheet_4,E137,
+fact-e30dd717cfbf41,COAL_PRODUCTION,Raw Coal Production,4.4,MT,WCL,Umrer OC,Umrer,2019-20-Q2,0.92,VERIFIED,,,1
+fact-c20a5a9a993942,COAL_PRODUCTION,Raw Coal Production,14.39,MT,ECL,Khottadih UG,Raniganj,2020-21-Q4,0.95,VERIFIED,,,11
+fact-86334ef1c10746,COAL_PRODUCTION,Raw Coal Production,18.34,MT,CCL,Magadh OC,West Bokaro,FY 2021-22,0.96,VERIFIED,,,20
+fact-84d3f418789d45,COAL_PRODUCTION,Raw Coal Production,32.65,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2020-21,0.9,VERIFIED,Sheet_1,H40,
+fact-d1edc691886b40,COAL_PRODUCTION,Raw Coal Production,26.95,MT,CCL,Ashoka OC,South Karanpura,FY 2023-24,0.75,NEEDS_REVIEW,,,4
+fact-5efca2441d9345,COAL_PRODUCTION,Raw Coal Production,19.76,MT,CMPDI,RI-VI Singrauli,Geological Directorate,FY 2019-20,0.94,VERIFIED,Sheet1,R109,
+fact-434f766517754c,COAL_PRODUCTION,Raw Coal Production,6.9,MT,NCL,Amlohri OC,Singrauli,2016-17-Q2,0.96,VERIFIED,,,8
+fact-d134878d7f054b,COAL_PRODUCTION,Raw Coal Production,5.22,MT,MCL,Hingula OC,Ib Valley,FY 2023-24,0.74,NEEDS_REVIEW,,,1
+fact-42590bd877d04d,COAL_PRODUCTION,Raw Coal Production,54.54,MT,SECL,Jamuna Kotma UG,Korba,FY 2025-26,0.95,VERIFIED,Sheet1,R125,
+fact-955744cbc78f46,COAL_PRODUCTION,Raw Coal Production,25.36,MT,BCCL,Govindpur OC,Raniganj West,FY 2023-24,0.69,REVIEW_REQUIRED,,,6
+fact-edb680c4ed7847,COAL_PRODUCTION,Raw Coal Production,23.49,MT,CIL,Tikak OC,Pan-India Mining Operations,December 2025-26,0.98,VERIFIED,,,4
+fact-b0bf7a47220046,COAL_PRODUCTION,Raw Coal Production,25.1,MT,SECL,Kusmunda OC,Sohagpur,FY 2020-21,0.63,REVIEW_REQUIRED,,,1
+fact-7140fa998ebf4d,COAL_PRODUCTION,Raw Coal Production,14.08,MT,BCCL,Bastacolla OC,Raniganj West,FY 2018-19,0.95,VERIFIED,,,9
+fact-b9c06384e60249,COAL_PRODUCTION,Raw Coal Production,22.94,MT,CCL,Piparwar OC,West Bokaro,FY 2016-17,0.77,CONFLICT,Sheet_3,E143,
+fact-96eadaf6de9447,COAL_PRODUCTION,Raw Coal Production,25.9,MT,NCL,Amlohri OC,Singrauli,2024-25-Q4,0.58,REVIEW_REQUIRED,,,7
+fact-d41fba700ca240,COAL_PRODUCTION,Raw Coal Production,25.6,MT,CCL,Piparwar OC,South Karanpura,FY 2024-25,0.75,NEEDS_REVIEW,Sheet_3,E134,
+fact-85c41fa5ae9848,COAL_PRODUCTION,Raw Coal Production,33.28,MT,NCL,Khadia OC,Singrauli,FY 2018-19,0.99,VERIFIED,,,1
+fact-380c8deb939648,COAL_PRODUCTION,Raw Coal Production,22.82,MT,CCL,Kuju OC,North Karanpura,FY 2024-25,0.94,VERIFIED,Sheet_1,C71,
+fact-6b5834aaa5254e,COAL_PRODUCTION,Raw Coal Production,4.2,MT,WCL,Wani OC,Wardha Valley,April 2019-20,0.56,REVIEW_REQUIRED,Sheet1,R61,
+fact-1939a537eb6546,COAL_PRODUCTION,Raw Coal Production,39.09,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2021-22,0.77,NEEDS_REVIEW,,,6
+fact-13dae3ee832c46,COAL_PRODUCTION,Raw Coal Production,2.09,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2016-17,0.93,VERIFIED,,,20
+fact-06033f8c28b549,COAL_PRODUCTION,Raw Coal Production,2.06,MT,SECL,Bijuri UG,Sohagpur,2024-25-Q3,0.74,NEEDS_REVIEW,,,5
+fact-f66d51b6826b4b,COAL_PRODUCTION,Raw Coal Production,19.69,MT,WCL,Pathakhera UG,Umrer,FY 2017-18,0.97,VERIFIED,Sheet_1,D95,
+fact-790f70925d324d,COAL_PRODUCTION,Raw Coal Production,19.31,MT,ECL,Pandaveswar UG,Raniganj,FY 2025-26,0.63,REVIEW_REQUIRED,,,2
+fact-d030034d9b6948,COAL_PRODUCTION,Raw Coal Production,11.58,MT,NCL,Krishnashila OC,Singrauli,FY 2017-18,0.97,VERIFIED,,,9
+fact-a4169ceabb714f,COAL_PRODUCTION,Raw Coal Production,22.92,MT,CMPDI,RI-IV Nagpur,Central Drilling Reserves,2020-21-Q4,0.93,VERIFIED,,,5
+fact-581ce42cf57741,COAL_PRODUCTION,Raw Coal Production,9.88,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2024-25,0.91,VERIFIED,,,11
+fact-73cd51d2b72c43,COAL_PRODUCTION,Raw Coal Production,5.51,MT,ECL,Chitra OC,Raniganj,FY 2017-18,0.93,VERIFIED,Sheet1,R5,
+fact-93359b27e9df4d,COAL_PRODUCTION,Raw Coal Production,40.47,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2022-23,0.98,NEEDS_REVIEW,,,16
+fact-2cab0abe131347,COAL_PRODUCTION,Raw Coal Production,31.25,MT,MCL,Ananta OC,Talcher,2022-23-Q1,0.93,VERIFIED,Sheet1,R184,
+fact-88670c089be64c,COAL_PRODUCTION,Raw Coal Production,18.38,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2017-18,0.73,NEEDS_REVIEW,,,2
+fact-9fceec1d82754a,COAL_PRODUCTION,Raw Coal Production,39.51,MT,CMPDI,RI-IV Nagpur,Geological Directorate,2022-23-Q3,0.94,VERIFIED,Sheet_2,F128,
+fact-f51a0b79182946,COAL_PRODUCTION,Raw Coal Production,48.87,MT,ECL,Pandaveswar UG,Raniganj,FY 2025-26,0.75,NEEDS_REVIEW,Sheet_2,H163,
+fact-016dc9dd58e64d,COAL_PRODUCTION,Raw Coal Production,17.99,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2019-20,0.97,VERIFIED,,,14
+fact-c286ed48a89543,COAL_PRODUCTION,Raw Coal Production,0.47,MT,CIL,Tikak OC,Pan-India Mining Operations,2016-17-Q3,0.92,VERIFIED,Sheet_2,H177,
+fact-dbf41233fac849,COAL_PRODUCTION,Raw Coal Production,22.08,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2017-18,0.78,NEEDS_REVIEW,Sheet_4,H155,
+fact-35b0ce0d31da4b,COAL_PRODUCTION,Raw Coal Production,0.7,MT,SECL,Shivani UG,Hasdeo,FY 2017-18,0.57,REVIEW_REQUIRED,,,24
+fact-6b6f3fe6af9041,COAL_PRODUCTION,Raw Coal Production,1.94,MT,NCL,Khadia OC,Singrauli,2016-17-Q1,0.98,VERIFIED,Sheet_2,F126,
+fact-b69b884f18c64a,COAL_PRODUCTION,Raw Coal Production,5.88,MT,ECL,Kottadih UG/OC,Raniganj,FY 2021-22,0.94,VERIFIED,Sheet_4,B6,
+fact-dc6b9ab2bf064e,COAL_PRODUCTION,Raw Coal Production,30.44,MT,WCL,Majri OC,Umrer,FY 2024-25,0.77,VERIFIED,,,2
+fact-231ddfa425d141,COAL_PRODUCTION,Raw Coal Production,32.45,MT,CCL,Piparwar OC,South Karanpura,July 2024-25,0.78,NEEDS_REVIEW,Sheet1,R193,
+fact-cd2dd13194a44b,COAL_PRODUCTION,Raw Coal Production,30.93,MT,WCL,Wani OC,Pench-Kanhan,FY 2020-21,0.9,VERIFIED,,,12
+fact-53320c7dc9934f,COAL_PRODUCTION,Raw Coal Production,3.34,MT,MCL,Belpahar OC,Ib Valley,2020-21-Q2,0.91,VERIFIED,,,6
+fact-cef7d8f4819c4c,COAL_PRODUCTION,Raw Coal Production,4.31,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2018-19,0.95,VERIFIED,Sheet_3,F78,
+fact-7e77ba81eb3746,COAL_PRODUCTION,Raw Coal Production,22.71,MT,SECL,Dipka OC,Mand-Raigarh,2023-24-Q2,0.6,REVIEW_REQUIRED,Sheet1,R183,
+fact-defb5918806c45,COAL_PRODUCTION,Raw Coal Production,21.43,MT,MCL,Lakhanpur OC,Talcher,2020-21-Q2,0.77,NEEDS_REVIEW,,,18
+fact-dfc6f8c31e094c,COAL_PRODUCTION,Raw Coal Production,19.54,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2017-18,0.93,VERIFIED,,,8
+fact-ae8af4568a244d,COAL_PRODUCTION,Raw Coal Production,14.96,MT,SECL,Shivani UG,Hasdeo,2024-25-Q1,0.96,VERIFIED,Sheet_1,J41,
+fact-1359bb9d337048,COAL_PRODUCTION,Raw Coal Production,11.02,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2021-22,0.97,VERIFIED,,,3
+fact-4b008ad68c3846,COAL_PRODUCTION,Raw Coal Production,26.61,MT,NCL,Khadia OC,Singrauli,FY 2017-18,0.96,VERIFIED,,,3
+fact-c75b0b2a2ddc4a,COAL_PRODUCTION,Raw Coal Production,29.81,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2024-25,0.88,NEEDS_REVIEW,,,7
+fact-6dabaf25e26b4a,COAL_PRODUCTION,Raw Coal Production,49.38,MT,SECL,Manikpur OC,Mand-Raigarh,2024-25-Q4,0.91,VERIFIED,Sheet_1,C169,
+fact-75adac89797945,COAL_PRODUCTION,Raw Coal Production,25.64,MT,ECL,Bankola UG,Raniganj,FY 2024-25,0.96,VERIFIED,,,3
+fact-876725a9308c42,COAL_PRODUCTION,Raw Coal Production,51.05,MT,CCL,Rajrappa OC,West Bokaro,FY 2025-26,0.6,REVIEW_REQUIRED,,,5
+fact-c60ccf5a85e24d,COAL_PRODUCTION,Raw Coal Production,19.82,MT,ECL,Rajmahal OC,Rajmahal,FY 2017-18,0.93,VERIFIED,,,10
+fact-c3b5208d92df4a,COAL_PRODUCTION,Raw Coal Production,29.07,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2016-17,0.78,CONFLICT,Sheet_2,F175,
+fact-067dbad923834c,COAL_PRODUCTION,Raw Coal Production,35.16,MT,WCL,Pathakhera UG,Pench-Kanhan,FY 2024-25,0.95,VERIFIED,Sheet_4,F74,
+fact-ac8da688d60a43,COAL_PRODUCTION,Raw Coal Production,22.72,MT,CCL,Rajrappa OC,North Karanpura,FY 2020-21,0.68,REVIEW_REQUIRED,,,4
+fact-1033f2e88bf447,COAL_PRODUCTION,Raw Coal Production,11.15,MT,CCL,Magadh OC,North Karanpura,FY 2020-21,0.98,VERIFIED,,,10
+fact-9fc18c92d81a44,COAL_PRODUCTION,Raw Coal Production,1.56,MT,WCL,Majri OC,Umrer,FY 2017-18,0.69,REVIEW_REQUIRED,Sheet_4,J149,
+fact-a44af844a0cd4b,COAL_PRODUCTION,Raw Coal Production,33.54,MT,SECL,Gevra OC,Hasdeo,FY 2021-22,0.98,VERIFIED,Sheet_5,H140,
+fact-e3131c19a51743,COAL_PRODUCTION,Raw Coal Production,3.15,MT,CIL,Tikak OC,Pan-India Mining Operations,2020-21-Q1,0.92,VERIFIED,Sheet1,R220,
+fact-1ac36d74605d4a,COAL_PRODUCTION,Raw Coal Production,30.17,MT,BCCL,Lodna OC,Jharia,FY 2019-20,0.93,VERIFIED,,,6
+fact-f357ae91618e40,COAL_PRODUCTION,Raw Coal Production,26.69,MT,CCL,Dhori OC,East Bokaro,FY 2020-21,0.58,REVIEW_REQUIRED,,,4
+fact-04b15d1aaf8349,COAL_PRODUCTION,Raw Coal Production,25.86,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2025-26,0.91,VERIFIED,,,26
+fact-59660d10406e43,COAL_PRODUCTION,Raw Coal Production,18.12,MT,CMPDI,RI-II Dhanbad,All CIL Coalfields (Exploration),FY 2020-21,0.91,VERIFIED,,,3
+fact-4a9d461b254e4a,COAL_PRODUCTION,Raw Coal Production,6.25,MT,NCL,Kakri OC,Singrauli,FY 2019-20,0.98,VERIFIED,,,2
+fact-6b3fe639f16644,COAL_PRODUCTION,Raw Coal Production,28.67,MT,CMPDI,RI-I Asansol,Geological Directorate,2016-17-Q3,0.86,NEEDS_REVIEW,Sheet1,R79,
+fact-58ebe60091fb41,COAL_PRODUCTION,Raw Coal Production,27.95,MT,WCL,Nagpur Area OC,Pench-Kanhan,FY 2016-17,0.95,VERIFIED,Sheet_4,F26,
+fact-34574d98d03340,COAL_PRODUCTION,Raw Coal Production,40.03,MT,ECL,Kottadih UG/OC,Raniganj,FY 2024-25,0.81,NEEDS_REVIEW,Sheet1,R189,
+fact-850129a6f41041,COAL_PRODUCTION,Raw Coal Production,25.24,MT,BCCL,Barora OC,Jharia,January 2023-24,0.96,VERIFIED,,,6
+fact-a56e628d319f42,COAL_PRODUCTION,Raw Coal Production,31.39,MT,WCL,Chandrapur OC,Pench-Kanhan,2020-21-Q3,0.96,VERIFIED,,,4
+fact-1a21a0da404a4a,COAL_PRODUCTION,Raw Coal Production,19.94,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),January 2019-20,0.95,VERIFIED,Sheet1,R60,
+fact-2d00353ce32945,COAL_PRODUCTION,Raw Coal Production,18.49,MT,CMPDI,RI-III Ranchi,Geological Directorate,2019-20-Q1,0.95,VERIFIED,Sheet1,R210,
+fact-a7ddd0026e1642,COAL_PRODUCTION,Raw Coal Production,5.43,MT,NCL,Khadia OC,Singrauli,FY 2016-17,0.93,VERIFIED,,,9
+fact-6104e530ad0f4e,COAL_PRODUCTION,Raw Coal Production,33.49,MT,NCL,Khadia OC,Singrauli,2022-23-Q4,0.64,REVIEW_REQUIRED,,,12
+fact-b553175c63744b,COAL_PRODUCTION,Raw Coal Production,22.45,MT,SECL,Gevra OC,Korba,FY 2022-23,0.95,VERIFIED,Sheet_1,E8,
+fact-84248ccb52fd45,COAL_PRODUCTION,Raw Coal Production,3.37,MT,CCL,Piparwar OC,West Bokaro,2021-22-Q4,0.99,VERIFIED,Sheet_1,D116,
+fact-167c56f1b7304d,COAL_PRODUCTION,Raw Coal Production,6.85,MT,WCL,Chandrapur OC,Pench-Kanhan,FY 2024-25,0.77,NEEDS_REVIEW,,,7
+fact-236e1407bb0c44,COAL_PRODUCTION,Raw Coal Production,1.54,MT,WCL,Pench UG,Wardha Valley,FY 2016-17,0.96,VERIFIED,Sheet_3,H80,
+fact-b5a9d52c538a48,COAL_PRODUCTION,Raw Coal Production,18.31,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2024-25,0.56,REVIEW_REQUIRED,,,2
+fact-e2a2c2a4279745,COAL_PRODUCTION,Raw Coal Production,3.43,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),FY 2019-20,0.95,VERIFIED,,,11
+fact-b1b0059bf8a346,COAL_PRODUCTION,Raw Coal Production,17.33,MT,NCL,Dudhichua OC,Singrauli,FY 2025-26,0.73,NEEDS_REVIEW,,,2
+fact-e85654bbb77e49,COAL_PRODUCTION,Raw Coal Production,25.79,MT,CMPDI,RI-I Asansol,Geological Directorate,FY 2025-26,0.6,REVIEW_REQUIRED,,,2
+fact-f2ae872a32944e,COAL_PRODUCTION,Raw Coal Production,37.42,MT,WCL,Pench UG,Umrer,FY 2024-25,0.65,REVIEW_REQUIRED,,,5
+fact-5530b156f7d840,COAL_PRODUCTION,Raw Coal Production,44.8,MT,ECL,Bankola UG,Rajmahal,March 2025-26,0.94,VERIFIED,Sheet_2,G73,
+fact-e06924ae5f574d,COAL_PRODUCTION,Raw Coal Production,18.43,MT,NCL,Nigahi OC,Singrauli,FY 2020-21,0.97,VERIFIED,Sheet_2,H75,
+fact-d2dee46ad4aa41,COAL_PRODUCTION,Raw Coal Production,40.26,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),FY 2022-23,0.69,REVIEW_REQUIRED,,,12
+fact-f0179b50146a40,COAL_PRODUCTION,Raw Coal Production,46.35,MT,WCL,Umrer OC,Pench-Kanhan,FY 2024-25,0.74,NEEDS_REVIEW,,,4
+fact-b106aec6b6cb44,COAL_PRODUCTION,Raw Coal Production,28.51,MT,NCL,Jayant OC,Singrauli,FY 2017-18,0.97,VERIFIED,Sheet_2,H83,
+fact-ad2ca6699a1142,COAL_PRODUCTION,Raw Coal Production,41.99,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2022-23,0.79,CONFLICT,,,7
+fact-6f8fe863e20049,COAL_PRODUCTION,Raw Coal Production,12.28,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2017-18,0.63,REVIEW_REQUIRED,,,28
+fact-98b289eca7914a,COAL_PRODUCTION,Raw Coal Production,16.46,MT,NCL,Jayant OC,Singrauli,2017-18-Q2,0.98,VERIFIED,,,27
+fact-7e0359ffa79145,COAL_PRODUCTION,Raw Coal Production,31.21,MT,CMPDI,RI-VII Bhubaneswar,Central Drilling Reserves,FY 2020-21,0.97,VERIFIED,,,17
+fact-e911e946f9cc45,COAL_PRODUCTION,Raw Coal Production,9.27,MT,CMPDI,RI-I Asansol,Geological Directorate,FY 2017-18,0.76,NEEDS_REVIEW,,,9
+fact-59f0c738fb3343,COAL_PRODUCTION,Raw Coal Production,15.77,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,2022-23-Q3,0.97,VERIFIED,,,1
+fact-f08fa06590c244,COAL_PRODUCTION,Raw Coal Production,21.73,MT,CMPDI,RI-VI Singrauli,Geological Directorate,FY 2018-19,0.91,VERIFIED,,,25
+fact-f489aa0ff00f47,COAL_PRODUCTION,Raw Coal Production,27.28,MT,ECL,Kottadih UG/OC,Raniganj,2020-21-Q2,0.8,NEEDS_REVIEW,,,8
+fact-64a535d1446a49,COAL_PRODUCTION,Raw Coal Production,29.22,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2023-24,0.99,VERIFIED,Sheet_2,C96,
+fact-ff3812d35dfc44,COAL_PRODUCTION,Raw Coal Production,33.36,MT,BCCL,Barora OC,Raniganj West,2018-19-Q1,0.96,VERIFIED,,,1
+fact-0662561940e543,COAL_PRODUCTION,Raw Coal Production,13.07,MT,NCL,Khadia OC,Singrauli,FY 2019-20,0.99,VERIFIED,,,8
+fact-f6681a9a080b45,COAL_PRODUCTION,Raw Coal Production,13.1,MT,MCL,Bharatpur OC,Ib Valley,FY 2024-25,0.9,VERIFIED,Sheet_3,F17,
+fact-4a95478cf6a54f,COAL_PRODUCTION,Raw Coal Production,50.96,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,2025-26-Q2,0.93,VERIFIED,,,15
+fact-97878d1e018444,COAL_PRODUCTION,Raw Coal Production,25.36,MT,WCL,Majri OC,Umrer,December 2020-21,0.91,VERIFIED,Sheet_3,J119,
+fact-470480f40a2942,COAL_PRODUCTION,Raw Coal Production,13.75,MT,CCL,Kuju OC,West Bokaro,FY 2018-19,0.92,VERIFIED,,,2
+fact-28397df0abb748,COAL_PRODUCTION,Raw Coal Production,10.19,MT,NCL,Amlohri OC,Singrauli,FY 2018-19,0.94,VERIFIED,,,10
+fact-5619d65f3ba04b,COAL_PRODUCTION,Raw Coal Production,28.58,MT,CCL,Rajrappa OC,North Karanpura,FY 2021-22,0.83,NEEDS_REVIEW,Sheet_4,H26,
+fact-7f544b5d95ad46,COAL_PRODUCTION,Raw Coal Production,1.38,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),FY 2019-20,0.87,NEEDS_REVIEW,Sheet1,R248,
+fact-f56d07fca2c740,COAL_PRODUCTION,Raw Coal Production,34.44,MT,ECL,Chitra OC,Raniganj,January 2023-24,0.92,VERIFIED,,,12
+fact-e2dc448b243c4f,COAL_PRODUCTION,Raw Coal Production,39.87,MT,SECL,Manikpur OC,Mand-Raigarh,FY 2023-24,0.73,NEEDS_REVIEW,Sheet_2,B129,
+fact-d225f9fbcf9645,COAL_PRODUCTION,Raw Coal Production,35.0,MT,BCCL,Lodna OC,Raniganj West,2019-20-Q3,0.73,NEEDS_REVIEW,,,22
+fact-413b6939123044,COAL_PRODUCTION,Raw Coal Production,31.47,MT,SECL,Shivani UG,Hasdeo,April 2025-26,0.93,VERIFIED,Sheet1,R27,
+fact-be561b29282b43,COAL_PRODUCTION,Raw Coal Production,18.17,MT,ECL,Khottadih UG,Rajmahal,2022-23-Q4,0.93,VERIFIED,Sheet_1,B5,
+fact-008d22b4654d41,COAL_PRODUCTION,Raw Coal Production,37.86,MT,NCL,Nigahi OC,Singrauli,2019-20-Q2,0.67,CONFLICT,,,5
+fact-193b07c9f0fc4b,COAL_PRODUCTION,Raw Coal Production,16.19,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2018-19,0.8,CONFLICT,,,9
+fact-bb986d884dfa45,COAL_PRODUCTION,Raw Coal Production,24.49,MT,BCCL,Bastacolla OC,Jharia,FY 2024-25,0.84,NEEDS_REVIEW,,,1
+fact-4f5b65a4213a42,COAL_PRODUCTION,Raw Coal Production,1.44,MT,CMPDI,RI-II Dhanbad,Geological Directorate,FY 2019-20,0.99,VERIFIED,Sheet1,R179,
+fact-853ad53b5d1644,COAL_PRODUCTION,Raw Coal Production,12.26,MT,SECL,Manikpur OC,Mand-Raigarh,FY 2017-18,0.92,VERIFIED,Sheet1,R152,
+fact-8fea9b86b8ad45,COAL_PRODUCTION,Raw Coal Production,10.7,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),2019-20-Q1,0.97,VERIFIED,Sheet1,R56,
+fact-bdcc5430ed984c,COAL_PRODUCTION,Raw Coal Production,27.97,MT,NCL,Nigahi OC,Singrauli,FY 2016-17,0.94,VERIFIED,,,8
+fact-806d8ece4df449,COAL_PRODUCTION,Raw Coal Production,24.33,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2016-17,0.92,VERIFIED,Sheet_1,E32,
+fact-8e3da1f4b40448,COAL_PRODUCTION,Raw Coal Production,27.85,MT,NCL,Amlohri OC,Singrauli,FY 2016-17,0.75,NEEDS_REVIEW,Sheet1,R132,
+fact-f9ea6ff377a44e,COAL_PRODUCTION,Raw Coal Production,30.66,MT,ECL,Sonepur Bazari OC,Raniganj,April 2024-25,0.84,NEEDS_REVIEW,Sheet1,R96,
+fact-f2109be9b0b941,COAL_PRODUCTION,Raw Coal Production,48.87,MT,NCL,Bina OC,Singrauli,2024-25-Q2,0.73,NEEDS_REVIEW,Sheet1,R60,
+fact-561c1f3d023b4b,COAL_PRODUCTION,Raw Coal Production,8.53,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2018-19,0.91,VERIFIED,,,4
+fact-f5ae0d42b9404a,COAL_PRODUCTION,Raw Coal Production,27.46,MT,ECL,Pandaveswar UG,Rajmahal,FY 2016-17,0.91,VERIFIED,Sheet_5,J129,
+fact-01e510dce94c43,COAL_PRODUCTION,Raw Coal Production,12.05,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2024-25,0.71,CONFLICT,,,10
+fact-3f228540c8634e,COAL_PRODUCTION,Raw Coal Production,23.62,MT,CMPDI,RI-II Dhanbad,All CIL Coalfields (Exploration),FY 2016-17,0.62,REVIEW_REQUIRED,Sheet1,R38,
+fact-e7e63b2836a94a,COAL_PRODUCTION,Raw Coal Production,12.95,MT,SECL,Shivani UG,Korba,FY 2016-17,0.8,CONFLICT,,,21
+fact-a52622b1658f4c,COAL_PRODUCTION,Raw Coal Production,12.99,MT,WCL,Majri OC,Wardha Valley,2020-21-Q3,0.98,VERIFIED,,,14
+fact-a0b1fcf59ec84a,COAL_PRODUCTION,Raw Coal Production,25.9,MT,WCL,Umrer OC,Umrer,FY 2020-21,0.68,CONFLICT,Sheet_1,E51,
+fact-86000a401c0643,COAL_PRODUCTION,Raw Coal Production,53.95,MT,SECL,Dipka OC,Sohagpur,FY 2025-26,0.96,VERIFIED,,,16
+fact-d5cb59c067a246,COAL_PRODUCTION,Raw Coal Production,20.76,MT,BCCL,Govindpur OC,Raniganj West,FY 2018-19,0.93,NEEDS_REVIEW,,,8
+fact-d916c7db8bd54c,COAL_PRODUCTION,Raw Coal Production,27.22,MT,ECL,Bankola UG,Raniganj,FY 2024-25,0.96,VERIFIED,,,10
+fact-2bba9ef5401741,COAL_PRODUCTION,Raw Coal Production,20.6,MT,MCL,Ananta OC,Talcher,FY 2022-23,0.93,VERIFIED,Sheet_1,F74,
+fact-ebdb022c7dc643,COAL_PRODUCTION,Raw Coal Production,28.99,MT,SECL,Dipka OC,Mand-Raigarh,2023-24-Q2,0.97,VERIFIED,Sheet1,R48,
+fact-1565ecd1640b4c,COAL_PRODUCTION,Raw Coal Production,2.28,MT,CMPDI,RI-II Dhanbad,Central Drilling Reserves,March 2022-23,0.93,VERIFIED,Sheet1,R44,
+fact-72c5016ce8714b,COAL_PRODUCTION,Raw Coal Production,37.22,MT,CCL,Dhori OC,North Karanpura,FY 2023-24,0.97,VERIFIED,Sheet1,R237,
+fact-58d08d68f46143,COAL_PRODUCTION,Raw Coal Production,26.9,MT,WCL,Pathakhera UG,Umrer,FY 2025-26,0.92,VERIFIED,,,1
+fact-72335fe4fd534a,COAL_PRODUCTION,Raw Coal Production,36.52,MT,ECL,Chitra OC,Rajmahal,February 2019-20,0.95,VERIFIED,,,4
+fact-2bc4e2c1b2394f,COAL_PRODUCTION,Raw Coal Production,23.08,MT,CIL,Leddo OC,Consolidated Indian Coalfields,2025-26-Q2,0.98,VERIFIED,,,25
+fact-e907e6516ee641,COAL_PRODUCTION,Raw Coal Production,35.46,MT,BCCL,Kusunda OC,Raniganj West,FY 2018-19,0.97,VERIFIED,,,3
+fact-40a1478dc6f045,COAL_PRODUCTION,Raw Coal Production,9.71,MT,BCCL,Katras OC,Jharia,FY 2022-23,0.94,VERIFIED,,,11
+fact-15ec57e099894b,COAL_PRODUCTION,Raw Coal Production,10.08,MT,WCL,Pench UG,Pench-Kanhan,2016-17-Q2,0.97,VERIFIED,,,12
+fact-7098de3b1f6147,COAL_PRODUCTION,Raw Coal Production,27.99,MT,MCL,Hingula OC,Ib Valley,FY 2017-18,0.87,NEEDS_REVIEW,Sheet_1,D144,
+fact-c809f650523549,COAL_PRODUCTION,Raw Coal Production,37.08,MT,CMPDI,RI-IV Nagpur,Central Drilling Reserves,FY 2019-20,0.97,VERIFIED,Sheet_4,G129,
+fact-3c7ee02f0ade4e,COAL_PRODUCTION,Raw Coal Production,16.49,MT,MCL,Kaniha OC,Talcher,FY 2018-19,0.98,VERIFIED,Sheet1,R61,
+fact-3c9dbd521fe44c,COAL_PRODUCTION,Raw Coal Production,28.18,MT,SECL,Kusmunda OC,Hasdeo,FY 2020-21,0.93,VERIFIED,Sheet_3,F107,
+fact-f3bfabe2e94749,COAL_PRODUCTION,Raw Coal Production,33.59,MT,WCL,Majri OC,Wardha Valley,FY 2020-21,0.95,VERIFIED,Sheet_2,D41,
+fact-26172f183f994a,COAL_PRODUCTION,Raw Coal Production,53.75,MT,WCL,Umrer OC,Umrer,2025-26-Q4,0.9,VERIFIED,,,3
+fact-eb2c6585ea1943,COAL_PRODUCTION,Raw Coal Production,22.03,MT,MCL,Belpahar OC,Ib Valley,FY 2017-18,0.71,CONFLICT,Sheet1,R210,
+fact-63a84039779d4e,COAL_PRODUCTION,Raw Coal Production,35.32,MT,NCL,Jayant OC,Singrauli,2023-24-Q1,0.94,VERIFIED,Sheet1,R70,
+fact-cea19521e7b640,COAL_PRODUCTION,Raw Coal Production,23.27,MT,MCL,Jagannath OC,Ib Valley,FY 2020-21,0.56,REVIEW_REQUIRED,,,17
+fact-0a00f981783b42,COAL_PRODUCTION,Raw Coal Production,15.16,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),FY 2020-21,0.75,NEEDS_REVIEW,,,1
+fact-ebc837b4f9514b,COAL_PRODUCTION,Raw Coal Production,30.95,MT,ECL,Bankola UG,Rajmahal,FY 2016-17,0.96,VERIFIED,Sheet_3,B173,
+fact-07979a77616940,COAL_PRODUCTION,Raw Coal Production,3.24,MT,ECL,Bankola UG,Rajmahal,FY 2025-26,0.88,NEEDS_REVIEW,,,13
+fact-969afe38f5454a,COAL_PRODUCTION,Raw Coal Production,11.5,MT,CCL,Amrapali OC,South Karanpura,2016-17-Q4,0.73,NEEDS_REVIEW,Sheet_2,H145,
+fact-9890e1f9d55440,COAL_PRODUCTION,Raw Coal Production,35.66,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2022-23,0.96,NEEDS_REVIEW,,,8
+fact-c4c903a27d7248,COAL_PRODUCTION,Raw Coal Production,43.18,MT,ECL,Kottadih UG/OC,Raniganj,FY 2024-25,0.62,REVIEW_REQUIRED,,,3
+fact-870e0f56bee743,COAL_PRODUCTION,Raw Coal Production,21.47,MT,CCL,Dhori OC,East Bokaro,FY 2019-20,0.97,VERIFIED,,,16
+fact-bf5d8848c24c46,COAL_PRODUCTION,Raw Coal Production,37.72,MT,CIL,Leddo OC,Consolidated Indian Coalfields,2022-23-Q3,0.97,VERIFIED,,,8
+fact-de30cc1f4fc74e,COAL_PRODUCTION,Raw Coal Production,20.86,MT,WCL,Chandrapur OC,Wardha Valley,2017-18-Q2,0.67,REVIEW_REQUIRED,Sheet1,R29,
+fact-76b51012f47747,COAL_PRODUCTION,Raw Coal Production,19.2,MT,BCCL,Govindpur OC,Jharia,FY 2018-19,0.55,REVIEW_REQUIRED,Sheet1,R68,
+fact-467b8ccd408341,COAL_PRODUCTION,Raw Coal Production,47.14,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2024-25,0.8,NEEDS_REVIEW,,,16
+fact-170d7c758a2842,COAL_PRODUCTION,Raw Coal Production,13.69,MT,NCL,Dudhichua OC,Singrauli,FY 2019-20,0.94,VERIFIED,,,6
+fact-f791ceea11384b,COAL_PRODUCTION,Raw Coal Production,1.45,MT,ECL,Sonepur Bazari OC,Rajmahal,FY 2018-19,0.98,NEEDS_REVIEW,,,6
+fact-364ea98ae72a4d,COAL_PRODUCTION,Raw Coal Production,13.56,MT,SECL,Manikpur OC,Korba,2025-26-Q1,0.69,REVIEW_REQUIRED,Sheet1,R175,
+fact-b25b0e54a8c74b,COAL_PRODUCTION,Raw Coal Production,10.64,MT,CMPDI,RI-IV Nagpur,Central Drilling Reserves,June 2024-25,0.96,VERIFIED,Sheet1,R56,
+fact-b6883dab356141,COAL_PRODUCTION,Raw Coal Production,28.63,MT,WCL,Pench UG,Pench-Kanhan,2025-26-Q2,0.97,VERIFIED,,,1
+fact-0503133e819743,COAL_PRODUCTION,Raw Coal Production,25.61,MT,CIL,Tikak OC,Pan-India Mining Operations,January 2018-19,0.58,REVIEW_REQUIRED,,,5
+fact-df418d362df046,COAL_PRODUCTION,Raw Coal Production,28.71,MT,SECL,Manikpur OC,Mand-Raigarh,FY 2018-19,0.99,VERIFIED,Sheet1,R241,
+fact-8861b0bbdb3b42,COAL_PRODUCTION,Raw Coal Production,29.07,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,2019-20-Q3,0.92,VERIFIED,Sheet_1,G122,
+fact-81e2f2ab396244,COAL_PRODUCTION,Raw Coal Production,9.99,MT,CIL,Leddo OC,Consolidated Indian Coalfields,2022-23-Q2,0.83,NEEDS_REVIEW,,,6
+fact-af8b53f7efc341,COAL_PRODUCTION,Raw Coal Production,7.52,MT,CCL,Dhori OC,North Karanpura,2023-24-Q3,0.76,NEEDS_REVIEW,,,8
+fact-51bc3d9235bb49,COAL_PRODUCTION,Raw Coal Production,31.89,MT,BCCL,Barora OC,Jharia,2016-17-Q2,0.95,VERIFIED,,,7
+fact-22c8f56ee2514b,COAL_PRODUCTION,Raw Coal Production,17.39,MT,CMPDI,RI-VI Singrauli,Central Drilling Reserves,FY 2019-20,0.76,CONFLICT,,,20
+fact-4fabff562f6141,COAL_PRODUCTION,Raw Coal Production,3.21,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),May 2022-23,0.97,VERIFIED,Sheet_5,F24,
+fact-9243c855b04d41,COAL_PRODUCTION,Raw Coal Production,27.25,MT,NCL,Jayant OC,Singrauli,2025-26-Q3,0.98,VERIFIED,,,2
+fact-4ce6adc857fb41,COAL_PRODUCTION,Raw Coal Production,10.41,MT,SECL,Kusmunda OC,Hasdeo,FY 2019-20,0.96,VERIFIED,,,14
+fact-a9e01015070743,COAL_PRODUCTION,Raw Coal Production,34.37,MT,BCCL,Lodna OC,Jharia,FY 2023-24,0.98,VERIFIED,,,7
+fact-add1b16302604b,COAL_PRODUCTION,Raw Coal Production,25.78,MT,CCL,Amrapali OC,South Karanpura,FY 2023-24,0.66,CONFLICT,,,14
+fact-3be3bf0ddb5d44,COAL_PRODUCTION,Raw Coal Production,17.3,MT,SECL,Manikpur OC,Hasdeo,FY 2016-17,0.75,NEEDS_REVIEW,,,10
+fact-04167600572446,COAL_PRODUCTION,Raw Coal Production,9.68,MT,WCL,Pench UG,Umrer,FY 2016-17,0.6,REVIEW_REQUIRED,Sheet_4,E116,
+fact-42692fd5aa8740,COAL_PRODUCTION,Raw Coal Production,21.51,MT,CIL,Tikak OC,Pan-India Mining Operations,2018-19-Q2,0.87,NEEDS_REVIEW,Sheet_4,C111,
+fact-7f7a836316384b,COAL_PRODUCTION,Raw Coal Production,14.17,MT,SECL,Kusmunda OC,Sohagpur,FY 2023-24,0.78,NEEDS_REVIEW,Sheet_1,C53,
+fact-d94b79a680c344,COAL_PRODUCTION,Raw Coal Production,29.2,MT,BCCL,Kusunda OC,Raniganj West,2018-19-Q2,0.96,VERIFIED,Sheet1,R29,
+fact-e49fea1146af4b,COAL_PRODUCTION,Raw Coal Production,36.37,MT,SECL,Bijuri UG,Sohagpur,2019-20-Q4,0.93,VERIFIED,,,11
+fact-2fa9b871e58242,COAL_PRODUCTION,Raw Coal Production,33.04,MT,NCL,Amlohri OC,Singrauli,FY 2023-24,0.92,VERIFIED,Sheet1,R207,
+fact-3f8f7e2e92f54f,COAL_PRODUCTION,Raw Coal Production,45.66,MT,CCL,Magadh OC,West Bokaro,FY 2024-25,0.95,VERIFIED,Sheet_4,E134,
+fact-51a8d1baf1d840,COAL_PRODUCTION,Raw Coal Production,32.41,MT,SECL,Kusmunda OC,Hasdeo,FY 2020-21,0.75,CONFLICT,Sheet_1,C56,
+fact-18a772864fa94d,COAL_PRODUCTION,Raw Coal Production,27.16,MT,SECL,Dipka OC,Sohagpur,January 2022-23,0.91,VERIFIED,,,1
+fact-524bea1f688d4d,COAL_PRODUCTION,Raw Coal Production,7.02,MT,CCL,Dhori OC,West Bokaro,August 2019-20,0.85,NEEDS_REVIEW,,,4
+fact-c043067dc80b48,COAL_PRODUCTION,Raw Coal Production,28.49,MT,ECL,Rajmahal OC,Rajmahal,FY 2020-21,0.98,VERIFIED,,,15
+fact-9153b92e2fa94e,COAL_PRODUCTION,Raw Coal Production,52.6,MT,SECL,Manikpur OC,Korba,FY 2025-26,0.81,NEEDS_REVIEW,Sheet1,R127,
+fact-53b18711fb7444,COAL_PRODUCTION,Raw Coal Production,20.96,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,2016-17-Q1,0.66,REVIEW_REQUIRED,Sheet_1,C30,
+fact-16e9ef82a3a847,COAL_PRODUCTION,Raw Coal Production,18.33,MT,NCL,Khadia OC,Singrauli,FY 2023-24,0.93,VERIFIED,,,8
+fact-d52a0bed3d0840,COAL_PRODUCTION,Raw Coal Production,24.91,MT,WCL,Umrer OC,Wardha Valley,FY 2016-17,0.91,VERIFIED,,,10
+fact-4887f0d075c94a,COAL_PRODUCTION,Raw Coal Production,38.97,MT,MCL,Bhubaneswari OC,Talcher,2022-23-Q3,0.58,REVIEW_REQUIRED,Sheet1,R203,
+fact-54ec6292abb147,COAL_PRODUCTION,Raw Coal Production,2.95,MT,BCCL,Bastacolla OC,Jharia,FY 2018-19,0.98,VERIFIED,Sheet1,R158,
+fact-6f710c22753b4a,COAL_PRODUCTION,Raw Coal Production,32.69,MT,MCL,Belpahar OC,Talcher,FY 2020-21,0.56,REVIEW_REQUIRED,,,13
+fact-fa926c72d01f4a,COAL_PRODUCTION,Raw Coal Production,31.26,MT,CCL,Rajrappa OC,East Bokaro,2025-26-Q4,0.97,VERIFIED,Sheet1,R157,
+fact-10880de00e2d44,COAL_PRODUCTION,Raw Coal Production,41.3,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),FY 2022-23,0.96,VERIFIED,Sheet1,R22,
+fact-6bdf36df7ba944,COAL_PRODUCTION,Raw Coal Production,28.96,MT,SECL,Dipka OC,Mand-Raigarh,2016-17-Q2,0.59,REVIEW_REQUIRED,,,3
+fact-9268f87a54ed49,COAL_PRODUCTION,Raw Coal Production,5.39,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),December 2019-20,0.64,REVIEW_REQUIRED,Sheet1,R31,
+fact-c735fd1d2ee549,COAL_PRODUCTION,Raw Coal Production,36.6,MT,SECL,Chhal OC,Mand-Raigarh,May 2023-24,0.93,VERIFIED,,,19
+fact-d0f3dd2926ed44,COAL_PRODUCTION,Raw Coal Production,21.79,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),FY 2022-23,0.88,NEEDS_REVIEW,Sheet1,R47,
+fact-7b473966e1a944,COAL_PRODUCTION,Raw Coal Production,53.06,MT,SECL,Gevra OC,Hasdeo,2025-26-Q2,0.74,NEEDS_REVIEW,Sheet1,R113,
+fact-40de13cbab9042,COAL_PRODUCTION,Raw Coal Production,0.43,MT,BCCL,Barora OC,Raniganj West,November 2018-19,0.65,REVIEW_REQUIRED,,,2
+fact-ffa06ea5a29148,COAL_PRODUCTION,Raw Coal Production,19.2,MT,CMPDI,RI-II Dhanbad,All CIL Coalfields (Exploration),FY 2016-17,0.95,VERIFIED,Sheet1,R148,
+fact-29690769b8d44a,COAL_PRODUCTION,Raw Coal Production,18.13,MT,WCL,Pench UG,Wardha Valley,2024-25-Q3,0.93,VERIFIED,Sheet1,R196,
+fact-5979aada07594c,COAL_PRODUCTION,Raw Coal Production,5.47,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2019-20,0.96,VERIFIED,,,20
+fact-361d5c77010841,COAL_PRODUCTION,Raw Coal Production,27.62,MT,ECL,Jhanjra UG,Raniganj,FY 2017-18,0.78,NEEDS_REVIEW,,,5
+fact-087aa03aaafa48,COAL_PRODUCTION,Raw Coal Production,1.05,MT,BCCL,Moonidih UG,Jharia,2019-20-Q2,0.56,REVIEW_REQUIRED,Sheet_3,C112,
+fact-e6d5410e03f44e,COAL_PRODUCTION,Raw Coal Production,7.42,MT,ECL,Pandaveswar UG,Raniganj,2017-18-Q2,0.76,NEEDS_REVIEW,Sheet1,R166,
+fact-eb07c20f29a147,COAL_PRODUCTION,Raw Coal Production,10.74,MT,CCL,Kathara OC,South Karanpura,FY 2019-20,0.66,NEEDS_REVIEW,Sheet1,R63,
+fact-ba34608145eb40,COAL_PRODUCTION,Raw Coal Production,32.45,MT,BCCL,Moonidih UG,Raniganj West,FY 2023-24,0.72,CONFLICT,,,13
+fact-7efa3203ea2a4c,COAL_PRODUCTION,Raw Coal Production,27.88,MT,ECL,Bankola UG,Rajmahal,FY 2019-20,0.74,NEEDS_REVIEW,,,7
+fact-0ed14beb2a454e,COAL_PRODUCTION,Raw Coal Production,15.09,MT,BCCL,Bastacolla OC,Raniganj West,FY 2019-20,0.91,VERIFIED,,,11
+fact-9b7b04fbedc64c,COAL_PRODUCTION,Raw Coal Production,5.56,MT,ECL,Chitra OC,Raniganj,FY 2016-17,0.58,REVIEW_REQUIRED,Sheet_4,G117,
+fact-e91f2553283b4e,COAL_PRODUCTION,Raw Coal Production,1.67,MT,ECL,Sonepur Bazari OC,Raniganj,FY 2018-19,0.79,CONFLICT,,,15
+fact-cfc317ccf76940,COAL_PRODUCTION,Raw Coal Production,17.79,MT,SECL,Shivani UG,Hasdeo,FY 2023-24,0.97,VERIFIED,,,21
+fact-f2f08b0de0884f,COAL_PRODUCTION,Raw Coal Production,49.23,MT,NCL,Nigahi OC,Singrauli,2025-26-Q3,0.67,REVIEW_REQUIRED,,,9
+fact-7981219c3abf45,COAL_PRODUCTION,Raw Coal Production,18.42,MT,CCL,Magadh OC,North Karanpura,FY 2019-20,0.97,VERIFIED,Sheet1,R132,
+fact-46d78127a0124d,COAL_PRODUCTION,Raw Coal Production,47.14,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2024-25,0.6,NEEDS_REVIEW,,,11
+fact-98d85e6a8e004d,COAL_PRODUCTION,Raw Coal Production,41.44,MT,MCL,Bharatpur OC,Ib Valley,FY 2022-23,0.76,NEEDS_REVIEW,Sheet_3,D10,
+fact-b7cbdffdc5c845,COAL_PRODUCTION,Raw Coal Production,21.95,MT,WCL,Kanhan UG,Pench-Kanhan,FY 2020-21,0.97,VERIFIED,Sheet_2,B52,
+fact-84c1ff4e5fa940,COAL_PRODUCTION,Raw Coal Production,28.93,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),FY 2024-25,0.74,CONFLICT,Sheet1,R148,
+fact-e4cd877e7bc941,COAL_PRODUCTION,Raw Coal Production,22.66,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2024-25,0.89,NEEDS_REVIEW,,,10
+fact-dce42c2f2dae49,COAL_PRODUCTION,Raw Coal Production,23.54,MT,MCL,Ananta OC,Ib Valley,FY 2017-18,0.84,NEEDS_REVIEW,Sheet1,R13,
+fact-b02b6df5e33949,COAL_PRODUCTION,Raw Coal Production,33.77,MT,BCCL,Bastacolla OC,Jharia,2025-26-Q1,0.99,VERIFIED,Sheet_4,G141,
+fact-e49c6500c9ab45,COAL_PRODUCTION,Raw Coal Production,10.35,MT,ECL,Rajmahal OC,Raniganj,FY 2019-20,0.95,VERIFIED,,,8
+fact-841021e4a26f42,COAL_PRODUCTION,Raw Coal Production,5.09,MT,SECL,Gevra OC,Korba,FY 2019-20,0.98,VERIFIED,,,4
+fact-35bff05161e74a,COAL_PRODUCTION,Raw Coal Production,10.41,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2018-19,0.77,CONFLICT,Sheet_2,D104,
+fact-addca5887cf345,COAL_PRODUCTION,Raw Coal Production,46.13,MT,SECL,Manikpur OC,Sohagpur,FY 2025-26,0.96,VERIFIED,,,2
+fact-74464a39282745,COAL_PRODUCTION,Raw Coal Production,44.64,MT,ECL,Pandaveswar UG,Rajmahal,2024-25-Q2,0.92,VERIFIED,,,2
+fact-7a46f1a72cc643,COAL_PRODUCTION,Raw Coal Production,37.25,MT,ECL,Kottadih UG/OC,Raniganj,FY 2025-26,0.94,VERIFIED,Sheet_2,B79,
+fact-41243a153e2f40,COAL_PRODUCTION,Raw Coal Production,3.75,MT,NCL,Krishnashila OC,Singrauli,FY 2025-26,0.96,VERIFIED,,,4
+fact-5dd6f41d235943,COAL_PRODUCTION,Raw Coal Production,11.66,MT,WCL,Nagpur Area OC,Pench-Kanhan,FY 2016-17,0.89,NEEDS_REVIEW,,,3
+fact-93e596dfe6934b,COAL_PRODUCTION,Raw Coal Production,45.85,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2023-24,0.96,VERIFIED,Sheet_2,B46,
+fact-fd0c773c5cbe4c,COAL_PRODUCTION,Raw Coal Production,0.49,MT,CMPDI,RI-III Ranchi,Geological Directorate,FY 2016-17,0.68,REVIEW_REQUIRED,Sheet1,R98,
+fact-ec521e9eac0e4a,COAL_PRODUCTION,Raw Coal Production,31.28,MT,ECL,Rajmahal OC,Rajmahal,FY 2021-22,0.91,VERIFIED,Sheet_4,D35,
+fact-8b1cf77a773f4b,COAL_PRODUCTION,Raw Coal Production,28.87,MT,ECL,Jhanjra UG,Rajmahal,2021-22-Q3,0.86,NEEDS_REVIEW,Sheet_2,C120,
+fact-4cf10f6ae3d246,COAL_PRODUCTION,Raw Coal Production,31.38,MT,MCL,Hingula OC,Ib Valley,FY 2016-17,0.96,VERIFIED,,,4
+fact-9157a8f126f84d,COAL_PRODUCTION,Raw Coal Production,4.37,MT,SECL,Gevra OC,Hasdeo,September 2025-26,0.98,VERIFIED,Sheet1,R127,
+fact-0346711de38647,COAL_PRODUCTION,Raw Coal Production,49.23,MT,NCL,Nigahi OC,Singrauli,2025-26-Q3,0.71,NEEDS_REVIEW,Sheet1,R14,
+fact-60bd9abda7664e,COAL_PRODUCTION,Raw Coal Production,6.37,MT,SECL,Shivani UG,Hasdeo,FY 2020-21,0.78,NEEDS_REVIEW,Sheet_2,D8,
+fact-029539b293ef40,COAL_PRODUCTION,Raw Coal Production,25.3,MT,WCL,Nagpur Area OC,Pench-Kanhan,FY 2020-21,0.96,VERIFIED,,,24
+fact-64eb8b5ce16545,COAL_PRODUCTION,Raw Coal Production,48.69,MT,MCL,Bharatpur OC,Talcher,2024-25-Q4,0.65,REVIEW_REQUIRED,,,10
+fact-58d500758a9c43,COAL_PRODUCTION,Raw Coal Production,5.16,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2024-25,0.91,VERIFIED,,,1
+fact-997b1bda9e9044,COAL_PRODUCTION,Raw Coal Production,2.13,MT,CCL,Dhori OC,West Bokaro,FY 2016-17,0.83,NEEDS_REVIEW,,,12
+fact-e445261d6b634d,COAL_PRODUCTION,Raw Coal Production,44.32,MT,NCL,Jayant OC,Singrauli,October 2025-26,0.91,VERIFIED,,,2
+fact-77d787a234ee47,COAL_PRODUCTION,Raw Coal Production,5.81,MT,BCCL,Govindpur OC,Raniganj West,FY 2017-18,0.98,VERIFIED,,,13
+fact-d399831d8bfa46,COAL_PRODUCTION,Raw Coal Production,17.07,MT,BCCL,Moonidih UG,Raniganj West,September 2018-19,0.92,VERIFIED,Sheet1,R6,
+fact-170161b6fcf849,COAL_PRODUCTION,Raw Coal Production,15.64,MT,CCL,Amrapali OC,South Karanpura,FY 2021-22,0.83,NEEDS_REVIEW,,,10
+fact-caaa0a4eb85b41,COAL_PRODUCTION,Raw Coal Production,46.73,MT,MCL,Jagannath OC,Ib Valley,2024-25-Q1,0.94,VERIFIED,,,10
+fact-5973d621f8b343,COAL_PRODUCTION,Raw Coal Production,28.33,MT,WCL,Wani OC,Pench-Kanhan,FY 2025-26,0.84,NEEDS_REVIEW,,,5
+fact-3a03f6ee91874b,COAL_PRODUCTION,Raw Coal Production,4.08,MT,BCCL,Block II OC,Raniganj West,FY 2018-19,0.78,NEEDS_REVIEW,,,1
+fact-5af479025f9145,COAL_PRODUCTION,Raw Coal Production,36.85,MT,CMPDI,RI-V Bilaspur,Geological Directorate,FY 2019-20,0.9,VERIFIED,Sheet_3,H111,
+fact-45effde5cabb48,COAL_PRODUCTION,Raw Coal Production,42.66,MT,CMPDI,RI-III Ranchi,Central Drilling Reserves,June 2022-23,0.97,VERIFIED,Sheet1,R133,
+fact-fcf074b3af9e42,COAL_PRODUCTION,Raw Coal Production,21.49,MT,BCCL,Bastacolla OC,Raniganj West,January 2019-20,0.96,VERIFIED,Sheet_1,D57,
+fact-a66b80e769ef4f,COAL_PRODUCTION,Raw Coal Production,2.77,MT,SECL,Dipka OC,Mand-Raigarh,2016-17-Q4,0.88,NEEDS_REVIEW,,,1
+fact-2e11555cc19145,COAL_PRODUCTION,Raw Coal Production,10.97,MT,WCL,Pench UG,Wardha Valley,FY 2020-21,0.97,VERIFIED,Sheet_3,D106,
+fact-fcfe213d31614d,COAL_PRODUCTION,Raw Coal Production,36.4,MT,MCL,Hingula OC,Talcher,FY 2024-25,0.75,NEEDS_REVIEW,Sheet_1,J66,
+fact-be0ad6839b4b4e,COAL_PRODUCTION,Raw Coal Production,32.44,MT,ECL,Jhanjra UG,Rajmahal,FY 2019-20,0.87,NEEDS_REVIEW,Sheet1,R107,
+fact-7fd7f7a8a74d4f,COAL_PRODUCTION,Raw Coal Production,35.42,MT,ECL,Jhanjra UG,Raniganj,FY 2019-20,0.78,NEEDS_REVIEW,,,10
+fact-b62b5c27f7024f,COAL_PRODUCTION,Raw Coal Production,20.89,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,FY 2016-17,0.98,VERIFIED,Sheet_5,E98,
+fact-9ebb927bf5fa4d,COAL_PRODUCTION,Raw Coal Production,25.08,MT,CCL,Kathara OC,South Karanpura,FY 2023-24,0.82,NEEDS_REVIEW,,,6
+fact-614726bf9df140,COAL_PRODUCTION,Raw Coal Production,45.63,MT,NCL,Bina OC,Singrauli,FY 2025-26,0.91,VERIFIED,Sheet1,R196,
+fact-86c1bd7be50b4e,COAL_PRODUCTION,Raw Coal Production,34.83,MT,BCCL,Kusunda OC,Raniganj West,FY 2019-20,0.94,VERIFIED,Sheet_3,B15,
+fact-acee16acb21f4c,COAL_PRODUCTION,Raw Coal Production,18.88,MT,MCL,Bharatpur OC,Talcher,2017-18-Q1,0.91,VERIFIED,Sheet_1,B153,
+fact-538eaf52e9504d,COAL_PRODUCTION,Raw Coal Production,38.13,MT,BCCL,Barora OC,Raniganj West,FY 2021-22,0.77,NEEDS_REVIEW,Sheet1,R200,
+fact-29d3e159eca147,COAL_PRODUCTION,Raw Coal Production,28.06,MT,BCCL,Barora OC,Raniganj West,FY 2023-24,0.91,VERIFIED,Sheet1,R12,
+fact-d1842c5235134b,COAL_PRODUCTION,Raw Coal Production,1.34,MT,NCL,Khadia OC,Singrauli,FY 2021-22,0.9,VERIFIED,,,12
+fact-c66bf6c33aca45,COAL_PRODUCTION,Raw Coal Production,1.76,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2021-22,0.65,CONFLICT,,,3
+fact-35ca11a776fc43,COAL_PRODUCTION,Raw Coal Production,10.84,MT,MCL,Belpahar OC,Talcher,FY 2018-19,0.9,VERIFIED,Sheet1,R222,
+fact-845b665441694b,COAL_PRODUCTION,Raw Coal Production,37.39,MT,CCL,Kuju OC,South Karanpura,FY 2025-26,0.87,NEEDS_REVIEW,,,2
+fact-906c3f80420241,COAL_PRODUCTION,Raw Coal Production,13.59,MT,NCL,Jayant OC,Singrauli,FY 2021-22,0.94,VERIFIED,,,12
+fact-5a178a94f88243,COAL_PRODUCTION,Raw Coal Production,38.71,MT,NCL,Khadia OC,Singrauli,FY 2022-23,0.79,NEEDS_REVIEW,,,2
+fact-fef435c4414742,COAL_PRODUCTION,Raw Coal Production,14.0,MT,WCL,Majri OC,Pench-Kanhan,FY 2016-17,0.92,VERIFIED,,,10
+fact-a809863fa4a948,COAL_PRODUCTION,Raw Coal Production,5.58,MT,MCL,Bhubaneswari OC,Ib Valley,FY 2024-25,0.58,REVIEW_REQUIRED,,,8
+fact-8f3dc0fc312143,COAL_PRODUCTION,Raw Coal Production,29.15,MT,NCL,Bina OC,Singrauli,FY 2016-17,0.99,VERIFIED,Sheet1,R140,
+fact-914d40b9da5a4f,COAL_PRODUCTION,Raw Coal Production,48.38,MT,ECL,Sonepur Bazari OC,Rajmahal,FY 2025-26,0.96,VERIFIED,Sheet_1,G177,
+fact-3e0cb74fbf9d4e,COAL_PRODUCTION,Raw Coal Production,5.88,MT,CCL,Kuju OC,North Karanpura,FY 2016-17,0.99,VERIFIED,Sheet_2,B148,
+fact-ee2cd57687584f,COAL_PRODUCTION,Raw Coal Production,22.11,MT,ECL,Bankola UG,Rajmahal,2024-25-Q1,0.91,VERIFIED,,,3
+fact-e25e7b79f6244f,COAL_PRODUCTION,Raw Coal Production,30.54,MT,CCL,Kuju OC,East Bokaro,FY 2016-17,0.67,REVIEW_REQUIRED,Sheet_2,E115,
+fact-65f466ef73e947,COAL_PRODUCTION,Raw Coal Production,24.02,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2022-23,0.97,VERIFIED,,,9
+fact-7156fef0b91140,COAL_PRODUCTION,Raw Coal Production,0.78,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,October 2019-20,0.92,VERIFIED,,,3
+fact-bf732093e49f4d,COAL_PRODUCTION,Raw Coal Production,36.84,MT,MCL,Ananta OC,Talcher,FY 2022-23,0.92,VERIFIED,Sheet1,R217,
+fact-6ece6f21acf140,COAL_PRODUCTION,Raw Coal Production,2.17,MT,BCCL,Moonidih UG,Raniganj West,FY 2019-20,0.95,VERIFIED,Sheet_1,E70,
+fact-a68ae4c7fc314c,COAL_PRODUCTION,Raw Coal Production,36.29,MT,CCL,Dhori OC,West Bokaro,FY 2019-20,0.91,VERIFIED,,,6
+fact-79b440d018e74d,COAL_PRODUCTION,Raw Coal Production,5.08,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2025-26,0.73,NEEDS_REVIEW,,,11
+fact-1e56d75247824a,COAL_PRODUCTION,Raw Coal Production,13.75,MT,CCL,Kuju OC,West Bokaro,FY 2018-19,0.61,NEEDS_REVIEW,,,4
+fact-6e34a658cf1a49,COAL_PRODUCTION,Raw Coal Production,26.18,MT,CMPDI,RI-VII Bhubaneswar,All CIL Coalfields (Exploration),February 2021-22,0.96,VERIFIED,,,3
+fact-2668f3ad784743,COAL_PRODUCTION,Raw Coal Production,33.34,MT,SECL,Bijuri UG,Korba,FY 2019-20,0.82,NEEDS_REVIEW,Sheet1,R101,
+fact-24ac7d6463e946,COAL_PRODUCTION,Raw Coal Production,24.28,MT,SECL,Bijuri UG,Hasdeo,2020-21-Q4,0.99,VERIFIED,Sheet_1,F129,
+fact-cdd9051ad77b48,COAL_PRODUCTION,Raw Coal Production,22.35,MT,ECL,Kottadih UG/OC,Rajmahal,FY 2017-18,0.96,VERIFIED,,,11
+fact-b9a06fc2bcf84f,COAL_PRODUCTION,Raw Coal Production,8.15,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2021-22,0.85,NEEDS_REVIEW,,,7
+fact-955dd287fa764b,COAL_PRODUCTION,Raw Coal Production,8.53,MT,NCL,Krishnashila OC,Singrauli,FY 2016-17,0.95,VERIFIED,Sheet1,R31,
+fact-c3ed72528d9c43,COAL_PRODUCTION,Raw Coal Production,0.56,MT,NCL,Bina OC,Singrauli,2023-24-Q2,0.95,VERIFIED,,,8
+fact-8f83b076027f4d,COAL_PRODUCTION,Raw Coal Production,4.39,MT,CIL,Tikak OC,Pan-India Mining Operations,March 2025-26,0.83,NEEDS_REVIEW,,,25
+fact-ef4bba9ee9b24d,COAL_PRODUCTION,Raw Coal Production,30.18,MT,WCL,Majri OC,Umrer,FY 2019-20,0.94,VERIFIED,,,10
+fact-80026c0c240840,COAL_PRODUCTION,Raw Coal Production,48.87,MT,CCL,Magadh OC,North Karanpura,FY 2024-25,0.92,VERIFIED,Sheet_1,G37,
+fact-75bf97af7c0d4e,COAL_PRODUCTION,Raw Coal Production,2.8,MT,NCL,Jayant OC,Singrauli,FY 2021-22,0.98,VERIFIED,,,11
+fact-b29fd8b3515449,COAL_PRODUCTION,Raw Coal Production,16.4,MT,NCL,Amlohri OC,Singrauli,FY 2017-18,0.78,CONFLICT,,,23
+fact-ab01887442924d,COAL_PRODUCTION,Raw Coal Production,34.0,MT,BCCL,Kusunda OC,Raniganj West,2017-18-Q4,0.95,VERIFIED,,,4
+fact-bd453174326143,COAL_PRODUCTION,Raw Coal Production,14.18,MT,BCCL,Katras OC,Raniganj West,April 2025-26,0.88,NEEDS_REVIEW,Sheet_5,D153,
+fact-ca1bdffa6b2e4e,COAL_PRODUCTION,Raw Coal Production,30.68,MT,WCL,Pench UG,Pench-Kanhan,FY 2024-25,0.79,CONFLICT,,,1
+fact-85e27a69e1544b,COAL_PRODUCTION,Raw Coal Production,33.42,MT,CMPDI,RI-V Bilaspur,All CIL Coalfields (Exploration),FY 2021-22,0.69,REVIEW_REQUIRED,Sheet_5,B149,
+fact-901d145b83c541,COAL_PRODUCTION,Raw Coal Production,27.53,MT,SECL,Jamuna Kotma UG,Hasdeo,2019-20-Q2,0.65,REVIEW_REQUIRED,,,3
+fact-66a69156cd7d4a,COAL_PRODUCTION,Raw Coal Production,35.91,MT,CIL,Tikak OC,Pan-India Mining Operations,FY 2018-19,0.88,NEEDS_REVIEW,Sheet_1,H83,
+fact-ea5a64124f7a49,COAL_PRODUCTION,Raw Coal Production,43.17,MT,BCCL,Block II OC,Raniganj West,FY 2023-24,0.95,VERIFIED,,,11
+fact-7b78a38f032246,COAL_PRODUCTION,Raw Coal Production,23.82,MT,CMPDI,RI-I Asansol,Central Drilling Reserves,FY 2016-17,0.95,VERIFIED,Sheet_3,J175,
+fact-54480d80bec845,COAL_PRODUCTION,Raw Coal Production,6.44,MT,CMPDI,RI-II Dhanbad,Geological Directorate,FY 2021-22,0.91,VERIFIED,,,7
+fact-4213c73d64cb40,COAL_PRODUCTION,Raw Coal Production,6.24,MT,BCCL,Lodna OC,Jharia,FY 2024-25,0.89,NEEDS_REVIEW,,,1
+fact-3938d2dccd5547,COAL_PRODUCTION,Raw Coal Production,22.92,MT,ECL,Chitra OC,Raniganj,FY 2020-21,0.9,VERIFIED,Sheet1,R162,
+fact-07e69fc3668d40,COAL_PRODUCTION,Raw Coal Production,10.27,MT,MCL,Belpahar OC,Talcher,FY 2017-18,0.9,VERIFIED,Sheet1,R206,
+fact-4dbdf2460fdc4b,COAL_PRODUCTION,Raw Coal Production,14.4,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),2018-19-Q1,0.95,VERIFIED,,,7
+fact-8ab732b6b6694a,COAL_PRODUCTION,Raw Coal Production,8.53,MT,SECL,Chhal OC,Hasdeo,FY 2016-17,0.82,NEEDS_REVIEW,,,7
+fact-9389f4f86dc943,COAL_PRODUCTION,Raw Coal Production,11.01,MT,MCL,Bharatpur OC,Talcher,FY 2022-23,0.98,VERIFIED,Sheet_4,J125,
+fact-1fb43941902741,COAL_PRODUCTION,Raw Coal Production,34.68,MT,BCCL,Barora OC,Raniganj West,FY 2023-24,0.81,NEEDS_REVIEW,,,7
+fact-9a534c5abdb349,COAL_PRODUCTION,Raw Coal Production,18.08,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2018-19,0.78,CONFLICT,Sheet_4,F70,
+fact-0b8307aba9ec47,COAL_PRODUCTION,Raw Coal Production,20.8,MT,CMPDI,RI-I Asansol,All CIL Coalfields (Exploration),FY 2021-22,0.79,NEEDS_REVIEW,,,12
+fact-0b2880947f7a48,COAL_PRODUCTION,Raw Coal Production,33.29,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2025-26,0.98,VERIFIED,,,10
+fact-60a67ef2bb134c,COAL_PRODUCTION,Raw Coal Production,7.81,MT,WCL,Kanhan UG,Wardha Valley,FY 2017-18,0.89,NEEDS_REVIEW,,,12
+fact-59c5180ab53c44,COAL_PRODUCTION,Raw Coal Production,23.01,MT,NCL,Bina OC,Singrauli,April 2019-20,0.91,VERIFIED,,,8
+fact-b6c3550a5ddd4f,COAL_PRODUCTION,Raw Coal Production,12.28,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2017-18,0.94,NEEDS_REVIEW,,,4
+fact-7054cb0e89814d,COAL_PRODUCTION,Raw Coal Production,5.47,MT,BCCL,Bastacolla OC,Raniganj West,FY 2024-25,0.88,NEEDS_REVIEW,,,8
+fact-c40347b2447d4b,COAL_PRODUCTION,Raw Coal Production,31.7,MT,SECL,Chhal OC,Sohagpur,2018-19-Q1,0.86,NEEDS_REVIEW,Sheet1,R146,
+fact-6c07c5ccf1c94c,COAL_PRODUCTION,Raw Coal Production,24.45,MT,MCL,Lakhanpur OC,Ib Valley,FY 2021-22,0.87,NEEDS_REVIEW,Sheet1,R51,
+fact-ac07820ea6ad4b,COAL_PRODUCTION,Raw Coal Production,11.13,MT,ECL,Khottadih UG,Rajmahal,FY 2023-24,0.97,VERIFIED,Sheet_3,D139,
+fact-d485591e1cfe4c,COAL_PRODUCTION,Raw Coal Production,23.29,MT,CIL,Tikak OC,Pan-India Mining Operations,2020-21-Q4,0.95,VERIFIED,,,3
+fact-e28e066d5ef842,COAL_PRODUCTION,Raw Coal Production,23.71,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),FY 2024-25,0.9,NEEDS_REVIEW,,,11
+fact-5938db6b110248,COAL_PRODUCTION,Raw Coal Production,10.96,MT,MCL,Ananta OC,Talcher,FY 2016-17,0.94,VERIFIED,,,8
+fact-2b5d0f20451f4b,COAL_PRODUCTION,Raw Coal Production,10.76,MT,NCL,Amlohri OC,Singrauli,October 2022-23,0.97,VERIFIED,,,7
+fact-cd6a9dccae444a,COAL_PRODUCTION,Raw Coal Production,3.98,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,2016-17-Q1,0.86,NEEDS_REVIEW,,,1
+fact-a458342963804c,COAL_PRODUCTION,Raw Coal Production,34.87,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2018-19,0.96,VERIFIED,Sheet_3,J4,
+fact-dc519f92477d48,COAL_PRODUCTION,Raw Coal Production,18.81,MT,NCL,Krishnashila OC,Singrauli,FY 2018-19,0.98,VERIFIED,,,2
+fact-6376aa5b05ee4b,COAL_PRODUCTION,Raw Coal Production,33.13,MT,BCCL,Katras OC,Raniganj West,2023-24-Q2,0.92,VERIFIED,Sheet1,R50,
+fact-8bec85b1ded049,COAL_PRODUCTION,Raw Coal Production,18.21,MT,CMPDI,RI-IV Nagpur,Geological Directorate,FY 2018-19,0.61,REVIEW_REQUIRED,,,10
+fact-0a84a7838d3d43,COAL_PRODUCTION,Raw Coal Production,18.76,MT,NCL,Nigahi OC,Singrauli,FY 2020-21,0.91,VERIFIED,Sheet_1,D149,
+fact-a14e19c5578a4d,COAL_PRODUCTION,Raw Coal Production,18.31,MT,MCL,Kaniha OC,Ib Valley,February 2024-25,0.92,VERIFIED,Sheet_3,H129,
+fact-daeaa5a8727c41,COAL_PRODUCTION,Raw Coal Production,14.36,MT,BCCL,Katras OC,Raniganj West,FY 2021-22,0.9,NEEDS_REVIEW,Sheet1,R9,
+fact-2d9156e04c564f,COAL_PRODUCTION,Raw Coal Production,40.07,MT,BCCL,Katras OC,Raniganj West,FY 2023-24,0.87,NEEDS_REVIEW,,,1
+fact-fb0e763806ea41,COAL_PRODUCTION,Raw Coal Production,20.58,MT,NCL,Nigahi OC,Singrauli,2017-18-Q2,0.67,REVIEW_REQUIRED,,,4
+fact-89e6998e179441,COAL_PRODUCTION,Raw Coal Production,33.6,MT,WCL,Umrer OC,Wardha Valley,FY 2025-26,0.63,REVIEW_REQUIRED,Sheet_4,E150,
+fact-183100f6d9f446,COAL_PRODUCTION,Raw Coal Production,10.73,MT,SECL,Shivani UG,Korba,FY 2018-19,0.94,VERIFIED,Sheet1,R74,
+fact-19f80cd0214b41,COAL_PRODUCTION,Raw Coal Production,28.73,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2020-21,0.7,CONFLICT,,,6
+fact-9680a413ae1f49,COAL_PRODUCTION,Raw Coal Production,42.31,MT,BCCL,Barora OC,Raniganj West,FY 2023-24,0.69,CONFLICT,,,6
+fact-d80abfcec4b34e,COAL_PRODUCTION,Raw Coal Production,7.62,MT,WCL,Pench UG,Wardha Valley,FY 2024-25,0.95,VERIFIED,Sheet1,R235,
+fact-4b046272db3340,COAL_PRODUCTION,Raw Coal Production,5.62,MT,NCL,Kakri OC,Singrauli,FY 2024-25,0.95,VERIFIED,,,13
+fact-8969ee47786c4c,COAL_PRODUCTION,Raw Coal Production,12.54,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2016-17,0.97,VERIFIED,Sheet_2,D51,
+fact-e86387a36b684c,COAL_PRODUCTION,Raw Coal Production,46.57,MT,NCL,Jayant OC,Singrauli,FY 2023-24,0.97,VERIFIED,,,7
+fact-463dc4321ee84d,COAL_PRODUCTION,Raw Coal Production,0.62,MT,BCCL,Moonidih UG,Jharia,FY 2017-18,0.91,VERIFIED,,,1
+fact-bbc68b65d7cf4b,COAL_PRODUCTION,Raw Coal Production,45.83,MT,NCL,Kakri OC,Singrauli,FY 2024-25,0.84,NEEDS_REVIEW,,,12
+fact-09b78815662648,COAL_PRODUCTION,Raw Coal Production,3.51,MT,WCL,Pathakhera UG,Wardha Valley,2016-17-Q1,0.92,VERIFIED,,,9
+fact-2f2c0e7ba30043,COAL_PRODUCTION,Raw Coal Production,34.94,MT,ECL,Sonepur Bazari OC,Rajmahal,FY 2019-20,0.76,NEEDS_REVIEW,,,8
+fact-2cedbebfa6db4d,COAL_PRODUCTION,Raw Coal Production,36.56,MT,SECL,Bijuri UG,Korba,FY 2020-21,0.69,REVIEW_REQUIRED,,,5
+fact-e408e23d54a04e,COAL_PRODUCTION,Raw Coal Production,12.66,MT,CCL,Kuju OC,West Bokaro,2016-17-Q2,0.81,NEEDS_REVIEW,Sheet_2,F15,
+fact-d6236891669642,COAL_PRODUCTION,Raw Coal Production,33.44,MT,BCCL,Katras OC,Jharia,February 2018-19,0.92,VERIFIED,Sheet1,R12,
+fact-3009c859f8ce45,COAL_PRODUCTION,Raw Coal Production,20.74,MT,ECL,Pandaveswar UG,Rajmahal,FY 2024-25,0.91,VERIFIED,,,2
+fact-dfe97f6e5f3842,COAL_PRODUCTION,Raw Coal Production,7.33,MT,CCL,Amrapali OC,North Karanpura,FY 2022-23,0.92,VERIFIED,,,19
+fact-3efc934bdaec49,COAL_PRODUCTION,Raw Coal Production,18.86,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,2020-21-Q2,0.73,NEEDS_REVIEW,Sheet1,R47,
+fact-e1becd581cbf4c,COAL_PRODUCTION,Raw Coal Production,11.96,MT,SECL,Dipka OC,Korba,FY 2016-17,0.98,VERIFIED,,,8
+fact-43fecdcf0ddf49,COAL_PRODUCTION,Raw Coal Production,25.87,MT,CMPDI,RI-III Ranchi,Central Drilling Reserves,June 2019-20,0.93,VERIFIED,,,2
+fact-52a041156e334c,COAL_PRODUCTION,Raw Coal Production,20.62,MT,SECL,Shivani UG,Korba,FY 2019-20,0.97,VERIFIED,Sheet1,R220,
+fact-256d262c1c5940,COAL_PRODUCTION,Raw Coal Production,23.8,MT,WCL,Pench UG,Wardha Valley,August 2016-17,0.76,NEEDS_REVIEW,Sheet_4,J80,
+fact-fe60d294205141,COAL_PRODUCTION,Raw Coal Production,5.93,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2024-25,0.69,CONFLICT,,,12
+fact-0cdbad99bd6642,COAL_PRODUCTION,Raw Coal Production,36.26,MT,CIL,Tikak OC,Pan-India Mining Operations,2018-19-Q2,0.91,VERIFIED,Sheet_2,D94,
+fact-57208a3323eb42,COAL_PRODUCTION,Raw Coal Production,8.4,MT,ECL,Sonepur Bazari OC,Rajmahal,FY 2016-17,0.97,VERIFIED,Sheet_2,H73,
+fact-36288ebb50094f,COAL_PRODUCTION,Raw Coal Production,36.3,MT,NCL,Kakri OC,Singrauli,FY 2020-21,0.94,VERIFIED,Sheet_1,D69,
+fact-02e3ef8dc91242,COAL_PRODUCTION,Raw Coal Production,12.13,MT,CCL,Rajrappa OC,East Bokaro,2019-20-Q4,0.87,NEEDS_REVIEW,Sheet_4,J160,
+fact-8a21646cef6340,COAL_PRODUCTION,Raw Coal Production,10.44,MT,NCL,Khadia OC,Singrauli,FY 2019-20,0.88,NEEDS_REVIEW,,,6
+fact-f57baf0259154d,COAL_PRODUCTION,Raw Coal Production,17.17,MT,ECL,Jhanjra UG,Rajmahal,FY 2024-25,0.86,NEEDS_REVIEW,,,17
+fact-0cbf7938d9744e,COAL_PRODUCTION,Raw Coal Production,16.57,MT,ECL,Jhanjra UG,Rajmahal,May 2016-17,0.89,NEEDS_REVIEW,,,13
+fact-e5e3626feb5347,COAL_PRODUCTION,Raw Coal Production,6.25,MT,NCL,Kakri OC,Singrauli,FY 2019-20,0.99,NEEDS_REVIEW,,,2
+fact-82eb6169a51341,COAL_PRODUCTION,Raw Coal Production,3.28,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2024-25,0.95,VERIFIED,,,1
+fact-31b6b8a487124f,COAL_PRODUCTION,Raw Coal Production,26.55,MT,ECL,Bankola UG,Raniganj,2020-21-Q2,0.93,VERIFIED,,,6
+fact-5d36335d5bce42,COAL_PRODUCTION,Raw Coal Production,7.98,MT,CCL,Amrapali OC,North Karanpura,FY 2023-24,0.94,VERIFIED,,,15
+fact-cea099ba9df84d,COAL_PRODUCTION,Raw Coal Production,15.05,MT,CCL,Magadh OC,West Bokaro,FY 2018-19,0.94,VERIFIED,,,3
+fact-bc1d0fe1444c43,COAL_PRODUCTION,Raw Coal Production,1.15,MT,CCL,Ashoka OC,East Bokaro,2023-24-Q3,0.94,VERIFIED,Sheet1,R129,
+fact-87a98df51ad548,COAL_PRODUCTION,Raw Coal Production,4.66,MT,MCL,Hingula OC,Ib Valley,2022-23-Q3,0.66,REVIEW_REQUIRED,Sheet1,R151,
+fact-190f6e66d5544d,COAL_PRODUCTION,Raw Coal Production,50.06,MT,WCL,Nagpur Area OC,Wardha Valley,FY 2024-25,0.75,VERIFIED,Sheet_4,H76,
+fact-05df8d12979d42,COAL_PRODUCTION,Raw Coal Production,17.0,MT,CCL,Rajrappa OC,West Bokaro,March 2024-25,0.92,VERIFIED,Sheet_4,D149,
+fact-eb02fc5992f940,COAL_PRODUCTION,Raw Coal Production,2.54,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2018-19,0.97,VERIFIED,Sheet1,R148,
+fact-1a353cfe4fbc44,COAL_PRODUCTION,Raw Coal Production,11.06,MT,ECL,Rajmahal OC,Raniganj,FY 2023-24,0.96,VERIFIED,,,7
+fact-7895a146687747,COAL_PRODUCTION,Raw Coal Production,17.09,MT,SECL,Kusmunda OC,Mand-Raigarh,2025-26-Q3,0.79,NEEDS_REVIEW,Sheet1,R20,
+fact-fb94850f94d348,COAL_PRODUCTION,Raw Coal Production,5.44,MT,SECL,Dipka OC,Sohagpur,FY 2020-21,0.98,VERIFIED,Sheet_1,E9,
+fact-080e880cd4774f,COAL_PRODUCTION,Raw Coal Production,34.19,MT,MCL,Lakhanpur OC,Ib Valley,March 2017-18,0.68,REVIEW_REQUIRED,Sheet_3,D69,
+fact-0f5acb9902b340,COAL_PRODUCTION,Raw Coal Production,19.44,MT,CMPDI,RI-VI Singrauli,Geological Directorate,March 2019-20,0.81,NEEDS_REVIEW,,,6
+fact-555cd811b6c44d,COAL_PRODUCTION,Raw Coal Production,5.47,MT,BCCL,Bastacolla OC,Raniganj West,FY 2024-25,0.62,NEEDS_REVIEW,Sheet_2,E87,
+fact-2080f54251f74e,COAL_PRODUCTION,Raw Coal Production,5.85,MT,NCL,Krishnashila OC,Singrauli,FY 2025-26,0.69,REVIEW_REQUIRED,,,13
+fact-8f9aafc28df948,COAL_PRODUCTION,Raw Coal Production,9.6,MT,MCL,Jagannath OC,Talcher,FY 2018-19,0.98,NEEDS_REVIEW,,,2
+fact-867389e184ec42,COAL_PRODUCTION,Raw Coal Production,28.36,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,2016-17-Q2,0.94,VERIFIED,Sheet_1,D166,
+fact-dca54b83cefe44,COAL_PRODUCTION,Raw Coal Production,1.27,MT,ECL,Bankola UG,Raniganj,2025-26-Q2,0.91,VERIFIED,,,6
+fact-86498fe7edaa45,COAL_PRODUCTION,Raw Coal Production,5.76,MT,WCL,Chandrapur OC,Pench-Kanhan,FY 2019-20,0.91,VERIFIED,,,13
+fact-427319daa31a4b,COAL_PRODUCTION,Raw Coal Production,26.88,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2019-20,0.76,NEEDS_REVIEW,,,7
+fact-802f13b18d7d4d,COAL_PRODUCTION,Raw Coal Production,17.33,MT,NCL,Dudhichua OC,Singrauli,FY 2025-26,0.98,NEEDS_REVIEW,Sheet1,R234,
+fact-3e5b143847e843,COAL_PRODUCTION,Raw Coal Production,9.84,MT,WCL,Majri OC,Umrer,2017-18-Q1,0.92,VERIFIED,,,7
+fact-4274c3f17efe4f,COAL_PRODUCTION,Raw Coal Production,33.4,MT,NCL,Dudhichua OC,Singrauli,FY 2023-24,0.7,CONFLICT,,,8
+fact-a571cdc35c8147,COAL_PRODUCTION,Raw Coal Production,7.91,MT,ECL,Bankola UG,Raniganj,FY 2016-17,0.63,REVIEW_REQUIRED,,,11
+fact-084d2839ca9447,COAL_PRODUCTION,Raw Coal Production,18.48,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2016-17,0.96,VERIFIED,Sheet_3,F106,
+fact-d80a5d135e3d43,COAL_PRODUCTION,Raw Coal Production,7.37,MT,BCCL,Moonidih UG,Raniganj West,FY 2025-26,0.56,REVIEW_REQUIRED,Sheet_2,F51,
+fact-bb9fca58e4d045,COAL_PRODUCTION,Raw Coal Production,0.42,MT,MCL,Hingula OC,Talcher,FY 2017-18,0.99,VERIFIED,Sheet_4,J108,
+fact-dd6057f61a784f,COAL_PRODUCTION,Raw Coal Production,42.77,MT,CCL,Magadh OC,North Karanpura,FY 2022-23,0.98,VERIFIED,,,3
+fact-5fbe1ae748de40,COAL_PRODUCTION,Raw Coal Production,35.07,MT,CCL,Magadh OC,South Karanpura,FY 2022-23,0.78,CONFLICT,,,6
+fact-4b8a6f55fe0a42,COAL_PRODUCTION,Raw Coal Production,21.09,MT,CCL,Ashoka OC,South Karanpura,FY 2023-24,0.98,VERIFIED,Sheet1,R138,
+fact-d17be84825f84b,COAL_PRODUCTION,Raw Coal Production,17.89,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2024-25,0.92,VERIFIED,Sheet1,R124,
+fact-f68954e6ff6b48,COAL_PRODUCTION,Raw Coal Production,14.91,MT,CMPDI,RI-VII Bhubaneswar,All CIL Coalfields (Exploration),2022-23-Q2,0.97,VERIFIED,Sheet_4,H91,
+fact-85f38652b4324f,COAL_PRODUCTION,Raw Coal Production,19.97,MT,BCCL,Barora OC,Jharia,2024-25-Q3,0.96,VERIFIED,,,3
+fact-aa502acd974948,COAL_PRODUCTION,Raw Coal Production,18.95,MT,WCL,Wani OC,Wardha Valley,August 2016-17,0.91,VERIFIED,,,4
+fact-74af87f9ddaf49,COAL_PRODUCTION,Raw Coal Production,3.22,MT,WCL,Majri OC,Wardha Valley,FY 2025-26,0.9,VERIFIED,Sheet_2,B75,
+fact-40126cd2ef834a,COAL_PRODUCTION,Raw Coal Production,3.63,MT,WCL,Nagpur Area OC,Umrer,2025-26-Q1,0.93,VERIFIED,Sheet_2,C107,
+fact-c5799a69708f4d,COAL_PRODUCTION,Raw Coal Production,10.16,MT,NCL,Jayant OC,Singrauli,FY 2016-17,0.9,VERIFIED,Sheet_1,D160,
+fact-4329a102b3bb4f,COAL_PRODUCTION,Raw Coal Production,38.29,MT,WCL,Nagpur Area OC,Wardha Valley,FY 2019-20,0.97,VERIFIED,,,1
+fact-b7891b566ed442,COAL_PRODUCTION,Raw Coal Production,27.58,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2020-21,0.99,VERIFIED,,,3
+fact-64cae7b930d54b,COAL_PRODUCTION,Raw Coal Production,5.4,MT,CMPDI,RI-V Bilaspur,Geological Directorate,FY 2020-21,0.58,REVIEW_REQUIRED,,,3
+fact-e7a5f125360746,COAL_PRODUCTION,Raw Coal Production,5.65,MT,SECL,Shivani UG,Mand-Raigarh,FY 2018-19,0.58,REVIEW_REQUIRED,Sheet1,R198,
+fact-e4672521b6d34e,COAL_PRODUCTION,Raw Coal Production,31.44,MT,SECL,Gevra OC,Korba,April 2016-17,0.93,VERIFIED,Sheet_1,D165,
+fact-68a4c24d053d40,COAL_PRODUCTION,Raw Coal Production,2.65,MT,BCCL,Moonidih UG,Jharia,2017-18-Q4,0.92,VERIFIED,,,3
+fact-2d04ae6dc83140,COAL_PRODUCTION,Raw Coal Production,26.97,MT,SECL,Chhal OC,Korba,FY 2018-19,0.91,VERIFIED,,,15
+fact-e4825f4cd70946,COAL_PRODUCTION,Raw Coal Production,1.3,MT,CCL,Amrapali OC,West Bokaro,2022-23-Q4,0.96,VERIFIED,,,9
+fact-c12eb0deea4b4e,COAL_PRODUCTION,Raw Coal Production,24.25,MT,CMPDI,RI-VI Singrauli,Central Drilling Reserves,2021-22-Q4,0.94,VERIFIED,Sheet_2,J15,
+fact-e94a69925e954e,COAL_PRODUCTION,Raw Coal Production,26.17,MT,ECL,Khottadih UG,Raniganj,June 2019-20,0.97,VERIFIED,,,8
+fact-214c266e7d5246,COAL_PRODUCTION,Raw Coal Production,1.04,MT,CCL,Magadh OC,East Bokaro,FY 2021-22,0.88,NEEDS_REVIEW,,,2
+fact-a2402da0a30b49,COAL_PRODUCTION,Raw Coal Production,26.69,MT,NCL,Amlohri OC,Singrauli,April 2017-18,0.91,VERIFIED,Sheet_2,H161,
+fact-6ebefd0f6b6841,COAL_PRODUCTION,Raw Coal Production,26.6,MT,CMPDI,RI-III Ranchi,Geological Directorate,FY 2016-17,0.92,VERIFIED,Sheet_2,G78,
+fact-eadbed09aeab45,COAL_PRODUCTION,Raw Coal Production,10.84,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2019-20,0.86,NEEDS_REVIEW,,,3
+fact-6cc6e990269643,COAL_PRODUCTION,Raw Coal Production,33.45,MT,MCL,Hingula OC,Ib Valley,FY 2017-18,0.82,NEEDS_REVIEW,,,5
+fact-ede86265f79d4e,COAL_PRODUCTION,Raw Coal Production,23.14,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2022-23,0.89,NEEDS_REVIEW,,,15
+fact-afcbcf26d2634f,COAL_PRODUCTION,Raw Coal Production,24.37,MT,MCL,Jagannath OC,Ib Valley,FY 2022-23,0.97,VERIFIED,Sheet1,R105,
+fact-4704b791522d4f,COAL_PRODUCTION,Raw Coal Production,9.46,MT,WCL,Pathakhera UG,Wardha Valley,FY 2018-19,0.99,VERIFIED,,,2
+fact-b93079b3ed8d40,COAL_PRODUCTION,Raw Coal Production,44.01,MT,CCL,Magadh OC,West Bokaro,FY 2023-24,0.58,VERIFIED,,,8
+fact-939c5a972e6348,COAL_PRODUCTION,Raw Coal Production,6.81,MT,WCL,Wani OC,Wardha Valley,FY 2019-20,0.9,VERIFIED,,,11
+fact-a3678dd03da54c,COAL_PRODUCTION,Raw Coal Production,11.87,MT,CCL,Amrapali OC,South Karanpura,FY 2017-18,0.8,NEEDS_REVIEW,,,14
+fact-017ebf00117341,COAL_PRODUCTION,Raw Coal Production,27.69,MT,SECL,Manikpur OC,Mand-Raigarh,FY 2023-24,0.95,VERIFIED,Sheet1,R220,
+fact-f373e2dd4e2a4b,COAL_PRODUCTION,Raw Coal Production,0.45,MT,MCL,Hingula OC,Ib Valley,2018-19-Q1,0.93,VERIFIED,,,2
+fact-f42badbc50574f,COAL_PRODUCTION,Raw Coal Production,29.18,MT,WCL,Umrer OC,Wardha Valley,FY 2025-26,0.92,VERIFIED,Sheet_2,C102,
+fact-45bdc30ad45042,COAL_PRODUCTION,Raw Coal Production,4.54,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2016-17,0.97,VERIFIED,,,1
+fact-c6fabd95b6d441,COAL_PRODUCTION,Raw Coal Production,4.82,MT,ECL,Jhanjra UG,Rajmahal,2017-18-Q3,0.87,NEEDS_REVIEW,,,4
+fact-557577779dc54d,COAL_PRODUCTION,Raw Coal Production,19.41,MT,BCCL,Bastacolla OC,Raniganj West,2023-24-Q2,0.63,REVIEW_REQUIRED,,,8
+fact-c363d39f066f4c,COAL_PRODUCTION,Raw Coal Production,12.22,MT,CIL,Tikak OC,Pan-India Mining Operations,2017-18-Q3,0.74,NEEDS_REVIEW,,,1
+fact-5df376cfd77346,COAL_PRODUCTION,Raw Coal Production,12.62,MT,WCL,Pathakhera UG,Wardha Valley,FY 2023-24,0.85,NEEDS_REVIEW,,,10
+fact-7be26574289e47,COAL_PRODUCTION,Raw Coal Production,10.98,MT,CMPDI,RI-IV Nagpur,Geological Directorate,2019-20-Q2,0.84,NEEDS_REVIEW,Sheet_5,E53,
+fact-49a049245a3c44,COAL_PRODUCTION,Raw Coal Production,21.96,MT,ECL,Kottadih UG/OC,Rajmahal,FY 2018-19,0.69,CONFLICT,Sheet_3,B151,
+fact-a6462a54d28046,COAL_PRODUCTION,Raw Coal Production,1.79,MT,WCL,Majri OC,Wardha Valley,FY 2017-18,0.68,CONFLICT,,,12
+fact-c3e5b7998b2f42,COAL_PRODUCTION,Raw Coal Production,18.09,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,2016-17-Q2,0.63,REVIEW_REQUIRED,,,5
+fact-7be507fe6a734a,COAL_PRODUCTION,Raw Coal Production,17.13,MT,CMPDI,RI-III Ranchi,Geological Directorate,FY 2016-17,0.93,VERIFIED,Sheet1,R99,
+fact-3969b9e4c9754f,COAL_PRODUCTION,Raw Coal Production,15.8,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,FY 2022-23,0.68,REVIEW_REQUIRED,,,15
+fact-e7aa8acd7f104c,COAL_PRODUCTION,Raw Coal Production,31.84,MT,BCCL,Lodna OC,Raniganj West,May 2023-24,0.92,VERIFIED,Sheet_2,F128,
+fact-aff34afa87be40,COAL_PRODUCTION,Raw Coal Production,4.98,MT,MCL,Bhubaneswari OC,Talcher,FY 2025-26,0.79,NEEDS_REVIEW,,,6
+fact-7b3c5e8a97ac4d,COAL_PRODUCTION,Raw Coal Production,9.32,MT,NCL,Khadia OC,Singrauli,FY 2021-22,0.92,VERIFIED,,,2
+fact-425dc5fa4d6e42,COAL_PRODUCTION,Raw Coal Production,29.56,MT,CMPDI,RI-V Bilaspur,Central Drilling Reserves,FY 2021-22,0.91,VERIFIED,,,7
+fact-8917971236d640,COAL_PRODUCTION,Raw Coal Production,9.83,MT,WCL,Majri OC,Wardha Valley,December 2017-18,0.92,VERIFIED,Sheet1,R37,
+fact-9e641eb3fce94e,COAL_PRODUCTION,Raw Coal Production,31.03,MT,CIL,Leddo OC,Pan-India Mining Operations,2016-17-Q3,0.86,NEEDS_REVIEW,,,3
+fact-c380f1508c224d,COAL_PRODUCTION,Raw Coal Production,18.0,MT,NCL,Kakri OC,Singrauli,FY 2023-24,0.86,NEEDS_REVIEW,,,8
+fact-a86ed23749dd46,COAL_PRODUCTION,Raw Coal Production,50.61,MT,MCL,Kaniha OC,Talcher,FY 2024-25,0.97,NEEDS_REVIEW,Sheet1,R107,
+fact-62e7992d1e5b42,COAL_PRODUCTION,Raw Coal Production,19.18,MT,NCL,Nigahi OC,Singrauli,FY 2016-17,0.99,VERIFIED,Sheet_2,G128,
+fact-fca6729f6c4844,COAL_PRODUCTION,Raw Coal Production,29.36,MT,MCL,Hingula OC,Talcher,2018-19-Q1,0.93,VERIFIED,,,3
+fact-8e065df307644d,COAL_PRODUCTION,Raw Coal Production,35.97,MT,CIL,NEC (North Eastern Coalfields),Pan-India Mining Operations,July 2023-24,0.98,VERIFIED,Sheet_2,C105,
+fact-1cb5b4c4905741,COAL_PRODUCTION,Raw Coal Production,1.39,MT,CCL,Ashoka OC,North Karanpura,FY 2020-21,0.76,NEEDS_REVIEW,Sheet_2,C86,
+fact-a2d27588380b46,COAL_PRODUCTION,Raw Coal Production,24.88,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,December 2018-19,0.98,VERIFIED,Sheet_3,E142,
+fact-9049b61ac1e044,COAL_PRODUCTION,Raw Coal Production,27.14,MT,NCL,Kakri OC,Singrauli,FY 2016-17,0.61,REVIEW_REQUIRED,,,16
+fact-2a7a0f89fa4145,COAL_PRODUCTION,Raw Coal Production,25.45,MT,NCL,Nigahi OC,Singrauli,FY 2021-22,0.98,VERIFIED,Sheet1,R220,
+fact-0a63f141c7974e,COAL_PRODUCTION,Raw Coal Production,31.38,MT,MCL,Lakhanpur OC,Ib Valley,FY 2024-25,0.66,REVIEW_REQUIRED,,,12
+fact-2c395936572b4c,COAL_PRODUCTION,Raw Coal Production,18.39,MT,CIL,NEC (North Eastern Coalfields),Consolidated Indian Coalfields,FY 2023-24,0.99,VERIFIED,Sheet1,R88,
+fact-993477d4f9ec4e,COAL_PRODUCTION,Raw Coal Production,18.22,MT,SECL,Shivani UG,Sohagpur,FY 2016-17,0.86,NEEDS_REVIEW,,,1
+fact-0ecf1705990d47,COAL_PRODUCTION,Raw Coal Production,2.67,MT,CMPDI,RI-I Asansol,All CIL Coalfields (Exploration),FY 2019-20,0.95,VERIFIED,Sheet1,R197,
+fact-7249acd1eeb94a,COAL_PRODUCTION,Raw Coal Production,27.86,MT,CMPDI,RI-III Ranchi,Geological Directorate,FY 2024-25,0.96,VERIFIED,,,7
+fact-cda6915f10874d,COAL_PRODUCTION,Raw Coal Production,28.83,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2019-20,0.68,REVIEW_REQUIRED,,,3
+fact-49c1feed367245,COAL_PRODUCTION,Raw Coal Production,26.74,MT,ECL,Jhanjra UG,Rajmahal,July 2025-26,0.81,NEEDS_REVIEW,Sheet_1,B33,
+fact-7b280c030eb04f,COAL_PRODUCTION,Raw Coal Production,5.59,MT,CMPDI,RI-VI Singrauli,All CIL Coalfields (Exploration),FY 2019-20,0.95,VERIFIED,,,2
+fact-478adc0ca91148,COAL_PRODUCTION,Raw Coal Production,35.15,MT,BCCL,Bastacolla OC,Jharia,FY 2019-20,0.68,REVIEW_REQUIRED,Sheet_1,B146,
+fact-50af1dac64aa43,COAL_PRODUCTION,Raw Coal Production,21.14,MT,CIL,Leddo OC,Consolidated Indian Coalfields,FY 2022-23,0.73,CONFLICT,,,23
+fact-94b721fe06e94e,COAL_PRODUCTION,Raw Coal Production,47.5,MT,WCL,Chandrapur OC,Umrer,FY 2024-25,0.96,VERIFIED,,,6
+fact-57b2e20efb4b44,COAL_PRODUCTION,Raw Coal Production,2.88,MT,CMPDI,RI-III Ranchi,All CIL Coalfields (Exploration),June 2024-25,0.96,VERIFIED,,,6
+fact-a9fa4252d5d24e,COAL_PRODUCTION,Raw Coal Production,22.98,MT,BCCL,Moonidih UG,Jharia,FY 2023-24,0.85,NEEDS_REVIEW,,,8
+fact-2579665890324c,COAL_PRODUCTION,Raw Coal Production,5.32,MT,NCL,Kakri OC,Singrauli,October 2023-24,0.92,VERIFIED,,,3
+fact-ce1036a06cc446,COAL_PRODUCTION,Raw Coal Production,15.83,MT,BCCL,Bastacolla OC,Raniganj West,2019-20-Q4,0.94,VERIFIED,Sheet_2,F98,
+fact-76008f6e1d014f,COAL_PRODUCTION,Raw Coal Production,43.63,MT,CIL,Tikak OC,Consolidated Indian Coalfields,FY 2023-24,0.92,VERIFIED,Sheet_5,J57,
+fact-287be36e7c3a46,COAL_PRODUCTION,Raw Coal Production,12.12,MT,CMPDI,RI-I Asansol,Geological Directorate,FY 2017-18,0.7,REVIEW_REQUIRED,,,5
+fact-c0f3633b86cb42,COAL_PRODUCTION,Raw Coal Production,6.4,MT,ECL,Kottadih UG/OC,Rajmahal,FY 2019-20,0.97,VERIFIED,Sheet1,R180,
+fact-938830b49a3f45,COAL_PRODUCTION,Raw Coal Production,31.7,MT,CMPDI,RI-IV Nagpur,All CIL Coalfields (Exploration),FY 2016-17,0.92,VERIFIED,Sheet_4,B101,
+fact-da12d404d8094f,COAL_PRODUCTION,Raw Coal Production,1.04,MT,CCL,Amrapali OC,North Karanpura,FY 2019-20,0.95,VERIFIED,Sheet_2,F36,
+fact-6cd6330aa84041,COAL_PRODUCTION,Raw Coal Production,12.95,MT,CCL,Rajrappa OC,West Bokaro,FY 2023-24,0.58,REVIEW_REQUIRED,,,13
+fact-222afc2b07e742,COAL_PRODUCTION,Raw Coal Production,8.18,MT,MCL,Bhubaneswari OC,Ib Valley,FY 2018-19,0.82,NEEDS_REVIEW,,,10
+fact-451d475fe2204a,COAL_PRODUCTION,Raw Coal Production,34.17,MT,NCL,Bina OC,Singrauli,FY 2018-19,0.85,NEEDS_REVIEW,,,2
+fact-1f8adc828ab240,COAL_PRODUCTION,Raw Coal Production,21.42,MT,NCL,Amlohri OC,Singrauli,FY 2018-19,0.92,VERIFIED,Sheet1,R164,
+fact-985d198a1a1346,COAL_PRODUCTION,Raw Coal Production,5.31,MT,SECL,Gevra OC,Sohagpur,FY 2025-26,0.93,VERIFIED,,,17
+fact-0f86337c0c0a4a,COAL_PRODUCTION,Raw Coal Production,17.75,MT,WCL,Umrer OC,Wardha Valley,FY 2016-17,0.97,VERIFIED,Sheet_3,H175,
+fact-95c4930d0d434e,COAL_PRODUCTION,Raw Coal Production,49.31,MT,MCL,Ananta OC,Talcher,March 2024-25,0.63,REVIEW_REQUIRED,Sheet_2,G144,
+fact-cbd670dc560c49,COAL_PRODUCTION,Raw Coal Production,30.47,MT,WCL,Chandrapur OC,Pench-Kanhan,October 2017-18,0.97,VERIFIED,,,14
+fact-71f8a580e1004d,COAL_PRODUCTION,Raw Coal Production,7.82,MT,CIL,Leddo OC,Pan-India Mining Operations,FY 2016-17,0.76,NEEDS_REVIEW,,,1
+fact-a143e5befc2c47,COAL_PRODUCTION,Raw Coal Production,2.95,MT,BCCL,Bastacolla OC,Raniganj West,FY 2018-19,0.91,NEEDS_REVIEW,Sheet1,R102,
+fact-993df37d7a8f42,COAL_PRODUCTION,Raw Coal Production,41.24,MT,BCCL,Kusunda OC,Raniganj West,2022-23-Q3,0.95,VERIFIED,,,8
+fact-1e239b1d3cb040,COAL_PRODUCTION,Raw Coal Production,34.22,MT,MCL,Bhubaneswari OC,Ib Valley,FY 2021-22,0.96,VERIFIED,Sheet1,R33,
+fact-e69e771de8384e,COAL_PRODUCTION,Raw Coal Production,26.28,MT,ECL,Jhanjra UG,Rajmahal,FY 2019-20,0.81,NEEDS_REVIEW,,,4
+fact-193f665d0bc546,COAL_PRODUCTION,Raw Coal Production,30.63,MT,WCL,Pench UG,Wardha Valley,FY 2016-17,0.83,NEEDS_REVIEW,,,10
