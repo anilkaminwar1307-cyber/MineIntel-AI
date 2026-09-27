@@ -27,15 +27,17 @@ MineIntel is a deterministic, evidence-grounded intelligence platform designed f
 ## 2. Verification & Test Status
 
 ### Backend Test Suite
-- **Result:** 78 / 78 tests passing (100% pass rate)
-- **Command:** `python -m pytest backend/tests -v`
+- **Result:** 90 / 90 tests passing (100% pass rate)
+- **Command:** `pytest backend/tests`
 - **Key Suites Verified:**
-  - `test_api.py`: Health check, capabilities, document upload, evidence ledger, analytics, reports, settings
-  - `test_document_intelligence.py`: Excel, PDF, scanned document OCR pipeline, CSV acceptance, normalizers (metric, unit, period, organization), confidence engine, provenance retrieval
-  - `test_live_document_pipeline.py`: Single upload, batch upload, SHA-256 deduplication, lifecycle, status tracking, preview
-  - `test_number_safe_calculation_engine.py`: Single-fact calculation, temporal overlap protection, consolidated vs. subsidiary double-counting prevention, target achievement matching, lineage persistence, reconciliation
-  - `test_pipeline.py`: Metric registry, period normalizer, unit normalizer, chunking, full CSV extraction
-  - `test_scaled_platform.py`: Capabilities, analytics overview, query engine, claim verification, topic intelligence, review queue, conflict resolution, report generation and PDF export
+  - `test_auth_rbac.py` (8/8 passing): JWT access tokens, bcrypt password hashing, login verification, protected `/me`, Analyst review-action prohibition (403), Reviewer authorization
+  - `test_api.py` (8/8 passing): Health check, capabilities, document upload, evidence ledger, analytics, reports, settings (with in-memory isolated SQLite fixture)
+  - `test_document_intelligence.py` (13/13 passing): Excel, PDF, scanned document OCR pipeline, CSV acceptance, normalizers (metric, unit, period, organization), confidence engine, provenance retrieval
+  - `test_live_document_pipeline.py` (23/23 passing): Single upload, batch upload, SHA-256 deduplication, lifecycle, status tracking, preview
+  - `test_number_safe_calculation_engine.py` (15/15 passing): Single-fact calculation, temporal overlap protection, consolidated vs. subsidiary double-counting prevention, target achievement matching, lineage persistence, reconciliation
+  - `test_pipeline.py` (9/9 passing): Metric registry, period normalizer, unit normalizer, chunking, full CSV extraction
+  - `test_scaled_platform.py` (10/10 passing): Capabilities, analytics overview, query engine, claim verification, topic intelligence, review queue, conflict resolution, report generation and PDF export
+  - `test_asset_resolver.py` (4/4 passing): Portable path resolution, missing asset error handling
 
 ### Frontend Compilation
 - **Result:** 0 TypeScript errors (`tsc && vite build` succeeded cleanly)
@@ -46,18 +48,36 @@ MineIntel is a deterministic, evidence-grounded intelligence platform designed f
 
 ## 3. Key Upgrades Completed
 
-1. **Authentication & RBAC Integration**:
-   - Seeded demo roles (`analyst_demo`, `reviewer_demo`, `admin_demo`) with secure password hashes.
-   - JWT identity extraction (`get_current_user_optional`) seamlessly integrated into:
-     - Review mutation endpoints (`approve`, `reject`, `edit-and-approve`)
-     - Evidence ledger direct verifications and fact superseding
-     - Query history and audit trail logging
-   - Graceful degradation: operates in demo fallback mode if JWT/passlib dependencies are not present.
+1. **Repository Hygiene & Clean Checkout Reproducibility**:
+   - Tracked live databases (`.db`), user uploads (`data/uploads`), generated PDF reports (`data/reports`), `.env`, `dist/`, and cache directories removed from git tracking.
+   - Root `.gitignore` and `.dockerignore` updated to guard against committing sensitive artifacts or local database files.
+   - Clean `.env.example` created with safe placeholders (`CHANGE_ME`) and documented demo defaults.
 
-2. **Database & Schema Completeness**:
-   - Root `data/mineintel.db` and runtime databases synchronized.
-   - Added missing `password_hash` and `is_demo` columns to `users` table.
-   - Ensured idempotency on table creation and schema column upgrades across startups.
+2. **Alembic Migrations & PostgreSQL Driver Pinning**:
+   - Removed SQLite-specific `PRAGMA table_info` and `ALTER TABLE` hacks from `main.py` startup handler.
+   - Implemented clean programmatic Alembic execution on startup (`command.upgrade(alembic_cfg, "head")`).
+   - Added `render_as_batch=True` to `migrations/env.py` for full SQLite compatibility.
+   - Pinned `psycopg2-binary>=2.9.9,<3.0.0` in `backend/requirements.txt` for production PostgreSQL Docker deployments.
+
+3. **Authentication & RBAC Enforcement**:
+   - Implemented JWT bearer authentication and bcrypt password hashing via `app.core.auth`.
+   - Role-Based Access Control matrix:
+     - **Analyst**: Upload documents, execute queries, view evidence ledger, access analytics and topic intelligence.
+     - **Reviewer**: Verify facts, edit data points, resolve cross-document evidence conflicts.
+     - **Admin**: System configuration, user management, and administrative audit inspection.
+   - Enforced reviewer provenance from the authenticated JWT principal to prevent reviewer identity spoofing.
+
+4. **Frontend Auth State & Operator Sign In**:
+   - Created dedicated `Login.tsx` component with Coal India / CMPDI branding, operator sign-in form, and quick demo logins for Analyst, Reviewer, and Admin.
+   - Configured Axios request interceptor to attach `Authorization: Bearer <token>` on all API requests.
+   - Configured Axios response interceptor for automatic 401 redirection and session cleanup.
+   - Integrated operator identity card, role badges, and logout flow into the navigation sidebar.
+
+5. **Storage Security & MIME Magic Validation**:
+   - Added magic bytes signature verification (`verify_magic_bytes`) in `LocalStorageService` to prevent file extension spoofing.
+   - Path traversal prevention to ensure all file writes and reads remain strictly within designated storage boundaries.
+   - Added `.docx` support to `FileType` enum and storage MIME mapping.
+
 
 3. **API Contract & Route Aliasing**:
    - Added `/calculations/calculate` alias matching frontend `api.runCalculation`.
