@@ -14,6 +14,7 @@ EXTENSION_MAP = {
     ".pdf": FileType.PDF,
     ".xlsx": FileType.XLSX,
     ".xls": FileType.XLS,
+    ".docx": getattr(FileType, "DOCX", FileType.TXT),
     ".csv": FileType.CSV,
     ".txt": FileType.TXT,
     ".png": FileType.PNG,
@@ -25,12 +26,38 @@ MIME_MAP = {
     FileType.PDF: ["application/pdf"],
     FileType.XLSX: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
     FileType.XLS: ["application/vnd.ms-excel"],
+    getattr(FileType, "DOCX", FileType.TXT): [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword"
+    ],
     FileType.CSV: ["text/csv", "text/plain", "application/csv"],
     FileType.TXT: ["text/plain"],
     FileType.PNG: ["image/png"],
     FileType.JPG: ["image/jpeg"],
     FileType.JPEG: ["image/jpeg"],
 }
+
+
+def verify_magic_bytes(content: bytes, ext: str) -> bool:
+    """Verify file magic signatures to prevent executable and extension spoofing."""
+    if not content:
+        return False
+    if ext == ".pdf":
+        return content.startswith(b"%PDF-")
+    elif ext in (".xlsx", ".docx"):
+        return content.startswith(b"PK\x03\x04")
+    elif ext == ".xls":
+        return content.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1") or content.startswith(b"PK\x03\x04")
+    elif ext == ".png":
+        return content.startswith(b"\x89PNG\r\n\x1a\n")
+    elif ext in (".jpg", ".jpeg"):
+        return content.startswith(b"\xff\xd8\xff")
+    elif ext in (".csv", ".txt"):
+        # Disallow Windows PE / Linux ELF executables masquerading as text/csv
+        if content.startswith(b"MZ") or content.startswith(b"\x7fELF"):
+            return False
+        return True
+    return True
 
 
 import hashlib
@@ -96,6 +123,13 @@ class LocalStorageService:
         )
 
         ext = os.path.splitext(clean_name)[1].lower()
+
+        # Security check: Validate magic bytes to stop MIME spoofing
+        if not verify_magic_bytes(content, ext):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Security violation: File header signatures do not match declared extension '{ext}'."
+            )
 
         # Security check: Password-protected or encrypted PDFs
         if ext == ".pdf":

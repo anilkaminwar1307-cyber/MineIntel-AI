@@ -74,6 +74,7 @@ class FileType(str, Enum):
     XLS = "XLS"
     CSV = "CSV"
     TXT = "TXT"
+    DOCX = "DOCX"
     PNG = "PNG"
     JPG = "JPG"
     JPEG = "JPEG"
