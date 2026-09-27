@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,6 +21,10 @@ from app.api.reviews import router as reviews_router
 from app.api.topics import router as topics_router
 from app.api.query import router as query_router
 from app.api.settings import router as settings_router
+from app.api.calculations import router as calculations_router
+from app.api.minegraph import router as minegraph_router
+from app.api.parliamentary import router as parliamentary_router
+from app.api.auth import router as auth_router
 
 
 @asynccontextmanager
@@ -30,27 +35,33 @@ async def lifespan(app: FastAPI):
     """
     logger.info("Initializing MineIntel backend...")
     try:
-        Base.metadata.create_all(bind=engine)
-        # Migrate generated_reports columns if missing
-        from sqlalchemy import text
-        with engine.connect() as conn:
-            res = conn.execute(text("PRAGMA table_info(generated_reports)")).fetchall()
-            col_names = [r[1] for r in res]
-            if col_names:
-                if "pdf_status" not in col_names:
-                    conn.execute(text("ALTER TABLE generated_reports ADD COLUMN pdf_status VARCHAR(50) DEFAULT 'READY'"))
-                if "pdf_path" not in col_names:
-                    conn.execute(text("ALTER TABLE generated_reports ADD COLUMN pdf_path VARCHAR(500)"))
-                if "pdf_filename" not in col_names:
-                    conn.execute(text("ALTER TABLE generated_reports ADD COLUMN pdf_filename VARCHAR(255)"))
-                if "pdf_size" not in col_names:
-                    conn.execute(text("ALTER TABLE generated_reports ADD COLUMN pdf_size INTEGER DEFAULT 0"))
-                if "pdf_generated_at" not in col_names:
-                    conn.execute(text("ALTER TABLE generated_reports ADD COLUMN pdf_generated_at DATETIME"))
-                conn.commit()
-        logger.info("Database tables and columns verified / created successfully.")
+        from alembic.config import Config
+        from alembic import command
+        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        alembic_ini_path = os.path.join(backend_dir, "alembic.ini")
+        if os.path.exists(alembic_ini_path):
+            alembic_cfg = Config(alembic_ini_path)
+            alembic_cfg.set_main_option("script_location", os.path.join(backend_dir, "migrations"))
+            command.upgrade(alembic_cfg, "head")
+            logger.info("Database schema verified via Alembic migrations.")
+        else:
+            Base.metadata.create_all(bind=engine)
+            logger.info("Database schema initialized via metadata.")
     except Exception as e:
-        logger.error(f"Error creating database tables / migrating: {e}")
+        logger.warning(f"Alembic auto-migration notice: {e}, falling back to create_all()")
+        Base.metadata.create_all(bind=engine)
+
+
+    # Auto-seed demo users when DEMO_MODE is enabled (idempotent)
+    if settings.DEMO_MODE:
+        try:
+            from app.core.database import SessionLocal as _SL
+            from app.api.auth import _DEMO_ACCOUNTS, seed_demo_users
+            _sess = _SL()
+            seed_demo_users(db=_sess)
+            _sess.close()
+        except Exception as _e:
+            logger.warning(f"Demo user seeding skipped (passlib not installed or other error): {_e}")
 
     yield
 
@@ -91,6 +102,10 @@ app.include_router(reviews_router, prefix=settings.API_PREFIX)
 app.include_router(topics_router, prefix=settings.API_PREFIX)
 app.include_router(query_router, prefix=settings.API_PREFIX)
 app.include_router(settings_router, prefix=settings.API_PREFIX)
+app.include_router(calculations_router, prefix=settings.API_PREFIX)
+app.include_router(minegraph_router, prefix=settings.API_PREFIX)
+app.include_router(parliamentary_router, prefix=settings.API_PREFIX)
+app.include_router(auth_router, prefix=settings.API_PREFIX)
 
 
 @app.get("/", include_in_schema=False)

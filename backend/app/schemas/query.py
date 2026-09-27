@@ -1,5 +1,7 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from pydantic import BaseModel
+
+from app.schemas.calculation import CalculationResultSchema
 
 
 class QueryRequest(BaseModel):
@@ -42,4 +44,5 @@ class QueryResponse(BaseModel):
     calculation_steps: Optional[List[str]] = None
     sql_query: Optional[str] = None
     suggestions: Optional[List[str]] = None
+    calculation_result: Optional[CalculationResultSchema] = None
 

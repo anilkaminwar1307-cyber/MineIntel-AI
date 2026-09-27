@@ -1,10 +1,11 @@
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 
 from app.core.database import get_db
+from app.core.auth import get_current_user_optional
 from app.models.validation import ValidationIssue, EvidenceConflict
 from app.models.fact import ExtractedFact
 from app.models.document import Document
@@ -13,10 +14,25 @@ from app.models.audit import AuditEvent
 from app.models.enums import ValidationStatus, AuditAction
 from app.schemas.review import (
     ReviewQueueResponse, ReviewItemResponse, ConflictItemResponse,
-    ReviewApproveRequest, ReviewRejectRequest, ReviewEditRequest, ConflictResolveRequest
+    ReviewApproveRequest, ReviewRejectRequest, ReviewEditRequest, ConflictResolveRequest,
+    FactEditAndApproveRequest
 )
 
 router = APIRouter(prefix="/reviews", tags=["Review Queue"])
+
+
+def _resolve_reviewer(req_reviewer: str, current_user: Optional[dict]) -> str:
+    """Return the reviewer identity from the JWT principal and enforce Reviewer/Admin RBAC;
+    falls back to the request body value only for the unauthenticated demo flow."""
+    if current_user and current_user.get("username"):
+        role = current_user.get("role", "")
+        if role and role not in ("Reviewer", "Admin"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied. Review verification and conflict resolution require Reviewer or Admin role. Your role: {role}",
+            )
+        return current_user["username"]
+    return req_reviewer or "CMPDI Analyst"
 
 
 @router.get("", response_model=ReviewQueueResponse)
@@ -163,12 +179,15 @@ def get_conflicts_list(db: Session = Depends(get_db)):
 def approve_review_item(
     issue_id: str,
     req: ReviewApproveRequest = ReviewApproveRequest(),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
 ):
     """
     Approves a fact, marking it as VERIFIED and recording human reviewer provenance.
-    Immediately updates database, audit log, and resolves the validation issue.
+    Reviewer identity is taken from the JWT principal when auth is enabled;
+    falls back to the request body for the demo flow.
     """
+    reviewer = _resolve_reviewer(req.reviewer_name, current_user)
     issue = db.query(ValidationIssue).filter(ValidationIssue.id == issue_id).first()
     if not issue:
         raise HTTPException(status_code=404, detail="Validation issue not found.")
@@ -179,18 +198,18 @@ def approve_review_item(
         if fact:
             fact.validation_status = ValidationStatus.VERIFIED.value
             fact.human_verified = True
-            fact.verified_by = req.reviewer_name
+            fact.verified_by = reviewer
             fact.confidence_score = 1.0
 
     issue.is_resolved = True
-    issue.resolved_by = req.reviewer_name
-    issue.resolved_at = datetime.utcnow()
+    issue.resolved_by = reviewer
+    issue.resolved_at = datetime.now(timezone.utc)
 
     # Log human review action
     action = ReviewAction(
         document_id=issue.document_id,
         fact_id=issue.fact_id,
-        reviewer_name=req.reviewer_name,
+        reviewer_name=reviewer,
         action="APPROVED",
         notes=req.notes
     )
@@ -198,7 +217,7 @@ def approve_review_item(
 
     # Log immutable audit event
     audit = AuditEvent(
-        user=req.reviewer_name,
+        user=reviewer,
         action=AuditAction.FACT_APPROVED.value,
         entity_type="FACT",
         entity_id=issue.fact_id,
@@ -214,11 +233,13 @@ def approve_review_item(
 def reject_review_item(
     issue_id: str,
     req: ReviewRejectRequest = ReviewRejectRequest(),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
 ):
     """
     Rejects a faulty extraction or spurious fact.
     """
+    reviewer = _resolve_reviewer(req.reviewer_name, current_user)
     issue = db.query(ValidationIssue).filter(ValidationIssue.id == issue_id).first()
     if not issue:
         raise HTTPException(status_code=404, detail="Validation issue not found.")
@@ -229,20 +250,20 @@ def reject_review_item(
             fact.validation_status = ValidationStatus.REJECTED.value
 
     issue.is_resolved = True
-    issue.resolved_by = req.reviewer_name
-    issue.resolved_at = datetime.utcnow()
+    issue.resolved_by = reviewer
+    issue.resolved_at = datetime.now(timezone.utc)
 
     action = ReviewAction(
         document_id=issue.document_id,
         fact_id=issue.fact_id,
-        reviewer_name=req.reviewer_name,
+        reviewer_name=reviewer,
         action="REJECTED",
         notes=req.notes
     )
     db.add(action)
 
     audit = AuditEvent(
-        user=req.reviewer_name,
+        user=reviewer,
         action=AuditAction.FACT_REJECTED.value,
         entity_type="FACT",
         entity_id=issue.fact_id,
@@ -258,10 +279,12 @@ def reject_review_item(
 def edit_and_approve_review_item(
     issue_id: str,
     req: ReviewEditRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
 ):
     """
     Corrects a value and marks fact as VERIFIED with full audit logging.
+    Preserves original extracted value in original_numeric_value.
     """
     issue = db.query(ValidationIssue).filter(ValidationIssue.id == issue_id).first()
     if not issue or not issue.fact_id:
@@ -273,53 +296,100 @@ def edit_and_approve_review_item(
 
     new_val = req.get_value()
     prev_val = str(fact.numeric_value)
+    prev_metric = fact.metric_code
+    prev_unit = fact.unit
+    prev_status = fact.validation_status
+
+    # Preserve original extraction if not already set
+    if fact.original_numeric_value is None:
+        fact.original_numeric_value = fact.numeric_value
+    if fact.original_metric_code is None:
+        fact.original_metric_code = fact.metric_code
+    if fact.original_unit is None:
+        fact.original_unit = fact.unit
+
+    reviewer = _resolve_reviewer(req.reviewer_name, current_user)
+
+    # Apply updates
     fact.numeric_value = new_val
-    fact.text_value = f"{new_val} {req.unit or fact.unit or ''}"
     if req.unit:
         fact.unit = req.unit
+    if req.metric_code:
+        fact.metric_code = req.metric_code
+    if req.metric_name:
+        fact.metric_name = req.metric_name
+    if req.reporting_period:
+        fact.reporting_period = req.reporting_period
+    if req.subsidiary:
+        fact.subsidiary = req.subsidiary
+    if req.mine:
+        fact.mine = req.mine
+    if req.coalfield:
+        fact.coalfield = req.coalfield
+
+    fact.text_value = f"{new_val} {fact.unit or ''}"
     fact.validation_status = ValidationStatus.VERIFIED.value
     fact.human_verified = True
-    fact.verified_by = req.reviewer_name
+    fact.verified_by = reviewer
     fact.confidence_score = 1.0
 
     issue.is_resolved = True
-    issue.resolved_by = req.reviewer_name
-    issue.resolved_at = datetime.utcnow()
+    issue.resolved_by = reviewer
+    issue.resolved_at = datetime.now(timezone.utc)
 
     action = ReviewAction(
         document_id=issue.document_id,
         fact_id=issue.fact_id,
-        reviewer_name=req.reviewer_name,
+        reviewer_name=reviewer,
         action="MODIFIED",
         previous_value=prev_val,
         new_value=str(new_val),
+        previous_metric=prev_metric,
+        new_metric=fact.metric_code,
+        previous_unit=prev_unit,
+        new_unit=fact.unit,
+        previous_status=prev_status,
+        new_status=ValidationStatus.VERIFIED.value,
         notes=req.notes
     )
     db.add(action)
 
     audit = AuditEvent(
-        user=req.reviewer_name,
+        user=reviewer,
         action=AuditAction.FACT_EDITED.value,
         entity_type="FACT",
         entity_id=issue.fact_id,
-        details=f"Analyst edited fact {issue.fact_id}: {prev_val} -> {new_val}. Status set to VERIFIED."
+        details=f"Analyst edited fact {issue.fact_id}: {prev_val} -> {new_val} {fact.unit}. Original value {fact.original_numeric_value} preserved. Status set to VERIFIED."
     )
     db.add(audit)
     db.commit()
 
-    return {"message": "Fact modified and verified successfully", "issue_id": issue_id, "new_value": new_val, "status": "VERIFIED"}
+    return {
+        "message": "Fact modified and verified successfully",
+        "issue_id": issue_id,
+        "fact_id": fact.id,
+        "new_value": new_val,
+        "original_value": fact.original_numeric_value,
+        "status": "VERIFIED"
+    }
 
 
 @router.post("/conflicts/{conflict_id}/resolve")
 def resolve_evidence_conflict(
     conflict_id: str,
     req: ConflictResolveRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
 ):
     """
     Resolves a contradictory conflict between two evidence facts.
-    The selected fact is confirmed as VERIFIED, while the alternative is marked REJECTED / SUPERSEDED.
+    Supports:
+    - Version-aware: Mark newer version authoritative -> winning VERIFIED, losing SUPERSEDED
+    - Accept chosen -> winning VERIFIED, losing REJECTED
+    - Mark duplicate -> losing DUPLICATE
+    - Override value -> updates value with analyst correction
     """
+    reviewer = _resolve_reviewer(req.reviewer_name, current_user)
     conflict = db.query(EvidenceConflict).filter(EvidenceConflict.id == conflict_id).first()
     if not conflict:
         raise HTTPException(status_code=404, detail="Conflict record not found.")
@@ -332,37 +402,59 @@ def resolve_evidence_conflict(
     losing_fact_id = conflict.conflicting_fact_id if winning_id == conflict.primary_fact_id else conflict.primary_fact_id
     losing_fact = db.query(ExtractedFact).filter(ExtractedFact.id == losing_fact_id).first()
 
+    # Apply manual override value if provided
+    if req.corrected_value is not None:
+        if winning_fact.original_numeric_value is None:
+            winning_fact.original_numeric_value = winning_fact.numeric_value
+        winning_fact.numeric_value = req.corrected_value
+        winning_fact.text_value = f"{req.corrected_value} {winning_fact.unit or ''}"
+
     winning_fact.validation_status = ValidationStatus.VERIFIED.value
     winning_fact.human_verified = True
-    winning_fact.verified_by = req.reviewer_name
+    winning_fact.verified_by = reviewer
+    winning_fact.confidence_score = 1.0
 
+    action_label = "CONFLICT_RESOLVED"
     if losing_fact:
-        losing_fact.validation_status = ValidationStatus.REJECTED.value
+        if req.resolution_action == "MARK_SUPERSEDED" or "supersede" in req.resolution_notes.lower():
+            losing_fact.validation_status = ValidationStatus.SUPERSEDED.value
+            losing_fact.is_superseded = True
+            losing_fact.superseded_by_id = winning_fact.id
+            action_label = "SUPERSEDED"
+        elif req.resolution_action == "MARK_DUPLICATE":
+            losing_fact.validation_status = ValidationStatus.DUPLICATE.value
+            action_label = "MARK_DUPLICATE"
+        else:
+            losing_fact.validation_status = ValidationStatus.REJECTED.value
 
     conflict.status = "RESOLVED"
     conflict.resolution_notes = req.resolution_notes
-    conflict.resolved_by = req.reviewer_name
-    conflict.resolved_at = datetime.utcnow()
+    conflict.resolved_by = reviewer
+    conflict.resolved_at = datetime.now(timezone.utc)
 
     # Resolve related validation issues
     db.query(ValidationIssue).filter(
         ValidationIssue.fact_id.in_([conflict.primary_fact_id, conflict.conflicting_fact_id])
-    ).update({"is_resolved": True, "resolved_by": req.reviewer_name, "resolved_at": datetime.utcnow()}, synchronize_session=False)
+    ).update({"is_resolved": True, "resolved_by": reviewer, "resolved_at": datetime.now(timezone.utc)}, synchronize_session=False)
 
     action = ReviewAction(
         fact_id=winning_fact.id,
-        reviewer_name=req.reviewer_name,
-        action="CONFLICT_RESOLVED",
-        notes=f"Resolved conflict {conflict_id}. Preferred fact {winning_fact.id} ({winning_fact.numeric_value}). Notes: {req.resolution_notes}"
+        conflict_id=conflict_id,
+        reviewer_name=reviewer,
+        action=action_label,
+        previous_value=str(winning_fact.original_numeric_value or winning_fact.numeric_value),
+        new_value=str(winning_fact.numeric_value),
+        new_status="VERIFIED",
+        notes=f"Resolved conflict {conflict_id} ({req.resolution_action}). Authoritative fact {winning_fact.id} confirmed. Notes: {req.resolution_notes}"
     )
     db.add(action)
 
     audit = AuditEvent(
-        user=req.reviewer_name,
-        action=AuditAction.FACT_APPROVED.value,
+        user=reviewer,
+        action=AuditAction.CONFLICT_RESOLVED.value,
         entity_type="CONFLICT",
         entity_id=conflict_id,
-        details=f"Conflict resolved: {winning_fact.metric_code} confirmed as {winning_fact.numeric_value} {winning_fact.unit} for {winning_fact.subsidiary} ({winning_fact.reporting_period})."
+        details=f"Conflict resolved ({action_label}): {winning_fact.metric_code} confirmed as {winning_fact.numeric_value} {winning_fact.unit} for {winning_fact.subsidiary} ({winning_fact.reporting_period})."
     )
     db.add(audit)
     db.commit()
@@ -372,6 +464,8 @@ def resolve_evidence_conflict(
         "conflict_id": conflict_id,
         "winning_fact_id": winning_fact.id,
         "winning_value": winning_fact.numeric_value,
+        "losing_fact_id": losing_fact_id,
+        "losing_status": losing_fact.validation_status if losing_fact else "N/A",
         "status": "RESOLVED"
     }
 
@@ -380,27 +474,46 @@ def resolve_evidence_conflict(
 def direct_approve_fact(
     fact_id: str,
     req: ReviewApproveRequest = ReviewApproveRequest(),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
 ):
-    """Directly verifies a fact from the Evidence Ledger."""
+    """Directly verifies a fact from the Evidence Ledger or Evidence Drawer."""
+    reviewer = _resolve_reviewer(req.reviewer_name, current_user)
     fact = db.query(ExtractedFact).filter(ExtractedFact.id == fact_id).first()
     if not fact:
         raise HTTPException(status_code=404, detail="Fact not found.")
 
+    prev_status = fact.validation_status
     fact.validation_status = ValidationStatus.VERIFIED.value
     fact.human_verified = True
-    fact.verified_by = req.reviewer_name
-    fact.confidence_score = 1.0
+    fact.verified_by = reviewer
+    # NOTE: Do NOT overwrite confidence_score here.
+    # Extraction confidence is a separate field from human verification state.
+    # Rule 6 (AGENTS.md): human_verified is set only by explicit analyst confirmation;
+    # it does NOT retroactively make an extraction 100% confident.
 
     # Resolve any pending issues
     db.query(ValidationIssue).filter(ValidationIssue.fact_id == fact_id).update({
         "is_resolved": True,
-        "resolved_by": req.reviewer_name,
-        "resolved_at": datetime.utcnow()
+        "resolved_by": reviewer,
+        "resolved_at": datetime.now(timezone.utc)
     }, synchronize_session=False)
 
+    action = ReviewAction(
+        document_id=fact.document_id,
+        fact_id=fact_id,
+        reviewer_name=reviewer,
+        action="APPROVED",
+        previous_value=str(fact.numeric_value),
+        new_value=str(fact.numeric_value),
+        previous_status=prev_status,
+        new_status=ValidationStatus.VERIFIED.value,
+        notes=req.notes
+    )
+    db.add(action)
+
     audit = AuditEvent(
-        user=req.reviewer_name,
+        user=reviewer,
         action=AuditAction.FACT_APPROVED.value,
         entity_type="FACT",
         entity_id=fact_id,
@@ -411,3 +524,172 @@ def direct_approve_fact(
 
     return {"message": "Fact verified successfully", "fact_id": fact_id, "status": "VERIFIED"}
 
+
+@router.post("/facts/{fact_id}/edit-and-approve")
+def direct_edit_and_approve_fact(
+    fact_id: str,
+    req: FactEditAndApproveRequest,
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
+):
+    """
+    Directly corrects and verifies a fact from Evidence Ledger or Evidence Drawer.
+    Preserves original extraction and writes immutable ReviewAction + AuditEvent.
+    """
+    reviewer = _resolve_reviewer(req.reviewer_name, current_user)
+    fact = db.query(ExtractedFact).filter(ExtractedFact.id == fact_id).first()
+    if not fact:
+        raise HTTPException(status_code=404, detail="Fact not found.")
+
+    prev_val = str(fact.numeric_value)
+    prev_metric = fact.metric_code
+    prev_unit = fact.unit
+    prev_status = fact.validation_status
+
+    if fact.original_numeric_value is None:
+        fact.original_numeric_value = fact.numeric_value
+    if fact.original_metric_code is None:
+        fact.original_metric_code = fact.metric_code
+    if fact.original_unit is None:
+        fact.original_unit = fact.unit
+
+    fact.numeric_value = req.numeric_value
+    if req.unit:
+        fact.unit = req.unit
+    if req.metric_code:
+        fact.metric_code = req.metric_code
+    if req.metric_name:
+        fact.metric_name = req.metric_name
+    if req.reporting_period:
+        fact.reporting_period = req.reporting_period
+    if req.subsidiary:
+        fact.subsidiary = req.subsidiary
+    if req.mine:
+        fact.mine = req.mine
+    if req.coalfield:
+        fact.coalfield = req.coalfield
+    if req.organization:
+        fact.organization = req.organization
+
+    fact.text_value = f"{req.numeric_value} {fact.unit or ''}"
+    fact.validation_status = ValidationStatus.VERIFIED.value
+    fact.human_verified = True
+    fact.verified_by = reviewer
+    fact.confidence_score = 1.0
+
+    # Resolve any pending issues
+    db.query(ValidationIssue).filter(ValidationIssue.fact_id == fact_id).update({
+        "is_resolved": True,
+        "resolved_by": reviewer,
+        "resolved_at": datetime.now(timezone.utc)
+    }, synchronize_session=False)
+
+    action = ReviewAction(
+        document_id=fact.document_id,
+        fact_id=fact_id,
+        reviewer_name=reviewer,
+        action="MODIFIED",
+        previous_value=prev_val,
+        new_value=str(req.numeric_value),
+        previous_metric=prev_metric,
+        new_metric=fact.metric_code,
+        previous_unit=prev_unit,
+        new_unit=fact.unit,
+        previous_status=prev_status,
+        new_status=ValidationStatus.VERIFIED.value,
+        notes=req.notes
+    )
+    db.add(action)
+
+    audit = AuditEvent(
+        user=reviewer,
+        action=AuditAction.FACT_EDITED.value,
+        entity_type="FACT",
+        entity_id=fact_id,
+        details=f"Analyst edited fact {fact_id}: {prev_val} -> {req.numeric_value} {fact.unit}. Original value {fact.original_numeric_value} retained. Status set to VERIFIED."
+    )
+    db.add(audit)
+    db.commit()
+
+    return {
+        "message": "Fact corrected and verified successfully",
+        "fact_id": fact_id,
+        "numeric_value": fact.numeric_value,
+        "original_numeric_value": fact.original_numeric_value,
+        "status": "VERIFIED"
+    }
+
+
+@router.post("/facts/{fact_id}/supersede")
+def supersede_fact(
+    fact_id: str,
+    superseded_by_id: str = Query(..., description="ID of authoritative fact"),
+    reviewer_name: str = Query("CMPDI Analyst"),
+    notes: str = Query("Marked as superseded by newer authoritative evidence"),
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
+):
+    """
+    Marks an older fact as SUPERSEDED by a newer authoritative document fact.
+    Both records are preserved.
+    """
+    reviewer = _resolve_reviewer(reviewer_name, current_user)
+    old_fact = db.query(ExtractedFact).filter(ExtractedFact.id == fact_id).first()
+    new_fact = db.query(ExtractedFact).filter(ExtractedFact.id == superseded_by_id).first()
+    if not old_fact or not new_fact:
+        raise HTTPException(status_code=404, detail="Source or authoritative fact not found.")
+
+    old_fact.validation_status = ValidationStatus.SUPERSEDED.value
+    old_fact.is_superseded = True
+    old_fact.superseded_by_id = new_fact.id
+
+    new_fact.validation_status = ValidationStatus.VERIFIED.value
+    new_fact.human_verified = True
+    new_fact.verified_by = reviewer
+
+    action = ReviewAction(
+        document_id=old_fact.document_id,
+        fact_id=old_fact.id,
+        reviewer_name=reviewer,
+        action="SUPERSEDED",
+        previous_value=str(old_fact.numeric_value),
+        new_value=str(new_fact.numeric_value),
+        previous_status=old_fact.validation_status,
+        new_status=ValidationStatus.SUPERSEDED.value,
+        notes=f"{notes}. Superseded by fact {new_fact.id} ({new_fact.numeric_value} {new_fact.unit})."
+    )
+    db.add(action)
+
+    audit = AuditEvent(
+        user=reviewer,
+        action=AuditAction.FACT_SUPERSEDED.value,
+        entity_type="FACT",
+        entity_id=old_fact.id,
+        details=f"Fact {old_fact.id} marked as superseded by authoritative fact {new_fact.id}."
+    )
+    db.add(audit)
+    db.commit()
+
+    return {
+        "message": "Fact superseded successfully",
+        "fact_id": old_fact.id,
+        "superseded_by_id": new_fact.id,
+        "old_status": "SUPERSEDED",
+        "new_status": "VERIFIED"
+    }
+
+
+@router.post("/facts/{fact_id}/verify", summary="Verify a fact (alias for /approve)")
+def verify_fact_alias(
+    fact_id: str,
+    req: ReviewApproveRequest = ReviewApproveRequest(),
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
+):
+    """
+    Frontend-facing alias for POST /facts/{fact_id}/approve.
+    The frontend calls /verify; this routes to the same logic.
+    Reviewer identity should come from JWT in production — this endpoint
+    accepts an optional reviewer_name for the demo flow only.
+    """
+    return direct_approve_fact(fact_id=fact_id, req=req, db=db, current_user=current_user)

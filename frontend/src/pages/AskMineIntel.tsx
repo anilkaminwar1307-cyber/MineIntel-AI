@@ -30,6 +30,7 @@ import {
 import { api } from '../services/api';
 import { QueryResponse, EvidenceSourceCitation } from '../types';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import { CalculationTrace } from '../components/evidence/CalculationTrace';
 
 const SUGGESTED_PROMPTS = [
   "What was SECL's raw coal production in FY 2024-25?",
@@ -378,6 +379,18 @@ export const AskMineIntel: React.FC = () => {
                   <span>PROVENANCE VERIFIED</span>
                 </span>
               </div>
+            </div>
+          )}
+
+          {/* NumberSafe 2.0 Calculation Audit Card */}
+          {response.calculation_result && (
+            <div className="pt-1">
+              <ErrorBoundary isCompact fallbackMessage="Calculation trace unavailable.">
+                <CalculationTrace
+                  result={response.calculation_result}
+                  label={`NumberSafe Result — ${response.calculation_result.metric_code}`}
+                />
+              </ErrorBoundary>
             </div>
           )}
 

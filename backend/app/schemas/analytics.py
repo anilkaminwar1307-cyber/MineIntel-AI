@@ -11,6 +11,10 @@ class OverviewKPIs(BaseModel):
     average_confidence: float = 0.0
     reports_generated: int = 0
     active_subsidiaries: int = 0
+    real_documents_count: int = 0
+    demo_documents_count: int = 0
+    real_facts_count: int = 0
+    demo_facts_count: int = 0
 
 
 class SubsidiarySummary(BaseModel):

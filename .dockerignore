@@ -1,0 +1,45 @@
+# ─── Backend Python artifacts ─────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+.Python
+*.egg-info/
+.eggs/
+
+# ─── Secrets ──────────────────────────────────────────────────────────────────
+# Never copy .env files into Docker image
+.env
+!.env.example
+backend/.env
+frontend/.env
+
+# ─── Databases — NEVER include in Docker image ────────────────────────────────
+*.db
+*.db-shm
+*.db-wal
+data/mineintel.db
+data/test_mineintel.db
+backend/data/mineintel.db
+
+# ─── Backups ──────────────────────────────────────────────────────────────────
+backups/
+
+# ─── Frontend build artifacts ─────────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ─── Test artifacts ───────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ─── IDE / OS ─────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

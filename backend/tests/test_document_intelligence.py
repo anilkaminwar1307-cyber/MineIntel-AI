@@ -308,10 +308,14 @@ def test_metric_normalization():
     assert reg.resolve("Output")[0] == "COAL_PRODUCTION"
     assert reg.resolve("Production Target")[0] == "PRODUCTION_TARGET"
     assert reg.resolve("Target")[0] == "PRODUCTION_TARGET"
-    assert reg.resolve("Coal Dispatch")[0] == "COAL_DISPATCH"
-    assert reg.resolve("Offtake")[0] == "COAL_DISPATCH"
-    assert reg.resolve("Geological Reserve")[0] == "GEOLOGICAL_RESERVE"
-    assert reg.resolve("Resources")[0] == "GEOLOGICAL_RESERVE"
+    # Coal Dispatch / Offtake — canonical code is COAL_OFFTAKE
+    # (COAL_DISPATCH was the registry v1 code; legacy alias maps to canonical)
+    assert reg.resolve("Coal Dispatch")[0] == "COAL_OFFTAKE"
+    assert reg.resolve("Offtake")[0] == "COAL_OFFTAKE"
+    # Geological Reserves — canonical code is GEOLOGICAL_RESERVES
+    # (GEOLOGICAL_RESERVE singular was registry v1; alias maps to canonical)
+    assert reg.resolve("Geological Reserve")[0] == "GEOLOGICAL_RESERVES"
+    assert reg.resolve("Resources")[0] == "GEOLOGICAL_RESERVES"
     assert reg.resolve("Drilling")[0] == "DRILLING"
     assert reg.resolve("Drilled Metres")[0] == "DRILLING"
     assert reg.resolve("Meterage")[0] == "DRILLING"

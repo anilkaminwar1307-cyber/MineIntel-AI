@@ -13,9 +13,12 @@ import { ReportStudio } from './pages/ReportStudio';
 import { AuditTrail } from './pages/AuditTrail';
 import { Settings } from './pages/Settings';
 import { NotFound } from './pages/NotFound';
+import { MineGraph } from './pages/MineGraph';
+import { ParliamentaryBrief } from './pages/ParliamentaryBrief';
+import { Login } from './pages/Login';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { api } from './services/api';
-import { HealthInfo, DocumentItem } from './types';
+import { api, getStoredToken, getStoredUser } from './services/api';
+import { HealthInfo, DocumentItem, UserProfile, TokenResponse } from './types';
 import { Files } from 'lucide-react';
 
 const VALID_TABS = [
@@ -29,7 +32,9 @@ const VALID_TABS = [
   'topics',
   'reports',
   'audit',
-  'settings'
+  'settings',
+  'minegraph',
+  'parliamentary',
 ] as const;
 
 type TabType = typeof VALID_TABS[number] | '404';
@@ -60,6 +65,38 @@ export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<TabType>(getInitialTabFromUrl);
   const [health, setHealth] = useState<HealthInfo | null>(null);
   const [selectedDoc, setSelectedDoc] = useState<DocumentItem | null>(null);
+  const [token, setToken] = useState<string | null>(getStoredToken);
+  const [user, setUser] = useState<UserProfile | null>(getStoredUser);
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setToken(null);
+      setUser(null);
+    };
+    window.addEventListener('mineintel:unauthorized', handleUnauthorized);
+    return () => {
+      window.removeEventListener('mineintel:unauthorized', handleUnauthorized);
+    };
+  }, []);
+
+  const handleLoginSuccess = (tokenData: TokenResponse) => {
+    setToken(tokenData.access_token);
+    setUser({
+      id: '',
+      username: tokenData.username,
+      email: '',
+      full_name: tokenData.full_name,
+      role: tokenData.role,
+      organization: 'CMPDI / CIL',
+      is_demo: false,
+    });
+  };
+
+  const handleLogout = () => {
+    api.logout();
+    setToken(null);
+    setUser(null);
+  };
 
   const fetchHealth = async () => {
     try {
@@ -177,6 +214,16 @@ export const App: React.FC = () => {
           title: 'Platform Settings',
           subtitle: 'Subsystem diagnostics, storage paths, and AI provider configurations'
         };
+      case 'minegraph':
+        return {
+          title: 'MineGraph — Knowledge Graph',
+          subtitle: 'Interactive Mine · Coalfield · Subsidiary · Metric ontology visualization'
+        };
+      case 'parliamentary':
+        return {
+          title: 'Parliamentary Brief Generator',
+          subtitle: 'Ministry of Coal Lok Sabha / Rajya Sabha question briefs — NumberSafe certified'
+        };
       default:
         return {
           title: 'MineIntel Platform',
@@ -187,6 +234,10 @@ export const App: React.FC = () => {
 
   const meta = getPageMeta();
 
+  if (!token || !user) {
+    return <Login onLoginSuccess={handleLoginSuccess} />;
+  }
+
   return (
     <div className="flex h-screen bg-slate-100 overflow-hidden">
       {/* Fixed Left Sidebar */}
@@ -194,6 +245,8 @@ export const App: React.FC = () => {
         currentTab={currentTab}
         onSelectTab={navigateTab}
         health={health}
+        user={user}
+        onLogout={handleLogout}
       />
 
       {/* Main Workspace Area */}
@@ -259,6 +312,8 @@ export const App: React.FC = () => {
             {currentTab === 'reports' && <ReportStudio />}
             {currentTab === 'audit' && <AuditTrail />}
             {currentTab === 'settings' && <Settings />}
+            {currentTab === 'minegraph' && <MineGraph />}
+            {currentTab === 'parliamentary' && <ParliamentaryBrief />}
             {currentTab === '404' && (
               <NotFound onNavigate={navigateTab} requestedRoute={window.location.hash || window.location.pathname} />
             )}

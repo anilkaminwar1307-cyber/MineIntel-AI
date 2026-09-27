@@ -7,16 +7,24 @@ from app.models.base import generate_uuid, _utcnow
 class ReviewAction(Base):
     """
     Human-in-the-loop review actions taken on facts, conflicts, or document validations.
+    Preserves immutable before/after state deltas.
     """
     __tablename__ = "review_actions"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     document_id = Column(String(36), nullable=True, index=True)
     fact_id = Column(String(36), nullable=True, index=True)
+    conflict_id = Column(String(36), nullable=True, index=True)
     reviewer_name = Column(String(100), nullable=False, default="CMPDI Analyst")
-    action = Column(String(50), nullable=False)  # APPROVED, MODIFIED, REJECTED, ESCALATED
+    action = Column(String(50), nullable=False)  # APPROVED, MODIFIED, REJECTED, ESCALATED, CONFLICT_RESOLVED, SUPERSEDED
     previous_value = Column(String(255), nullable=True)
     new_value = Column(String(255), nullable=True)
+    previous_metric = Column(String(100), nullable=True)
+    new_metric = Column(String(100), nullable=True)
+    previous_unit = Column(String(50), nullable=True)
+    new_unit = Column(String(50), nullable=True)
+    previous_status = Column(String(50), nullable=True)
+    new_status = Column(String(50), nullable=True)
     notes = Column(Text, nullable=True)
     created_at = Column(DateTime, default=_utcnow, nullable=False)
 

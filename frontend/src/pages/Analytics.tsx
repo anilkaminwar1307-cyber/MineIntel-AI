@@ -245,6 +245,28 @@ export const Analytics: React.FC = () => {
         </div>
       </div>
 
+      {/* ── NumberSafe Data Integrity Banner ── */}
+      <div className="bg-gradient-to-r from-emerald-50 via-white to-sky-50 border border-emerald-200 rounded-lg px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+        <div className="flex items-center gap-2 text-emerald-800">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+          <span className="font-bold">NumberSafe 2.0 — All figures derived exclusively from evidence database via deterministic SQL.</span>
+        </div>
+        <div className="flex flex-wrap gap-3 text-slate-600">
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+            Real uploaded data
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-sky-400 inline-block" />
+            Demo data
+          </span>
+          <span className="flex items-center gap-1">
+            <AlertTriangle className="w-3 h-3 text-amber-500" />
+            <span className="text-amber-700 font-semibold">N/A target = no target evidence uploaded (never fabricated)</span>
+          </span>
+        </div>
+      </div>
+
       {/* ── 4 KPI Cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">

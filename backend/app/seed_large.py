@@ -11,7 +11,7 @@ import sys
 import uuid
 import random
 import argparse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Tuple
 
 from sqlalchemy import create_engine, text
@@ -222,7 +222,7 @@ def generate_synthetic_data(target_facts: int = 50000, reset: bool = False):
                 name=name,
                 category=category,
                 mention_count=0,
-                created_at=datetime.utcnow() - timedelta(days=random.randint(60, 300))
+                created_at=datetime.now(timezone.utc) - timedelta(days=random.randint(60, 300))
             )
             db.add(topic)
             topic_objs.append(topic)
@@ -239,7 +239,7 @@ def generate_synthetic_data(target_facts: int = 50000, reset: bool = False):
 
     documents = []
     doc_records_for_insert = []
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     for d_idx in range(num_docs):
         doc_id = f"doc-demo-{uuid.uuid4().hex[:12]}"

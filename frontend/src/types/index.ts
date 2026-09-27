@@ -40,7 +40,16 @@ export interface DocumentItem {
   processing_message?: string | null;
   processing_error?: string | null;
   fact_count: number;
+  real_fact_count?: number;
+  warning_count?: number;
   topic_count: number;
+  is_demo?: boolean;
+  sha256?: string | null;
+  revision_number?: number;
+  is_latest_version?: boolean;
+  pipeline_version?: string | null;
+  processing_started_at?: string | null;
+  processing_completed_at?: string | null;
   created_at: string;
   processed_at?: string | null;
 }
@@ -334,6 +343,46 @@ export interface ConflictListResponse {
   total: number;
 }
 
+export interface DocumentValidationIssueItem {
+  id: string;
+  document_id: string;
+  fact_id?: string | null;
+  issue_type: string;
+  severity: string;
+  description: string;
+  is_resolved: boolean;
+  created_at: string;
+  metric_name?: string | null;
+  numeric_value?: number | null;
+  unit?: string | null;
+  cell_reference?: string | null;
+  page_number?: number | null;
+}
+
+export interface DocumentConflictItem {
+  id: string;
+  metric_code: string;
+  primary_fact_id: string;
+  conflicting_fact_id: string;
+  description: string;
+  discrepancy_percent?: number | null;
+  status: string;
+  created_at: string;
+  primary_value?: string | null;
+  conflicting_value?: string | null;
+}
+
+export interface DocumentValidationsResponse {
+  document_id: string;
+  total_issues: number;
+  open_issues: number;
+  resolved_issues: number;
+  conflicts_count: number;
+  issues: DocumentValidationIssueItem[];
+  conflicts: DocumentConflictItem[];
+}
+
+
 export interface EvidenceSourceCitation {
   fact_id: string;
   document_id: string;
@@ -374,6 +423,7 @@ export interface QueryResponse {
   sources: EvidenceSourceCitation[];
   chart?: QueryChart | null;
   suggestions?: string[] | null;
+  calculation_result?: CalculationResult | null;
 }
 
 export interface GeneratedReportItem {
@@ -463,3 +513,340 @@ export interface SystemSettingsStatus {
   record_counts?: Record<string, number> | null;
   components: Record<string, ComponentStatus>;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NumberSafe 2.0 — Calculation Audit Trail Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface IncludedFact {
+  fact_id: string;
+  metric_code: string;
+  subsidiary?: string | null;
+  mine?: string | null;
+  reporting_period?: string | null;
+  numeric_value?: number | null;
+  unit?: string | null;
+  confidence_score: number;
+  validation_status: string;
+  is_demo: boolean;
+  document_id: string;
+  page_number?: number | null;
+  sheet_name?: string | null;
+  cell_reference?: string | null;
+  source_context?: string | null;
+}
+
+export interface ExclusionDecision {
+  fact_id: string;
+  reason: string;
+  excluded_in_favour_of?: string | null;
+}
+
+export interface CalculationResult {
+  success: boolean;
+  error_code?: string | null;
+  error_message?: string | null;
+
+  result?: number | null;
+  unit?: string | null;
+  calculation_method?: string | null;
+  formula?: string | null;
+
+  metric_code: string;
+  filters_applied: Record<string, any>;
+
+  evidence_count_total: number;
+  evidence_count_used: number;
+  excluded_count: number;
+  verified_count: number;
+  verified_pct: number;
+
+  /** 'REAL' | 'DEMO' | 'MIXED' | 'UNKNOWN' */
+  is_demo_scope: string;
+
+  included_facts: IncludedFact[];
+  exclusions: ExclusionDecision[];
+  warnings: string[];
+  sql_description: string;
+  lineage_id?: string | null;
+}
+
+export interface CalculationRequest {
+  metric_code: string;
+  operation?: string;
+  subsidiary?: string | null;
+  mine?: string | null;
+  reporting_period?: string | null;
+  only_verified?: boolean;
+  only_real?: boolean;
+  only_demo?: boolean;
+  exclude_consolidated?: boolean;
+  document_ids?: string[] | null;
+}
+
+export interface LineageResponse {
+  id: string;
+  operation: string;
+  metric_code: string;
+  filters: Record<string, any>;
+  result?: number | null;
+  unit?: string | null;
+  formula?: string | null;
+  calculation_method?: string | null;
+  sql_description?: string | null;
+  success: boolean;
+  error_code?: string | null;
+  evidence_count: number;
+  evidence_used_count: number;
+  verified_count: number;
+  excluded_count: number;
+  verified_pct?: number | null;
+  is_demo_scope?: string | null;
+  warnings: string[];
+  initiated_by?: string | null;
+  created_at?: string | null;
+  included_facts: Record<string, any>[];
+  excluded_facts: Record<string, any>[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Batch Upload & Pipeline Monitoring Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface BatchUploadItemResult {
+  filename: string;
+  file_type: string;
+  file_size: number;
+  status: string;
+  document_id?: string | null;
+  is_duplicate: boolean;
+  duplicate_of_id?: string | null;
+  duplicate_of_filename?: string | null;
+  detected_organization?: string | null;
+  detected_period?: string | null;
+  facts_extracted: number;
+  warnings: string[];
+  error?: string | null;
+}
+
+export interface BatchUploadResponse {
+  total_files: number;
+  successful: number;
+  duplicates: number;
+  failed: number;
+  items: BatchUploadItemResult[];
+}
+
+export interface ProcessingStatusResponse {
+  document_id: string;
+  status: string;
+  processing_progress: number;
+  processing_message?: string | null;
+  current_stage?: string | null;
+  fact_count: number;
+  warning_count: number;
+  warnings: string[];
+  processing_error?: string | null;
+  processing_started_at?: string | null;
+  processing_completed_at?: string | null;
+}
+
+export interface ExtractionSummaryResponse {
+  document_id: string;
+  original_filename: string;
+  file_type: string;
+  document_category?: string | null;
+  organization: string;
+  reporting_period?: string | null;
+  quality_label?: string | null;
+  quality_score?: number | null;
+  page_count: number;
+  sheet_count: number;
+  table_count: number;
+  total_facts: number;
+  high_confidence_facts: number;
+  needs_review_facts: number;
+  conflicts_count: number;
+  warning_count: number;
+  warnings: string[];
+  is_demo: boolean;
+  duration_seconds?: number | null;
+}
+
+export interface SourcePreviewPage {
+  page_number: number;
+  raw_text?: string | null;
+  has_native_text: boolean;
+  is_ocr_page: boolean;
+  ocr_confidence?: number | null;
+  extraction_method?: string | null;
+}
+
+export interface SourcePreviewSheet {
+  sheet_name: string;
+  used_range?: string | null;
+  headers: string[];
+  rows: any[][];
+  row_count: number;
+  col_count: number;
+}
+
+export interface SourcePreviewResponse {
+  document_id: string;
+  original_filename: string;
+  file_type: string;
+  pages: SourcePreviewPage[];
+  sheets: SourcePreviewSheet[];
+  text_preview?: string | null;
+}
+
+export type DataScope = 'ALL' | 'REAL' | 'DEMO';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 9 — MineGraph Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type MineGraphNodeType =
+  | 'CIL'
+  | 'SUBSIDIARY'
+  | 'COALFIELD'
+  | 'MINE'
+  | 'METRIC'
+  | 'DOCUMENT'
+  | 'FACT';
+
+export interface MineGraphNode {
+  id: string;
+  label: string;
+  type: MineGraphNodeType;
+  color: string;
+  size: number;
+  level?: number;
+  fact_count?: number;
+  subsidiary?: string;
+  coalfield?: string;
+  mine?: string;
+  metric_code?: string;
+  document_id?: string;
+  file_type?: string;
+  description?: string;
+  value?: number;
+  unit?: string;
+  period?: string;
+  confidence?: number;
+  page_number?: number;
+  sheet_name?: string;
+  cell_reference?: string;
+  source_context?: string;
+}
+
+export interface MineGraphEdge {
+  source: string;
+  target: string;
+  relation: string;
+  weight: number;
+  conflict?: boolean;
+}
+
+export interface MineGraphStats {
+  node_count: number;
+  edge_count: number;
+  subsidiaries: number;
+  coalfields: number;
+  mines: number;
+  total_facts_in_db: number;
+  total_documents: number;
+}
+
+export interface MineGraphResponse {
+  nodes: MineGraphNode[];
+  edges: MineGraphEdge[];
+  stats: MineGraphStats;
+}
+
+export interface SubsidiaryGraphSummary {
+  subsidiary: string;
+  coalfields: string[];
+  fact_count: number;
+  mine_count: number;
+  top_metrics: Array<{ metric_code: string; count: number }>;
+}
+
+export interface MineGraphSubsidiariesResponse {
+  subsidiaries: SubsidiaryGraphSummary[];
+  total: number;
+}
+
+export interface MineGraphPathNode {
+  level: number;
+  type: string;
+  label: string;
+  id: string;
+  value?: number;
+  unit?: string;
+  period?: string;
+  confidence?: number;
+  page_number?: number;
+  sheet_name?: string;
+  cell_reference?: string;
+  source_context?: string;
+  document_id?: string;
+  file_type?: string;
+}
+
+export interface MineGraphPathResponse {
+  fact_id: string;
+  path: MineGraphPathNode[];
+  path_length: number;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 10 — Parliamentary Brief Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface ParliamentaryBriefRequest {
+  query: string;
+  period: string;
+  subsidiary: string;
+}
+
+export interface ParliamentaryBriefResponse {
+  query: string;
+  period: string;
+  subsidiary: string;
+  brief_text: string;
+  status: string;
+  records_used: number;
+  confidence: number;
+  citations: EvidenceSourceCitation[];
+  direct_metric_value?: number | null;
+  metric_unit?: string | null;
+  calculation?: any;
+}
+
+export interface ParliamentarySampleQuestion {
+  id: string;
+  question: string;
+  period: string;
+  subsidiary: string;
+  category: string;
+}
+
+export interface TokenResponse {
+  access_token: string;
+  token_type: string;
+  role: 'Analyst' | 'Reviewer' | 'Admin' | string;
+  username: string;
+  full_name: string;
+}
+
+export interface UserProfile {
+  id: string;
+  username: string;
+  email: string;
+  full_name: string;
+  role: 'Analyst' | 'Reviewer' | 'Admin' | string;
+  organization: string;
+  is_demo: boolean;
+}
+

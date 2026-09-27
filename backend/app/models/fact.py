@@ -54,6 +54,24 @@ class ExtractedFact(Base):
     # Demo flag
     is_demo = Column(Boolean, default=False, nullable=False, index=True)
 
+    # NumberSafe 2.0 — temporal grain of this observation
+    # ANNUAL / QUARTERLY / MONTHLY / POINT_IN_TIME / CUMULATIVE_YTD
+    # Used by duplicate_detector to prevent annual+monthly double-count
+    temporal_grain = Column(String(30), nullable=True, index=True)
+
+    # Prompt 2 — Source object tracking & Fact-level deduplication
+    source_object_type = Column(String(50), nullable=True)  # TABLE, PAGE, SHEET, OCR_BLOCK
+    source_object_id = Column(String(100), nullable=True)
+    source_hash = Column(String(64), nullable=True)
+    dedup_key = Column(String(255), nullable=True, index=True)
+
+    # Prompt 3 — EvidenceChain 2.0: Original Extraction Preservation & Version Control
+    original_numeric_value = Column(Float, nullable=True)
+    original_metric_code = Column(String(100), nullable=True)
+    original_unit = Column(String(50), nullable=True)
+    superseded_by_id = Column(String(36), nullable=True, index=True)
+    is_superseded = Column(Boolean, default=False, nullable=False, index=True)
+
     # Timestamps
     created_at = Column(DateTime, default=_utcnow, nullable=False)
     updated_at = Column(DateTime, default=_utcnow, onupdate=_utcnow, nullable=False)

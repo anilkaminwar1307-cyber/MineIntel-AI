@@ -1,6 +1,8 @@
+from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.database import get_db
+from app.core.auth import get_current_user_optional
 from app.models.query import QueryHistory
 from app.models.audit import AuditEvent
 from app.models.enums import AuditAction
@@ -11,12 +13,23 @@ router = APIRouter(prefix="/query", tags=["Ask MineIntel"])
 
 
 @router.post("", response_model=QueryResponse)
-def execute_query(request: QueryRequest, db: Session = Depends(get_db)):
+def execute_query(
+    request: QueryRequest,
+    db: Session = Depends(get_db),
+    current_user: Optional[dict] = Depends(get_current_user_optional),
+):
     """
     Query endpoint for Ask MineIntel.
     Executes grounded NumberSafe queries against 50,000 facts in the Evidence Ledger.
     Deterministic SQL for all numbers; grounded synthesis for narratives.
     """
+    user_name = "CMPDI Analyst"
+    if current_user:
+        if isinstance(current_user, dict):
+            user_name = current_user.get("full_name") or current_user.get("username") or "CMPDI Analyst"
+        else:
+            user_name = getattr(current_user, "full_name", None) or getattr(current_user, "username", "CMPDI Analyst")
+
     result = NumberSafeQueryEngine.execute(
         db=db,
         query_text=request.query,
@@ -31,13 +44,13 @@ def execute_query(request: QueryRequest, db: Session = Depends(get_db)):
         scope=request.scope,
         response_mode=request.response_mode,
         answer_text=result["answer"][:1000],
-        user_name="CMPDI Analyst"
+        user_name=user_name
     )
     db.add(history)
 
     # Log Audit Event
     audit = AuditEvent(
-        user="CMPDI Analyst",
+        user=user_name,
         action=AuditAction.QUERY_EXECUTED.value,
         entity_type="QUERY",
         entity_id=history.id,
@@ -82,6 +95,7 @@ def execute_query(request: QueryRequest, db: Session = Depends(get_db)):
         metric_unit=result.get("metric_unit"),
         calculation_steps=result.get("calculation_steps") or ([result["calculation"]] if result.get("calculation") else []),
         sql_query=result.get("sql_query"),
-        suggestions=result.get("suggestions")
+        suggestions=result.get("suggestions"),
+        calculation_result=result.get("calculation_result")
     )
 

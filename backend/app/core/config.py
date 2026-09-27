@@ -48,6 +48,14 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = Field(default="", description="Google Gemini API key")
     GEMINI_MODEL: str = "gemini-2.5-flash"
 
+    # JWT Authentication
+    JWT_SECRET_KEY: str = Field(
+        default="mineintel-secret-development-key-change-in-prod-32bytes",
+        description="JWT HMAC secret"
+    )
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 480
+
     # Operational Modes
     DEMO_MODE: bool = True
     AUTO_PROCESS_UPLOADS: bool = False  # Phase 1 only uploads without triggering auto extraction

@@ -33,6 +33,9 @@ MIME_MAP = {
 }
 
 
+import hashlib
+
+
 class LocalStorageService:
     def __init__(self, base_dir: str = None):
         self.base_dir = Path(base_dir or settings.UPLOAD_DIR).resolve()
@@ -54,6 +57,12 @@ class LocalStorageService:
         clean_name = self.sanitize_filename(filename)
         ext = os.path.splitext(clean_name)[1].lower()
 
+        if file_size == 0:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Empty file rejected. '{clean_name}' contains 0 bytes."
+            )
+
         if ext not in EXTENSION_MAP:
             allowed = ", ".join(EXTENSION_MAP.keys())
             raise HTTPException(
@@ -71,10 +80,10 @@ class LocalStorageService:
         file_type = EXTENSION_MAP[ext]
         return file_type, clean_name
 
-    async def save_file(self, upload_file: UploadFile) -> Tuple[str, str, int, FileType]:
+    async def save_file(self, upload_file: UploadFile) -> Tuple[str, str, int, FileType, str]:
         """
         Saves UploadFile safely into storage.
-        Returns: (stored_filename, absolute_storage_path, file_size_bytes, file_type)
+        Returns: (stored_filename, absolute_storage_path, file_size_bytes, file_type, sha256_hash)
         """
         # Read content to measure size and validate
         content = await upload_file.read()
@@ -86,9 +95,30 @@ class LocalStorageService:
             file_size
         )
 
+        ext = os.path.splitext(clean_name)[1].lower()
+
+        # Security check: Password-protected or encrypted PDFs
+        if ext == ".pdf":
+            try:
+                import fitz
+                pdf_doc = fitz.open(stream=content, filetype="pdf")
+                if pdf_doc.is_encrypted:
+                    pdf_doc.close()
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Password-protected / encrypted PDFs cannot be processed. Please decrypt '{clean_name}' before uploading."
+                    )
+                pdf_doc.close()
+            except HTTPException:
+                raise
+            except Exception as e:
+                logger.warning(f"PDF pre-inspection notice for {clean_name}: {e}")
+
+        # Compute SHA-256 fingerprint
+        sha256_hash = hashlib.sha256(content).hexdigest()
+
         # Generate unique storage filename to avoid collisions and directory tampering
         file_id = str(uuid.uuid4())
-        ext = os.path.splitext(clean_name)[1].lower()
         base = os.path.splitext(clean_name)[0][:40]  # truncate overly long names
         stored_filename = f"{file_id}_{base}{ext}"
 
@@ -101,8 +131,16 @@ class LocalStorageService:
         async with aiofiles.open(destination_path, "wb") as f:
             await f.write(content)
 
-        logger.info(f"Stored file '{clean_name}' as '{stored_filename}' ({file_size} bytes)")
-        return stored_filename, str(destination_path), file_size, file_type
+        logger.info(f"Stored file '{clean_name}' as '{stored_filename}' ({file_size} bytes, sha256={sha256_hash[:8]}...)")
+        return stored_filename, str(destination_path), file_size, file_type, sha256_hash
+
+    def compute_sha256(self, storage_path: str) -> str:
+        """Compute SHA-256 of a file already on disk."""
+        h = hashlib.sha256()
+        with open(storage_path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                h.update(chunk)
+        return h.hexdigest()
 
     def delete_file(self, stored_filename: str) -> bool:
         """Safely delete file from storage."""
