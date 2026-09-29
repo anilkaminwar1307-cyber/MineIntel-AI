@@ -26,6 +26,9 @@ class ExtractedFact(Base):
     text_value = Column(String(500), nullable=True)
     unit = Column(String(50), nullable=True)                        # Canonical unit: MT, BCM, Meters
     raw_unit = Column(String(50), nullable=True)                    # Unit as written in doc
+    scale = Column(Float, default=1.0, nullable=True)               # Scale factor: 1.0, 1000.0, 100000.0, etc.
+    normalized_value = Column(Float, nullable=True, index=True)     # Standardized value in base canonical unit
+    bounding_box = Column(String(100), nullable=True)               # OCR / Page spatial coordinates "x0,y0,x1,y1"
     
     # Mining domain entity hierarchy (MineGraph coordinates)
     reporting_period = Column(String(50), nullable=True, index=True) # e.g. "2024-Q3", "FY 2023-24"

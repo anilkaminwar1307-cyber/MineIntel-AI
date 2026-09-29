@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import desc
 
 from app.core.database import get_db
+from app.core.auth import require_analyst, require_admin
 from app.models.report import GeneratedReport
 from app.models.fact import ExtractedFact
 from app.schemas.report import (
@@ -81,15 +82,28 @@ def check_reportguard_post(
 
 
 @router.post("/generate", response_model=GeneratedReportResponse)
-def generate_report(request: GenerateReportRequest, db: Session = Depends(get_db)):
+def generate_report(
+    request: GenerateReportRequest,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(require_analyst),
+):
     """
     Generates a comprehensive 19-section mining report from grounded SQL evidence.
     Creates downloadable PDF and stores structured metrics and section content.
+    Requires at minimum Analyst role.
     """
     title = request.title
     if not title:
         sub_label = request.subsidiary if request.subsidiary != "ALL" else "Consolidated CIL"
         title = f"{request.period} {sub_label} {request.report_type}"
+
+    # Use authenticated user as the report author, fall back to request field
+    generated_by = (
+        request.generated_by
+        or current_user.get("full_name")
+        or current_user.get("username")
+        or "CMPDI Senior Analyst"
+    )
 
     try:
         report = ReportGeneratorService.generate_report(
@@ -100,7 +114,7 @@ def generate_report(request: GenerateReportRequest, db: Session = Depends(get_db
             period=request.period,
             document_ids=request.document_ids,
             only_verified=request.only_verified,
-            generated_by=request.generated_by or "CMPDI Senior Analyst",
+            generated_by=generated_by,
             draft_override=request.draft_override
         )
         return GeneratedReportResponse.model_validate(report)
@@ -305,10 +319,14 @@ def export_report_evidence_csv(report_id: str, db: Session = Depends(get_db)):
 
 
 @router.delete("/{report_id}", summary="Delete a generated report")
-def delete_report(report_id: str, db: Session = Depends(get_db)):
+def delete_report(
+    report_id: str,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
     """
     Deletes a generated report record and its associated PDF file.
-    Creates an immutable AuditEvent before deletion.
+    Requires Admin role. Creates an immutable AuditEvent before deletion.
     Returns 404 if not found; idempotent if file is already missing.
     """
     from app.models.audit import AuditEvent
@@ -320,7 +338,7 @@ def delete_report(report_id: str, db: Session = Depends(get_db)):
 
     # Write audit event BEFORE deletion so the record exists
     audit = AuditEvent(
-        user="System",
+        user=current_user.get("username", "Admin"),
         action=AuditAction.DOCUMENT_DELETED.value,
         entity_type="GENERATED_REPORT",
         entity_id=report_id,

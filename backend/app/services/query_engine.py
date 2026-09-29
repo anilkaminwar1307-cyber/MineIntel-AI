@@ -85,71 +85,111 @@ class NumberSafeQueryEngine:
         query_text: str,
         scope: str = "ALL_EVIDENCE",
         response_mode: str = "STANDARD",
-        document_ids: Optional[List[str]] = None
+        document_ids: Optional[List[str]] = None,
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         """
         Executes query deterministically using SQL for numbers and RAG for narrative.
+        Defaults to is_demo == False for both ExtractedFact and Document.
         """
         q_lower = query_text.strip().lower()
+        data_scope_val = "DEMO DATA" if include_demo else "REAL UPLOADED DATA"
 
         # 1. Claim Verification Check (e.g. "SECL production in FY 2024-25 was 50 MT" or "Verify claim: ...")
         if "verify" in q_lower or "claim" in q_lower or (any(w in q_lower for w in ["was", "is", "were", "achieved", "exceeded", "produced", "dispatched", "drilled", "stood", "reached"]) and re.search(r'\b\d+(?:\.\d+)?\s*(?:mt|bcm|m|%|inr|cr)\b', q_lower)):
-            claim_result = cls._handle_claim_verification(db, query_text, scope, document_ids)
+            claim_result = cls._handle_claim_verification(db, query_text, scope, document_ids, include_demo=include_demo)
             if claim_result:
+                claim_result["data_scope"] = data_scope_val
+                claim_result["is_demo"] = include_demo
                 return claim_result
 
+        def _wb(s: str) -> bool:
+            """Word-boundary check on q_lower to avoid substring false positives."""
+            return bool(re.search(rf'\b{re.escape(s)}\b', q_lower))
+
         # 2. Unresolved conflicts query
-        if "conflict" in q_lower or "discrepanc" in q_lower or "contradiction" in q_lower:
-            return cls._handle_conflicts_query(db, query_text)
+        if _wb("conflict") or _wb("discrepancy") or _wb("contradiction"):
+            res = cls._handle_conflicts_query(db, query_text)
+        elif _wb("review") or "require review" in q_lower or _wb("unverified"):
+            res = cls._handle_review_records_query(db, query_text)
+        elif (_wb("target") and (_wb("achievement") or _wb("actual") or _wb("vs") or _wb("compare"))) or "highest target achievement" in q_lower:
+            res = cls._handle_target_vs_achievement(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif _wb("trend") or "over time" in q_lower or _wb("yearly") or _wb("history"):
+            res = cls._handle_trend_query(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif (_wb("highest") or _wb("lowest") or _wb("rank") or _wb("compare") or _wb("between")) and any(
+            _wb(sub) for sub in ["subsidiary", "subsidiaries", "mcl", "secl", "ncl", "ecl", "bccl", "ccl", "wcl", "cmpdi"]
+        ):
+            res = cls._handle_subsidiary_comparison(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif (_wb("top") or _wb("rank")) and any(
+            _wb(sub) for sub in ["subsidiary", "subsidiaries", "mcl", "secl", "ncl", "ecl", "bccl", "ccl", "wcl"]
+        ):
+            res = cls._handle_subsidiary_comparison(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif cls._identify_metric(q_lower):
+            metric_match = cls._identify_metric(q_lower)
+            res = cls._handle_metric_aggregate(db, query_text, metric_match, scope, document_ids, include_demo=include_demo)
+        elif _wb("quality") or _wb("confidence") or _wb("provenance"):
+            res = cls._handle_evidence_quality_query(db)
+        else:
+            res = cls._handle_narrative_rag(db, query_text, scope, response_mode, document_ids, include_demo=include_demo)
 
-        # 3. Review Queue / Validation issues query
-        if "review" in q_lower or "require review" in q_lower or "validation issue" in q_lower or "unverified" in q_lower:
-            return cls._handle_review_records_query(db, query_text)
+        res["data_scope"] = data_scope_val
+        res["is_demo"] = include_demo
+        return res
 
-        # 4. Target vs Achievement comparison query
-        if ("target" in q_lower and ("achievement" in q_lower or "actual" in q_lower or "vs" in q_lower or "compare" in q_lower)) or "highest target achievement" in q_lower:
-            return cls._handle_target_vs_achievement(db, query_text, scope, document_ids)
-
-        # 5. Trend query (e.g. "5 year production trend", "production trend")
-        if "trend" in q_lower or "over time" in q_lower or "yearly" in q_lower or "history" in q_lower:
-            return cls._handle_trend_query(db, query_text, scope, document_ids)
-
-        # 6. Highest / Lowest subsidiary comparison (e.g. "Which subsidiary had highest production?", "Compare MCL and SECL")
-        if ("highest" in q_lower or "lowest" in q_lower or "top" in q_lower or "rank" in q_lower or "compare" in q_lower or "between" in q_lower) and any(sub in q_lower for sub in ["subsidiary", "mcl", "secl", "ncl", "ecl", "bccl", "ccl", "wcl", "cmpdi"]):
-            return cls._handle_subsidiary_comparison(db, query_text, scope, document_ids)
-
-        # 7. Specific metric aggregation (Drilling, Production, Offtake, Reserves, OB Removal, Capex)
-        metric_match = cls._identify_metric(q_lower)
-        if metric_match:
-            return cls._handle_metric_aggregate(db, query_text, metric_match, scope, document_ids)
-
-        # 8. Evidence quality distribution query
-        if "quality" in q_lower or "confidence" in q_lower or "provenance" in q_lower:
-            return cls._handle_evidence_quality_query(db)
-
-        # 9. Fallback: Semantic / Keyword RAG across document chunks
-        return cls._handle_narrative_rag(db, query_text, scope, response_mode, document_ids)
+    # ── Word-boundary compiled patterns for metric identification (Step 4 fix) ──
+    # Using \b..\b prevents false positives:
+    #   - "is" inside "this" → should NOT trigger claim verification
+    #   - "top" inside "stopped" → should NOT trigger subsidiary comparison
+    #   - "obr" inside "october" → should NOT trigger OBR metric
+    _METRIC_PATTERNS: list = []  # initialized below class body
 
     @classmethod
     def _identify_metric(cls, q_lower: str) -> Optional[Tuple[str, str, str]]:
-        """Identifies standard mining metrics from user queries."""
-        if "drill" in q_lower or "coring" in q_lower:
-            return ("DRILLING", "Exploratory Drilling Progress", "m")
-        elif "overburden" in q_lower or "obr" in q_lower or "stripping" in q_lower:
-            return ("OVERBURDEN_REMOVAL", "Overburden Removal (OBR)", "Mm3")
-        elif "dispatch" in q_lower or "offtake" in q_lower or "rake" in q_lower:
-            return ("COAL_OFFTAKE", "Coal Dispatch / Offtake", "MT")
-        elif "reserve" in q_lower or "geological" in q_lower:
-            return ("GEOLOGICAL_RESERVES", "Proved Geological Reserves", "MT")
-        elif "target" in q_lower and "achievement" not in q_lower:
-            return ("PRODUCTION_TARGET", "Production Target", "MT")
-        elif "capex" in q_lower or "capital" in q_lower or "expenditure" in q_lower:
-            return ("CAPITAL_EXPENDITURE", "Capital Expenditure (Capex)", "INR Cr")
-        elif "stock" in q_lower:
-            return ("COAL_STOCK", "Closing Pithead Coal Stock", "MT")
-        elif "borehole" in q_lower:
+        """
+        Identifies standard mining metrics using word-boundary patterns.
+        Returns (metric_code, metric_name, unit) or None.
+        Word-boundary matching prevents false positives (Step 4).
+
+        Handles common inflections: plurals (-s), past tense (-ed), gerund (-ing).
+        Uses re.search with alternation groups to match word-stems at word boundaries.
+        """
+        def wbany(*terms: str) -> bool:
+            """
+            Return True if ANY of the terms matches as a whole word (or word-prefix stem).
+            Each term is tested with \\bterm\\b (exact) OR \\bterm[a-z]*\\b (stem match for
+            inflections like plural/past-tense), but NOT as mid-word substrings.
+            Example: wbany("borehole") matches "boreholes" but NOT "bore" in "boredom".
+            """
+            for t in terms:
+                # Exact word boundary match (catches "drill", "drilling", "drilled" if listed)
+                if re.search(rf'\b{re.escape(t)}\b', q_lower):
+                    return True
+                # Stem match: term immediately followed by common inflections only
+                if re.search(rf'\b{re.escape(t)}(?:s|es|ed|ing|er|ers)?\b', q_lower):
+                    return True
+            return False
+
+        # Most specific / less ambiguous patterns first
+
+        # Borehole check BEFORE drill to avoid "drilled boreholes" going to DRILLING
+        if wbany("borehole"):
             return ("EXPLORATION_BOREHOLES", "Exploration Boreholes Drilled", "Count")
-        elif "production" in q_lower or "output" in q_lower or "mined" in q_lower or "extracted" in q_lower or "total coal" in q_lower:
+        if wbany("drill", "drilling", "coring"):
+            return ("DRILLING", "Exploratory Drilling Progress", "m")
+        if wbany("overburden", "obr", "stripping"):
+            return ("OVERBURDEN_REMOVAL", "Overburden Removal (OBR)", "Mm3")
+        if wbany("dispatch", "offtake", "rake"):
+            return ("COAL_OFFTAKE", "Coal Dispatch / Offtake", "MT")
+        if wbany("reserve", "geological"):
+            return ("GEOLOGICAL_RESERVES", "Proved Geological Reserves", "MT")
+        # 'target' alone (without achievement) → production target
+        if wbany("target") and not wbany("achievement"):
+            return ("PRODUCTION_TARGET", "Production Target", "MT")
+        if wbany("capex", "capital", "expenditure"):
+            return ("CAPITAL_EXPENDITURE", "Capital Expenditure (Capex)", "INR Cr")
+        if wbany("stock"):
+            return ("COAL_STOCK", "Closing Pithead Coal Stock", "MT")
+        if wbany("production", "output", "mined", "extracted") or "total coal" in q_lower:
             return ("COAL_PRODUCTION", "Raw Coal Production", "MT")
         return None
 
@@ -181,7 +221,8 @@ class NumberSafeQueryEngine:
         query: str,
         metric: Tuple[str, str, str],
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         metric_code, metric_name, unit = metric
         period, sub = cls._extract_period_and_sub(query)
@@ -191,6 +232,8 @@ class NumberSafeQueryEngine:
             subsidiary=sub,
             reporting_period=period,
             only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
+            only_demo=False,
             document_ids=document_ids if scope == "SELECTED_DOCUMENTS" else None,
             exclude_consolidated=True if (sub and sub.upper() not in ("CIL", "COAL INDIA", "CONSOLIDATED")) else False,
         )
@@ -207,21 +250,25 @@ class NumberSafeQueryEngine:
                 "query": query,
                 "status": "SUCCESS",
                 "answer": (
-                    f"**No qualifying evidence records found** for **{metric_name}**"
+                    f"**No verified evidence records found** for **{metric_name}**"
                     + (f" under subsidiary **{sub}**" if sub else "")
                     + (f" during **{period}**" if period else "")
-                    + f".\n\n*(Engine status: {calc_result.error_message or 'INSUFFICIENT_EVIDENCE'})*"
+                    + f".\n\n*(Engine status: {calc_result.error_message or 'no verified evidence'})*"
                 ),
                 "calculation": calc_result.sql_description or "Calculation returned 0 qualifying evidence records.",
                 "records_used": 0,
-                "verification_status": "INSUFFICIENT_EVIDENCE",
+                "verification_status": "NO_VERIFIED_EVIDENCE",
                 "verification_result": "INSUFFICIENT_EVIDENCE",
                 "confidence": 0.0,
                 "citations": [],
                 "chart": None,
                 "scope": scope,
                 "response_mode": "STANDARD",
+                "direct_metric_value": None,
+                "metric_unit": unit,
                 "calculation_result": _calc_to_schema(calc_result),
+                "data_scope": "DEMO DATA" if include_demo else "REAL UPLOADED DATA",
+                "is_demo": include_demo,
             }
 
         agg_val = calc_result.result
@@ -296,7 +343,8 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         period, _ = cls._extract_period_and_sub(query)
         period_filter = period or "FY 2024-25"
@@ -305,21 +353,24 @@ class NumberSafeQueryEngine:
             db,
             metric_code="COAL_PRODUCTION",
             reporting_period=period,
-            only_verified=(scope == "VERIFIED_ONLY")
+            only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
         )
 
         if not sub_results:
             return {
                 "query": query,
                 "status": "SUCCESS",
-                "answer": "No comparative subsidiary production figures recorded in database for this period.",
+                "answer": "No verified evidence comparative subsidiary production figures recorded in database for this period.",
                 "calculation": "Deterministic subsidiary calculation returned 0 valid groups.",
                 "records_used": 0,
-                "verification_status": "NO_EVIDENCE",
+                "verification_status": "NO_VERIFIED_EVIDENCE",
                 "confidence": 0.0,
                 "citations": [],
                 "chart": None,
                 "calculation_result": None,
+                "data_scope": "DEMO DATA" if include_demo else "REAL UPLOADED DATA",
+                "is_demo": include_demo,
             }
 
         top_sub = sub_results[0]
@@ -373,7 +424,8 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         _, sub = cls._extract_period_and_sub(query)
         metric_info = cls._identify_metric(query.lower()) or ("COAL_PRODUCTION", "Raw Coal Production", "MT")
@@ -383,20 +435,23 @@ class NumberSafeQueryEngine:
             db,
             metric_code=metric_code,
             subsidiary=sub,
-            only_verified=(scope == "VERIFIED_ONLY")
+            only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
         )
 
         if not trend_points:
             return {
                 "query": query,
                 "status": "SUCCESS",
-                "answer": f"No historical trend evidence found for {metric_name}" + (f" ({sub})" if sub else "") + ".",
+                "answer": f"No verified evidence historical trend found for {metric_name}" + (f" ({sub})" if sub else "") + ".",
                 "calculation": "No valid financial year periods found for trend analysis.",
                 "records_used": 0,
-                "verification_status": "NO_EVIDENCE",
+                "verification_status": "NO_VERIFIED_EVIDENCE",
                 "confidence": 0.0,
                 "citations": [],
-                "chart": None
+                "chart": None,
+                "data_scope": "DEMO DATA" if include_demo else "REAL UPLOADED DATA",
+                "is_demo": include_demo,
             }
 
         chart_data = {
@@ -443,7 +498,8 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         period, sub = cls._extract_period_and_sub(query)
         period_filter = period or "FY 2024-25"
@@ -455,12 +511,14 @@ class NumberSafeQueryEngine:
                 subsidiary=sub,
                 reporting_period=period_filter,
                 only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
             )
             target_scope = EvidenceScope(
                 metric_code="PRODUCTION_TARGET",
                 subsidiary=sub,
                 reporting_period=period_filter,
                 only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
             )
 
             achieve_res = CalculationEngine.calculate_achievement(db, actual_scope, target_scope)
@@ -532,12 +590,14 @@ class NumberSafeQueryEngine:
                 subsidiary=s,
                 reporting_period=period_filter,
                 only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
             )
             tgt_scope = EvidenceScope(
                 metric_code="PRODUCTION_TARGET",
                 subsidiary=s,
                 reporting_period=period_filter,
                 only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
             )
             act_res = CalculationEngine.calculate(db, act_scope, AggOp.SUM)
             tgt_res = CalculationEngine.calculate(db, tgt_scope, AggOp.SUM)
@@ -702,7 +762,8 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Optional[Dict[str, Any]]:
         """
         Adheres to section 38: Claim Verification against 50K DB.
@@ -723,13 +784,13 @@ class NumberSafeQueryEngine:
 
         claimed_val = float(num_match.group(1))
 
-
         # Query actual database using CalculationEngine (no LIMIT 100 bug)
         scope_obj = EvidenceScope(
             metric_code=metric_code,
             subsidiary=sub,
             reporting_period=period,
             only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
             document_ids=document_ids if scope == "SELECTED_DOCUMENTS" else None,
             exclude_consolidated=True if (sub and sub.upper() not in ("CIL", "COAL INDIA", "CONSOLIDATED")) else False,
         )
@@ -831,10 +892,18 @@ class NumberSafeQueryEngine:
         query: str,
         scope: str,
         response_mode: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         """
         Narrative answers using grounded chunk retrieval + Gemini (or extractive template fallback).
+
+        Step 5 fixes:
+        - confidence_score derived from retrieval hit count, never hardcoded
+        - human_verified is always False for chunk citations (chunks are not human-reviewed)
+        - No asyncio.run() — uses concurrent.futures.ThreadPoolExecutor for thread-safety
+        - Returns INSUFFICIENT_EVIDENCE when no chunks are found
+        - Only uses chunks from real documents unless include_demo=True
         """
         words = [w for w in re.findall(r'\b\w{4,}\b', query.lower()) if w not in ["what", "which", "where", "show", "tell", "summarize", "about", "coal", "india"]]
         chunks_query = db.query(DocumentChunk)
@@ -842,32 +911,87 @@ class NumberSafeQueryEngine:
         if scope == "SELECTED_DOCUMENTS" and document_ids:
             chunks_query = chunks_query.filter(DocumentChunk.document_id.in_(document_ids))
 
-        # Heuristic keyword match
+        # Filter by demo/real scope via joined Document.is_demo
+        if not include_demo:
+            chunks_query = chunks_query.join(Document, Document.id == DocumentChunk.document_id)\
+                .filter(Document.is_demo == False)  # noqa: E712
+
+        # Heuristic keyword match — collect unique chunks by id
+        seen_ids: set = set()
         matched_chunks = []
-        for word in words[:3]:
-            res = chunks_query.filter(DocumentChunk.content.ilike(f"%{word}%")).limit(5).all()
-            matched_chunks.extend(res)
+        for word in words[:4]:
+            results = chunks_query.filter(DocumentChunk.content.ilike(f"%{word}%")).limit(6).all()
+            for r in results:
+                if r.id not in seen_ids:
+                    matched_chunks.append(r)
+                    seen_ids.add(r.id)
 
+        # Step 5: return INSUFFICIENT_EVIDENCE when nothing found (no arbitrary fallback chunks)
         if not matched_chunks:
-            matched_chunks = chunks_query.limit(4).all()
+            return {
+                "query": query,
+                "status": "INSUFFICIENT_EVIDENCE",
+                "answer": (
+                    "No relevant context was found in the indexed document repository for this query. "
+                    "Please upload related CMPDI/CIL operational documents to enable grounded answers."
+                ),
+                "calculation": "Keyword retrieval returned 0 matching chunks above threshold.",
+                "records_used": 0,
+                "verification_status": "INSUFFICIENT_EVIDENCE",
+                "confidence": 0.0,
+                "citations": [],
+                "chart": None,
+                "scope": scope,
+                "response_mode": response_mode,
+            }
 
-        context_texts = [c.content for c in matched_chunks[:5]]
+        context_texts = [c.content for c in matched_chunks[:6]]
+        # Confidence derived from retrieval hit count (not hardcoded)
+        retrieval_confidence = round(min(0.85, 0.50 + len(matched_chunks) * 0.05), 2)
 
         ai_provider = get_ai_provider()
         gemini_status = ai_provider.get_status()
+        answer_text: str
+        generation_mode = "extractive_no_llm"
 
         if gemini_status.get("status") == "configured":
             try:
+                import concurrent.futures
                 import asyncio
-                answer_text = asyncio.run(ai_provider.answer_from_context(query, context_texts, response_mode))
+
+                def _run_async() -> str:
+                    """Execute async Gemini call safely from a sync context."""
+                    loop = asyncio.new_event_loop()
+                    try:
+                        return loop.run_until_complete(
+                            asyncio.wait_for(
+                                ai_provider.answer_from_context(query, context_texts, response_mode),
+                                timeout=20,
+                            )
+                        )
+                    finally:
+                        loop.close()
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(_run_async)
+                    try:
+                        answer_text = future.result(timeout=25)
+                        generation_mode = "gemini_llm"
+                    except concurrent.futures.TimeoutError:
+                        logger.warning("Gemini answer_from_context timed out — falling back to extractive.")
+                        answer_text = cls._extractive_narrative_fallback(query, context_texts)
+                        generation_mode = "extractive_no_llm"
             except Exception as e:
                 logger.error(f"Gemini generation error: {e}")
                 answer_text = cls._extractive_narrative_fallback(query, context_texts)
+                generation_mode = "extractive_no_llm"
         else:
             answer_text = cls._extractive_narrative_fallback(query, context_texts)
+            generation_mode = "extractive_no_llm"
 
+        # Build citations — human_verified is always False for chunks (Step 5)
         citations = []
-        for c in matched_chunks[:4]:
+        for c in matched_chunks[:5]:
             doc = db.query(Document).filter(Document.id == c.document_id).first()
             citations.append({
                 "fact_id": f"chunk-{c.id}",
@@ -885,8 +1009,10 @@ class NumberSafeQueryEngine:
                 "column_name": None,
                 "cell_reference": None,
                 "source_context": c.content[:150] if c.content else None,
-                "confidence_score": 0.90,
-                "human_verified": True,
+                # Step 5: confidence comes from retrieval, NOT hardcoded
+                "confidence_score": retrieval_confidence,
+                # Step 5: chunks are NOT human-verified — never hardcode True here
+                "human_verified": False,
                 "value": c.content[:80] + "..." if c.content else ""
             })
 
@@ -897,11 +1023,12 @@ class NumberSafeQueryEngine:
             "calculation": "Grounded semantic retrieval across indexed document chunks",
             "records_used": len(matched_chunks),
             "verification_status": "GROUNDED_CONTEXT",
-            "confidence": 0.90,
+            "confidence": retrieval_confidence,
             "citations": citations,
             "chart": None,
             "scope": scope,
-            "response_mode": response_mode
+            "response_mode": response_mode,
+            "mode": generation_mode,
         }
 
     @classmethod

@@ -20,14 +20,14 @@ MineIntel is a deterministic, evidence-grounded intelligence platform designed f
 7. **Monolithic Architecture**: FastAPI backend + SQLAlchemy/Alembic + Vite React TypeScript frontend.
 8. **No Hardcoded Secrets**: All configuration is managed via `app.core.config.settings` backed by `pydantic-settings` and environment variables.
 9. **Shared Evidence Database**: All modules (`MineGraph`, `NumberSafe`, `EvidenceChain`, `ReportGuard`) query and write to the unified relational database.
-10. **Typed and Tested**: 78/78 backend tests pass; frontend compiles with 0 TypeScript errors.
+ 10. **Typed and Tested**: 146/146 backend tests pass; frontend compiles with 0 TypeScript errors.
 
 ---
 
 ## 2. Verification & Test Status
 
 ### Backend Test Suite
-- **Result:** 90 / 90 tests passing (100% pass rate)
+- **Result:** 146 / 146 tests passing (100% pass rate)
 - **Command:** `pytest backend/tests`
 - **Key Suites Verified:**
   - `test_auth_rbac.py` (8/8 passing): JWT access tokens, bcrypt password hashing, login verification, protected `/me`, Analyst review-action prohibition (403), Reviewer authorization
@@ -36,7 +36,10 @@ MineIntel is a deterministic, evidence-grounded intelligence platform designed f
   - `test_live_document_pipeline.py` (23/23 passing): Single upload, batch upload, SHA-256 deduplication, lifecycle, status tracking, preview
   - `test_number_safe_calculation_engine.py` (15/15 passing): Single-fact calculation, temporal overlap protection, consolidated vs. subsidiary double-counting prevention, target achievement matching, lineage persistence, reconciliation
   - `test_pipeline.py` (9/9 passing): Metric registry, period normalizer, unit normalizer, chunking, full CSV extraction
-  - `test_scaled_platform.py` (10/10 passing): Capabilities, analytics overview, query engine, claim verification, topic intelligence, review queue, conflict resolution, report generation and PDF export
+  - `test_scaled_platform.py` (10/10 passing): Capabilities, analytics overview, query engine, claim verification (including CONTRADICTED verdict), topic intelligence, review queue, conflict resolution, report generation and PDF export
+  - `test_ask_mineintel_orchestrator.py` (7/7 passing): 11-step QueryOrchestrator intent routing, entity resolution, NumberSafe SQL dispatch, claim verification, narrative RAG, greeting/help, suggestions
+  - `test_query_intent_routing.py` (23/23 passing): Intent classifier boundaries, metric word boundary matching, narrative RAG evidence gating
+  - `test_phase0_verification.py` (5/5 passing): Insufficient evidence gating, conflict on duplicate facts, temporal grain mixing refusal, demo data exclusion, extractive labelling
   - `test_asset_resolver.py` (4/4 passing): Portable path resolution, missing asset error handling
 
 ### Frontend Compilation

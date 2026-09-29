@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 from app.core.database import get_db
+from tests.conftest import analyst_headers, reviewer_headers, admin_headers
 
 @pytest.fixture(scope="module", autouse=True)
 def ensure_real_db():
@@ -24,7 +25,7 @@ def test_system_capabilities():
 
 
 def test_system_settings_and_counts():
-    response = client.get("/api/settings")
+    response = client.get("/api/settings", headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert data["app_name"] == "MineIntel"
@@ -41,7 +42,7 @@ def test_system_settings_and_counts():
 
 
 def test_analytics_overview():
-    response = client.get("/api/analytics/overview")
+    response = client.get("/api/analytics/overview", headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert "kpis" in data
@@ -58,7 +59,7 @@ def test_numbersafe_query_subsidiary_production():
         "query": "What was SECL's raw coal production in FY 2024-25?",
         "scope": "ALL_EVIDENCE",
         "response_mode": "STANDARD"
-    })
+    }, headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "SUCCESS"
@@ -76,7 +77,7 @@ def test_numbersafe_query_comparison_chart():
         "query": "Compare raw coal production across all subsidiaries in FY 2024-25",
         "scope": "ALL_EVIDENCE",
         "response_mode": "STANDARD"
-    })
+    }, headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "SUCCESS"
@@ -90,15 +91,15 @@ def test_numbersafe_claim_verification():
         "query": "Verify claim: SECL produced 168.0 MT of raw coal in FY 2024-25",
         "scope": "ALL_EVIDENCE",
         "response_mode": "STANDARD"
-    })
+    }, headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "SUCCESS"
-    assert data["verification_result"] in ["SUPPORTED", "CONFLICTING", "PARTIALLY_SUPPORTED", "INSUFFICIENT_EVIDENCE"]
+    assert data["verification_result"] in ["SUPPORTED", "CONFLICTING", "PARTIALLY_SUPPORTED", "INSUFFICIENT_EVIDENCE", "CONTRADICTED"]
 
 
 def test_topic_intelligence():
-    response = client.get("/api/topics")
+    response = client.get("/api/topics", headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert len(data["topics"]) >= 10
@@ -106,7 +107,7 @@ def test_topic_intelligence():
     assert data["total_mentions"] > 1000
 
     topic_id = data["topics"][0]["id"]
-    detail_response = client.get(f"/api/topics/{topic_id}")
+    detail_response = client.get(f"/api/topics/{topic_id}", headers=analyst_headers())
     assert detail_response.status_code == 200
     detail_data = detail_response.json()
     assert "snippets" in detail_data
@@ -114,7 +115,7 @@ def test_topic_intelligence():
 
 
 def test_review_queue_and_actions():
-    response = client.get("/api/reviews?page=1&page_size=10")
+    response = client.get("/api/reviews?page=1&page_size=10", headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert "items" in data
@@ -123,17 +124,17 @@ def test_review_queue_and_actions():
     if data["items"]:
         issue = data["items"][0]
         issue_id = issue["id"]
-        # Test edit and approve
+        # Test edit and approve (requires Reviewer role)
         edit_res = client.post(f"/api/reviews/{issue_id}/edit-and-approve", json={
             "corrected_value": 45.5,
             "notes": "Automated test analyst verification"
-        })
+        }, headers=reviewer_headers())
         assert edit_res.status_code == 200
         assert edit_res.json()["new_value"] == 45.5
 
 
 def test_conflicts_and_resolution():
-    response = client.get("/api/reviews/conflicts")
+    response = client.get("/api/reviews/conflicts", headers=analyst_headers())
     assert response.status_code == 200
     data = response.json()
     assert "conflicts" in data
@@ -143,43 +144,43 @@ def test_conflicts_and_resolution():
     resolve_res = client.post(f"/api/reviews/conflicts/{conflict['id']}/resolve", json={
         "chosen_fact_id": conflict["fact_a_id"],
         "resolution_notes": "Test resolved to Fact A"
-    })
+    }, headers=reviewer_headers())
     assert resolve_res.status_code == 200
     assert "resolved" in resolve_res.json()["message"].lower()
 
 
 def test_report_generation_and_pdf_export():
-    # 1. Pre-flight check
+    # 1. Pre-flight check (analyst can do GET reportguard)
     guard_res = client.post("/api/reports/reportguard", json={
         "report_type": "Coal Production & Offtake Monthly Brief",
         "subsidiary": "SECL",
         "period": "FY 2024-25"
-    })
+    }, headers=analyst_headers())
     assert guard_res.status_code == 200
     guard_data = guard_res.json()
     assert guard_data["can_proceed"] is True
     assert guard_data["verified_evidence_ratio"] > 0.5
 
-    # 2. Generate Report
+    # 2. Generate Report (analyst)
     gen_res = client.post("/api/reports/generate", json={
         "title": "SECL Executive Production Brief (Test)",
         "report_type": "Coal Production & Offtake Monthly Brief",
         "subsidiary": "SECL",
         "period": "FY 2024-25"
-    })
+    }, headers=analyst_headers())
     assert gen_res.status_code == 200
     report_data = gen_res.json()
     report_id = report_data["id"]
     assert report_data["evidence_count"] > 0
 
-    # 3. PDF Download
-    pdf_res = client.get(f"/api/reports/{report_id}/pdf")
+    # 3. PDF Download (analyst)
+    pdf_res = client.get(f"/api/reports/{report_id}/pdf", headers=analyst_headers())
     assert pdf_res.status_code == 200
     assert pdf_res.headers["content-type"] == "application/pdf"
     assert len(pdf_res.content) > 1000
 
-    # 4. CSV Download
-    csv_res = client.get(f"/api/reports/{report_id}/export-csv")
+    # 4. CSV Download (analyst)
+    csv_res = client.get(f"/api/reports/{report_id}/export-csv", headers=analyst_headers())
     assert csv_res.status_code == 200
     assert "text/csv" in csv_res.headers["content-type"]
     assert "metric_code" in csv_res.text

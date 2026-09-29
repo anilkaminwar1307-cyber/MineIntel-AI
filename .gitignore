@@ -39,24 +39,33 @@ backend/mineintel.db
 # ─── Uploads and generated reports ───────────────────────────────────────────
 # Uploaded user files and generated PDFs must NOT be committed.
 data/uploads/
+data/uploads/*
 data/reports/
+data/reports/*
 backend/data/uploads/
+backend/data/uploads/*
 backend/data/reports/
+backend/data/reports/*
 
-# ─── Frontend build outputs ───────────────────────────────────────────────────
+# ─── Frontend build outputs & dependencies ───────────────────────────────────
+node_modules/
+**/node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
+dist/
 
 # ─── Secrets / environment ────────────────────────────────────────────────────
 # NEVER commit .env with real keys. Use .env.example as template.
 .env
-# Allow the example template
+**/.env
 !.env.example
 
 # ─── Backups (local only) ─────────────────────────────────────────────────────
 backups/
 _backups/
+**/backups/
+**/_backups/
 
 # ─── IDE / OS ─────────────────────────────────────────────────────────────────
 .vscode/

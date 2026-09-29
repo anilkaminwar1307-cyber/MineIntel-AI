@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  GitBranch,
   Network,
   Building2,
   Mountain,
@@ -11,8 +10,6 @@ import {
   ZoomIn,
   ZoomOut,
   Info,
-  ChevronDown,
-  ChevronRight,
   AlertTriangle,
   Shield,
   Search,
@@ -37,9 +34,8 @@ const NODE_TYPE_CONFIG: Record<string, { color: string; bg: string; icon: React.
   FACT:       { color: '#0891b2', bg: '#cffafe', icon: Shield,     label: 'Fact' },
 };
 
-const SUBSIDIARIES = ['ECL', 'BCCL', 'CCL', 'WCL', 'SECL', 'MCL', 'NCL', 'CMPDI'];
-const METRICS      = ['COAL_PRODUCTION', 'PRODUCTION_TARGET', 'OVERBURDEN_REMOVAL',
-                      'COAL_DISPATCH', 'DRILLING_METERS', 'STRIPPING_RATIO'];
+const METRICS = ['COAL_PRODUCTION', 'PRODUCTION_TARGET', 'OVERBURDEN_REMOVAL',
+                  'COAL_DISPATCH', 'DRILLING_METERS', 'STRIPPING_RATIO'];
 
 // ─── Static force positions (since we can't run D3 simulation) ────────────────
 function layoutNodes(nodes: MineGraphNode[], width: number, height: number): Map<string, { x: number; y: number }> {
@@ -115,7 +111,6 @@ const GraphLegend: React.FC = () => (
     <div className="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">Node Types</div>
     <div className="grid grid-cols-2 gap-x-4 gap-y-1">
       {Object.entries(NODE_TYPE_CONFIG).map(([type, cfg]) => {
-        const Icon = cfg.icon;
         return (
           <div key={type} className="flex items-center space-x-1.5">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: cfg.color }} />
@@ -222,7 +217,7 @@ const GraphCanvas: React.FC<{
 
         <g transform={`translate(${pan.x}, ${pan.y}) scale(${zoom})`}>
           {/* Edges */}
-          {graph.edges.map((edge, i) => {
+          {graph.edges.map((edge: MineGraphEdge, i: number) => {
             const sp = positions.get(edge.source);
             const tp = positions.get(edge.target);
             if (!sp || !tp) return null;
@@ -251,7 +246,7 @@ const GraphCanvas: React.FC<{
           })}
 
           {/* Nodes */}
-          {graph.nodes.map(node => {
+          {graph.nodes.map((node: MineGraphNode) => {
             const pos = positions.get(node.id);
             if (!pos) return null;
             const cfg = NODE_TYPE_CONFIG[node.type] || NODE_TYPE_CONFIG.DOCUMENT;
@@ -551,3 +546,5 @@ export const MineGraph: React.FC = () => {
     </div>
   );
 };
+
+export default MineGraph;

@@ -350,6 +350,15 @@ export const AskMineIntel: React.FC = () => {
               <Sparkles className="w-4 h-4 text-amber-600" />
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Synthesized Intelligence</h3>
               {response.verification_result && getVerificationBadge(response.verification_result)}
+              {response.mode && (
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold border ${
+                  response.mode === 'gemini_llm'
+                    ? 'bg-purple-50 text-purple-700 border-purple-200'
+                    : 'bg-slate-100 text-slate-700 border-slate-300'
+                }`}>
+                  mode: {response.mode}
+                </span>
+              )}
             </div>
             <div className="flex items-center space-x-3 text-xs text-slate-500">
               <span>

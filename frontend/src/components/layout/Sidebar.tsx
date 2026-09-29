@@ -17,6 +17,8 @@ import {
   Landmark,
   LogOut,
   Lock,
+  UploadCloud,
+  ShieldAlert,
 } from 'lucide-react';
 import { HealthInfo, UserProfile } from '../../types';
 
@@ -47,6 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab, healt
     {
       heading: 'EVIDENCE',
       items: [
+        { id: 'upload', label: 'Upload & Ingestion', icon: UploadCloud },
         { id: 'documents', label: 'Documents', icon: Files },
         { id: 'evidence', label: 'Evidence Ledger', icon: Database },
         {
@@ -68,6 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab, healt
     {
       heading: 'GOVERNANCE',
       items: [
+        { id: 'data_quality', label: 'Data Quality', icon: ShieldAlert },
         { id: 'audit', label: 'Audit Trail', icon: History },
         {
           id: 'settings',

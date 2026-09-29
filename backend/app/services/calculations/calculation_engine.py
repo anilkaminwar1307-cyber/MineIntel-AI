@@ -41,6 +41,7 @@ class CalcError:
     INCOMPATIBLE_UNITS = "INCOMPATIBLE_UNITS"
     MIXED_TEMPORAL_GRAIN = "MIXED_TEMPORAL_GRAIN"
     UNRESOLVED_CONFLICT = "UNRESOLVED_CONFLICT"
+    CONFLICT = "CONFLICT"
     AMBIGUOUS_ENTITY = "AMBIGUOUS_ENTITY"
     MISSING_TARGET = "MISSING_TARGET"
     NO_VERIFIED_EVIDENCE = "NO_VERIFIED_EVIDENCE"
@@ -121,7 +122,7 @@ class EvidenceScope:
     mine: Optional[str] = None
     reporting_period: Optional[str] = None    # e.g. "FY 2024-25"
     only_verified: bool = False
-    only_real: bool = False                   # exclude demo facts
+    only_real: bool = True                    # exclude demo facts by default
     only_demo: bool = False                   # only demo facts
     document_ids: Optional[List[str]] = None
     exclude_consolidated: bool = True         # drop CIL/consolidated rows
@@ -160,14 +161,33 @@ class CalculationEngine:
         result.evidence_count_total = len(raw_facts)
 
         if not raw_facts:
-            result.error_code = CalcError.INSUFFICIENT_EVIDENCE
+            result.error_code = CalcError.NO_VERIFIED_EVIDENCE if scope.only_real else CalcError.INSUFFICIENT_EVIDENCE
             result.error_message = (
-                f"No evidence records found for metric='{scope.metric_code}'"
+                f"No verified evidence records found for metric='{scope.metric_code}'"
                 + (f", subsidiary='{scope.subsidiary}'" if scope.subsidiary else "")
                 + (f", period='{scope.reporting_period}'" if scope.reporting_period else "")
                 + "."
             )
             result.sql_description = cls._describe_sql(scope)
+            # When only_real=True filtered everything out, check if demo facts exist so
+            # the caller knows the absence is due to demo-only data (not truly missing data).
+            if scope.only_real:
+                demo_probe_scope = EvidenceScope(
+                    metric_code=scope.metric_code,
+                    subsidiary=scope.subsidiary,
+                    mine=scope.mine,
+                    reporting_period=scope.reporting_period,
+                    only_real=False,
+                    only_demo=True,
+                    document_ids=scope.document_ids,
+                )
+                demo_facts = cls._fetch_facts(db, demo_probe_scope)
+                if demo_facts:
+                    result.is_demo_scope = DataScopeMode.DEMO
+                    result.warnings.append(
+                        "DEMO_DATA_ONLY — demo facts exist for this scope but were excluded "
+                        "because only_real=True. Use include_demo=True to surface them."
+                    )
             return result
 
         # 2. Validate units
@@ -196,6 +216,36 @@ class CalculationEngine:
             result.error_code = CalcError.INSUFFICIENT_EVIDENCE
             result.error_message = "All retrieved evidence was excluded during duplicate/overlap detection."
             return result
+
+        # 5.5 Check for unresolved conflict: differing values for identical (subsidiary, metric_code, reporting_period, temporal_grain, mine)
+        scope_buckets: Dict[Tuple, List[ExtractedFact]] = {}
+        for f in included_orm:
+            b_key = (
+                (f.subsidiary or "").upper(),
+                f.metric_code,
+                (f.reporting_period or "").upper(),
+                (getattr(f, "temporal_grain", None) or "").upper(),
+                (f.mine or "").upper(),
+            )
+            scope_buckets.setdefault(b_key, []).append(f)
+
+        for b_key, b_facts in scope_buckets.items():
+            if len(b_facts) > 1:
+                doc_ids = {bf.document_id for bf in b_facts if bf.document_id}
+                if len(doc_ids) > 1:
+                    vals = [round(bf.numeric_value, 2) for bf in b_facts if bf.numeric_value is not None]
+                    if len(set(vals)) > 1:
+                        result.error_code = CalcError.CONFLICT
+                        conflict_details = ", ".join([
+                            f"{bf.numeric_value} {bf.unit or ''} (Doc: {bf.document_id}, Page: {getattr(bf, 'page_number', 'N/A')}, Cell: {getattr(bf, 'cell_reference', 'N/A')})"
+                            for bf in b_facts
+                        ])
+                        result.error_message = (
+                            f"CONFLICT: Contradictory values detected for identical scope {b_key}: {conflict_details}. "
+                            "In accordance with Rule 5 ('Never hide conflicts'), calculation is refused until human review resolution."
+                        )
+                        result.warnings.append(result.error_message)
+                        return result
 
         # 6. Demo/real scope analysis
         result.is_demo_scope = cls._scope_mode(included_orm)
@@ -568,7 +618,7 @@ class CalculationEngine:
         metric_code: str = "COAL_PRODUCTION",
         reporting_period: Optional[str] = None,
         only_verified: bool = False,
-        only_real: bool = False,
+        only_real: bool = True,
         only_demo: bool = False,
     ) -> List[Dict[str, Any]]:
         """
@@ -610,21 +660,24 @@ class CalculationEngine:
         metric_code: str = "COAL_PRODUCTION",
         subsidiary: Optional[str] = None,
         only_verified: bool = False,
-        only_real: bool = False,
+        only_real: bool = True,
         only_demo: bool = False,
     ) -> List[Dict[str, Any]]:
         """
         Calculates multi-year metric trends with deduplication and grain protection.
         """
-        raw_periods = (
+        raw_periods_q = (
             db.query(ExtractedFact.reporting_period)
             .filter(
                 ExtractedFact.metric_code == metric_code,
                 ExtractedFact.reporting_period.ilike("FY%"),
             )
-            .distinct()
-            .all()
         )
+        if only_real:
+            raw_periods_q = raw_periods_q.filter(ExtractedFact.is_demo == False)
+        elif only_demo:
+            raw_periods_q = raw_periods_q.filter(ExtractedFact.is_demo == True)
+        raw_periods = raw_periods_q.distinct().all()
         periods = sorted(list({p[0] for p in raw_periods if p[0]}))
         trend = []
         for period in periods:

@@ -15,6 +15,20 @@ from sqlalchemy.pool import StaticPool
 import app.models  # Ensure all models are registered with Base.metadata
 from app.main import app
 from app.core.database import get_db, Base
+from app.core.auth import create_access_token
+
+
+def _auth_headers(role: str) -> dict:
+    token = create_access_token({"sub": "test-id", "username": f"{role.lower()}_test", "role": role, "full_name": f"{role} Test"})
+    return {"Authorization": f"Bearer {token}"}
+
+
+def analyst_headers() -> dict:
+    return _auth_headers("Analyst")
+
+
+def admin_headers() -> dict:
+    return _auth_headers("Admin")
 
 
 # ─── In-Memory Test Database ─────────────────────────────────────────────────
@@ -56,7 +70,8 @@ def upload_one_document(filename="upload_test.csv", auto_process=False):
     resp = client.post(
         "/api/documents/upload",
         files={"file": (filename, io.BytesIO(content), "text/csv")},
-        data={"auto_process": str(auto_process).lower()}
+        data={"auto_process": str(auto_process).lower()},
+        headers=analyst_headers(),
     )
     return resp
 
@@ -82,6 +97,7 @@ class TestSingleUpload:
         resp = client.post(
             "/api/documents/upload",
             files={"file": ("", io.BytesIO(b"content"), "text/plain")},
+            headers=analyst_headers(),
         )
         # Either 400 (filename missing) or 422 (validation)
         assert resp.status_code in (400, 422)
@@ -90,6 +106,7 @@ class TestSingleUpload:
         resp = client.post(
             "/api/documents/upload",
             files={"file": ("document.exe", io.BytesIO(b"MZ\x90"), "application/octet-stream")},
+            headers=analyst_headers(),
         )
         assert resp.status_code == 400
 
@@ -97,6 +114,7 @@ class TestSingleUpload:
         resp = client.post(
             "/api/documents/upload",
             files={"file": ("empty.csv", io.BytesIO(b""), "text/csv")},
+            headers=analyst_headers(),
         )
         assert resp.status_code == 400
 
@@ -111,7 +129,8 @@ class TestBatchUpload:
         resp = client.post(
             "/api/documents/batch-upload",
             files=files,
-            data={"auto_process": "false"}
+            data={"auto_process": "false"},
+            headers=analyst_headers(),
         )
         assert resp.status_code == 201
         data = resp.json()
@@ -128,7 +147,12 @@ class TestBatchUpload:
             ("files", (f"file{i}.csv", io.BytesIO(f"metric,value\nProd,{i}\n".encode()), "text/csv"))
             for i in range(11)
         ]
-        resp = client.post("/api/documents/batch-upload", files=files, data={"auto_process": "false"})
+        resp = client.post(
+            "/api/documents/batch-upload",
+            files=files,
+            data={"auto_process": "false"},
+            headers=analyst_headers(),
+        )
         assert resp.status_code == 400
         assert "10" in resp.json()["detail"]
 
@@ -138,13 +162,15 @@ class TestBatchUpload:
         client.post(
             "/api/documents/upload",
             files={"file": ("dup_test.csv", io.BytesIO(content), "text/csv")},
-            data={"auto_process": "false"}
+            data={"auto_process": "false"},
+            headers=analyst_headers(),
         )
         # Upload same content as batch
         resp = client.post(
             "/api/documents/batch-upload",
             files=[("files", ("dup_test2.csv", io.BytesIO(content), "text/csv"))],
-            data={"auto_process": "false"}
+            data={"auto_process": "false"},
+            headers=analyst_headers(),
         )
         # Should succeed but mark as duplicate
         assert resp.status_code == 201
@@ -159,7 +185,8 @@ class TestBatchUpload:
         resp = client.post(
             "/api/documents/batch-upload",
             files=files,
-            data={"auto_process": "false"}
+            data={"auto_process": "false"},
+            headers=analyst_headers(),
         )
         assert resp.status_code == 201
         data = resp.json()
@@ -172,7 +199,7 @@ class TestProcessingStatus:
         upload_resp = upload_one_document("status_test.csv")
         doc_id = upload_resp.json()["document"]["id"]
 
-        resp = client.get(f"/api/documents/{doc_id}/status")
+        resp = client.get(f"/api/documents/{doc_id}/status", headers=analyst_headers())
         assert resp.status_code == 200
         data = resp.json()
         assert data["document_id"] == doc_id
@@ -183,7 +210,7 @@ class TestProcessingStatus:
         assert "warnings" in data
 
     def test_get_status_unknown_doc_returns_404(self):
-        resp = client.get("/api/documents/nonexistent-id-xyz/status")
+        resp = client.get("/api/documents/nonexistent-id-xyz/status", headers=analyst_headers())
         assert resp.status_code == 404
 
 
@@ -193,7 +220,7 @@ class TestExtractionSummary:
         upload_resp = upload_one_document("summary_test.csv")
         doc_id = upload_resp.json()["document"]["id"]
 
-        resp = client.get(f"/api/documents/{doc_id}/extraction-summary")
+        resp = client.get(f"/api/documents/{doc_id}/extraction-summary", headers=analyst_headers())
         assert resp.status_code == 200
         data = resp.json()
         assert data["document_id"] == doc_id
@@ -205,7 +232,7 @@ class TestExtractionSummary:
         assert data["is_demo"] == False
 
     def test_extraction_summary_unknown_doc_returns_404(self):
-        resp = client.get("/api/documents/nonexistent/extraction-summary")
+        resp = client.get("/api/documents/nonexistent/extraction-summary", headers=analyst_headers())
         assert resp.status_code == 404
 
 
@@ -216,13 +243,14 @@ class TestSourcePreview:
         resp_up = client.post(
             "/api/documents/upload",
             files={"file": ("preview_test.csv", io.BytesIO(content), "text/csv")},
-            data={"auto_process": "true"}
+            data={"auto_process": "true"},
+            headers=analyst_headers(),
         )
         if resp_up.status_code != 201:
             pytest.skip("Upload failed, skipping preview test")
         doc_id = resp_up.json()["document"]["id"]
 
-        resp = client.get(f"/api/documents/{doc_id}/source-preview")
+        resp = client.get(f"/api/documents/{doc_id}/source-preview", headers=analyst_headers())
         assert resp.status_code == 200
         data = resp.json()
         assert data["document_id"] == doc_id
@@ -231,7 +259,7 @@ class TestSourcePreview:
         assert "sheets" in data
 
     def test_source_preview_unknown_doc_returns_404(self):
-        resp = client.get("/api/documents/nonexistent-xyz/source-preview")
+        resp = client.get("/api/documents/nonexistent-xyz/source-preview", headers=analyst_headers())
         assert resp.status_code == 404
 
 
@@ -247,7 +275,8 @@ class TestMetadataUpdate:
                 "document_category": "Production Report",
                 "reporting_period": "FY 2025-26",
                 "organization": "ECL"
-            }
+            },
+            headers=analyst_headers(),
         )
         assert resp.status_code == 200
         data = resp.json()
@@ -261,7 +290,8 @@ class TestMetadataUpdate:
 
         resp = client.patch(
             f"/api/documents/{doc_id}/metadata",
-            json={"reporting_period": "Q1 2024-25"}
+            json={"reporting_period": "Q1 2024-25"},
+            headers=analyst_headers(),
         )
         assert resp.status_code == 200
         assert resp.json()["reporting_period"] == "Q1 2024-25"
@@ -269,7 +299,8 @@ class TestMetadataUpdate:
     def test_patch_metadata_unknown_doc_returns_404(self):
         resp = client.patch(
             "/api/documents/nonexistent/metadata",
-            json={"document_category": "Geological Assessment"}
+            json={"document_category": "Geological Assessment"},
+            headers=analyst_headers(),
         )
         assert resp.status_code == 404
 
@@ -280,37 +311,37 @@ class TestReprocess:
         upload_resp = upload_one_document("reprocess_test.csv")
         doc_id = upload_resp.json()["document"]["id"]
 
-        resp = client.post(f"/api/documents/{doc_id}/reprocess")
+        resp = client.post(f"/api/documents/{doc_id}/reprocess", headers=analyst_headers())
         assert resp.status_code == 200
         data = resp.json()
         assert data["id"] == doc_id
         assert data["status"] in ("READY", "COMPLETED_WITH_WARNINGS", "FAILED")
 
     def test_reprocess_unknown_doc_returns_404(self):
-        resp = client.post("/api/documents/nonexistent-doc/reprocess")
+        resp = client.post("/api/documents/nonexistent-doc/reprocess", headers=analyst_headers())
         assert resp.status_code == 404
 
 
 # ─── Document Lifecycle ───────────────────────────────────────────────────────
 class TestDocumentLifecycle:
     def test_full_lifecycle_upload_list_delete(self):
-        # Upload
+        # Upload (Analyst)
         resp = upload_one_document("lifecycle_test.csv")
         assert resp.status_code == 201
         doc_id = resp.json()["document"]["id"]
 
-        # List — doc should appear
-        list_resp = client.get("/api/documents")
+        # List — doc should appear (Analyst)
+        list_resp = client.get("/api/documents", headers=analyst_headers())
         assert list_resp.status_code == 200
         ids = [d["id"] for d in list_resp.json()["items"]]
         assert doc_id in ids
 
-        # Delete
-        del_resp = client.delete(f"/api/documents/{doc_id}")
+        # Delete — requires Admin
+        del_resp = client.delete(f"/api/documents/{doc_id}", headers=admin_headers())
         assert del_resp.status_code == 200
 
-        # Should be gone
-        get_resp = client.get(f"/api/documents/{doc_id}")
+        # Should be gone (Analyst can still read)
+        get_resp = client.get(f"/api/documents/{doc_id}", headers=analyst_headers())
         assert get_resp.status_code == 404
 
     def test_upload_sets_is_demo_false(self):
@@ -324,5 +355,5 @@ class TestDocumentLifecycle:
         doc_id = resp.json()["document"]["id"]
 
         for endpoint in ["pages", "sheets", "tables", "chunks", "facts", "quality", "processing-log"]:
-            r = client.get(f"/api/documents/{doc_id}/{endpoint}")
+            r = client.get(f"/api/documents/{doc_id}/{endpoint}", headers=analyst_headers())
             assert r.status_code == 200, f"Endpoint /{endpoint} failed: {r.status_code}"

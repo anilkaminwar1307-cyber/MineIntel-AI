@@ -13,9 +13,12 @@ import { ReportStudio } from './pages/ReportStudio';
 import { AuditTrail } from './pages/AuditTrail';
 import { Settings } from './pages/Settings';
 import { NotFound } from './pages/NotFound';
-import { MineGraph } from './pages/MineGraph';
 import { ParliamentaryBrief } from './pages/ParliamentaryBrief';
 import { Login } from './pages/Login';
+import { UploadIngestion } from './pages/UploadIngestion';
+import { DataQuality } from './pages/DataQuality';
+
+const MineGraph = React.lazy(() => import('./pages/MineGraph').then(m => ({ default: m.MineGraph })));
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { api, getStoredToken, getStoredUser } from './services/api';
 import { HealthInfo, DocumentItem, UserProfile, TokenResponse } from './types';
@@ -35,25 +38,33 @@ const VALID_TABS = [
   'settings',
   'minegraph',
   'parliamentary',
+  'upload',
+  'data_quality',
 ] as const;
 
 type TabType = typeof VALID_TABS[number] | '404';
 
+/** Normalise a URL segment so both `data-quality` and `data_quality` map to `data_quality`. */
+const normalizeTabSlug = (raw: string): string => raw.replace(/-/g, '_');
+
 const getInitialTabFromUrl = (): TabType => {
-  // 1. Check hash first (e.g. #/ask or #ask)
-  const hash = window.location.hash.replace(/^#[/]?/, '').trim().toLowerCase();
-  if (hash) {
-    if (VALID_TABS.includes(hash as any)) {
-      return hash as TabType;
+  // 1. Check hash first (e.g. #/ask, #ask, #/data-quality, #/data_quality)
+  const rawHash = window.location.hash.replace(/^#[/]?/, '').trim().toLowerCase();
+  if (rawHash) {
+    const normalized = normalizeTabSlug(rawHash);
+    if (VALID_TABS.includes(normalized as any)) {
+      return normalized as TabType;
     }
+    // Unknown hash → 404
     return '404';
   }
 
   // 2. Check pathname (e.g. /ask or /analytics)
-  const pathname = window.location.pathname.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
-  if (pathname && pathname !== '' && pathname !== 'index.html') {
-    if (VALID_TABS.includes(pathname as any)) {
-      return pathname as TabType;
+  const rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
+  if (rawPath && rawPath !== '' && rawPath !== 'index.html') {
+    const normalized = normalizeTabSlug(rawPath);
+    if (VALID_TABS.includes(normalized as any)) {
+      return normalized as TabType;
     }
     return '404';
   }
@@ -116,7 +127,8 @@ export const App: React.FC = () => {
   };
 
   const navigateTab = useCallback((tab: string) => {
-    const normalized = tab.trim().toLowerCase();
+    // Accept both `data-quality` and `data_quality` style inputs
+    const normalized = normalizeTabSlug(tab.trim().toLowerCase());
     const targetTab: TabType = VALID_TABS.includes(normalized as any)
       ? (normalized as TabType)
       : '404';
@@ -127,8 +139,10 @@ export const App: React.FC = () => {
 
     setCurrentTab(targetTab);
 
-    // Update browser URL without reloading
-    const newHash = targetTab === 'overview' ? '#/' : `#/${targetTab}`;
+    // Use hyphenated slugs in URL for human-friendliness;
+    // normalizeTabSlug() ensures the reverse trip works on reload.
+    const urlSlug = targetTab.replace(/_/g, '-');
+    const newHash = targetTab === 'overview' ? '#/' : `#/${urlSlug}`;
     if (window.location.hash !== newHash) {
       window.history.pushState(null, '', newHash);
     }
@@ -224,6 +238,16 @@ export const App: React.FC = () => {
           title: 'Parliamentary Brief Generator',
           subtitle: 'Ministry of Coal Lok Sabha / Rajya Sabha question briefs — NumberSafe certified'
         };
+      case 'upload':
+        return {
+          title: 'Upload & Ingestion',
+          subtitle: 'Secure multi-format document ingestion with AI extraction pipeline'
+        };
+      case 'data_quality':
+        return {
+          title: 'Data Quality',
+          subtitle: 'Automated validation issues, severity triage, and conflict resolution'
+        };
       default:
         return {
           title: 'MineIntel Platform',
@@ -312,8 +336,21 @@ export const App: React.FC = () => {
             {currentTab === 'reports' && <ReportStudio />}
             {currentTab === 'audit' && <AuditTrail />}
             {currentTab === 'settings' && <Settings />}
-            {currentTab === 'minegraph' && <MineGraph />}
+            {currentTab === 'minegraph' && (
+              <React.Suspense
+                fallback={
+                  <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-3">
+                    <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    <span className="text-sm font-semibold text-slate-700">Loading MineGraph…</span>
+                  </div>
+                }
+              >
+                <MineGraph />
+              </React.Suspense>
+            )}
             {currentTab === 'parliamentary' && <ParliamentaryBrief />}
+            {currentTab === 'upload' && <UploadIngestion onNavigate={navigateTab} />}
+            {currentTab === 'data_quality' && <DataQuality onNavigate={navigateTab} />}
             {currentTab === '404' && (
               <NotFound onNavigate={navigateTab} requestedRoute={window.location.hash || window.location.pathname} />
             )}

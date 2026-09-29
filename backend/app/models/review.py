@@ -31,19 +31,25 @@ class ReviewAction(Base):
 
 class ProcessingJob(Base):
     """
-    Tracks async or multi-stage document processing pipeline steps.
+    Durable persistent processing job tracking async multi-stage pipeline execution,
+    retries, operator-safe error details, and idempotency.
     """
     __tablename__ = "processing_jobs"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     document_id = Column(String(36), ForeignKey("documents.id", ondelete="CASCADE"), nullable=False, index=True)
-    stage = Column(String(50), nullable=False)  # CLASSIFYING, EXTRACTING, OCR, VALIDATING, etc.
-    status = Column(String(50), nullable=False, default="PENDING")  # PENDING, RUNNING, COMPLETED, FAILED
-    progress = Column(Integer, default=0)
+    stage = Column(String(50), nullable=False, default="QUEUED")  # QUEUED, CLASSIFYING, EXTRACTING, OCR, TABLE_PROCESSING, FACT_EXTRACTION, NORMALIZING, VALIDATING, INDEXING, READY, REVIEW_REQUIRED, FAILED
+    status = Column(String(50), nullable=False, default="QUEUED")  # QUEUED, PROCESSING, REVIEW_REQUIRED, COMPLETED, FAILED
+    progress = Column(Integer, default=0, nullable=False)
     message = Column(String(255), nullable=True)
     error_details = Column(Text, nullable=True)
-    started_at = Column(DateTime, default=_utcnow, nullable=False)
+    retry_count = Column(Integer, default=0, nullable=False)
+    max_retries = Column(Integer, default=3, nullable=False)
+    version = Column(Integer, default=1, nullable=False)
+    idempotency_key = Column(String(64), nullable=True, index=True)
+    started_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
 
     document = relationship("Document", back_populates="processing_jobs")
 

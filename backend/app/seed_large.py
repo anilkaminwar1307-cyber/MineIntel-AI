@@ -12,7 +12,7 @@ import uuid
 import random
 import argparse
 from datetime import datetime, timedelta, timezone
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -182,17 +182,31 @@ def generate_provenance(file_type: str, page_max: int, sheet_count: int) -> Tupl
         return (page, None, None, None, None, context)
 
 
-def generate_synthetic_data(target_facts: int = 50000, reset: bool = False):
+def generate_synthetic_data(target_facts: int = 50000, reset: bool = False, db_url: Optional[str] = None):
     """
     Main entry point for generating the 50K MineIntel synthetic dataset.
+    Refuses to run unless DEMO_MODE=true.
+    Writes to separate database file (data/demo.db) by default, never to the main db.
     """
+    if not getattr(settings, "DEMO_MODE", False):
+        raise RuntimeError("seed_large.py refused to run: DEMO_MODE must be enabled (DEMO_MODE=true in environment)")
+
     random.seed(SEED)
     print(f"=== MINEINTEL LARGE-SCALE DATASET GENERATOR ===")
     print(f"Target Facts: {target_facts:,}")
     print(f"Seed: {SEED} (Deterministic & Reproducible)")
-    print(f"Target Database: {settings.DATABASE_URL.split('@')[-1] if '@' in settings.DATABASE_URL else settings.DATABASE_URL}")
 
-    db = SessionLocal()
+    if not db_url:
+        demo_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+        os.makedirs(demo_dir, exist_ok=True)
+        demo_db_path = os.path.join(demo_dir, "demo.db")
+        db_url = f"sqlite:///{demo_db_path}"
+
+    print(f"Target Database: {db_url}")
+    target_engine = create_engine(db_url, connect_args={"check_same_thread": False} if "sqlite" in db_url else {})
+    Base.metadata.create_all(bind=target_engine)
+    TargetSession = sessionmaker(autocommit=False, autoflush=False, bind=target_engine)
+    db = TargetSession()
 
     if reset:
         print("\n[RESET] Removing prior demo records (is_demo=True)...")
@@ -746,6 +760,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="MineIntel 50K Synthetic Database Seeder")
     parser.add_argument("--size", type=int, default=50000, help="Target number of facts (default: 50,000)")
     parser.add_argument("--reset", action="store_true", help="Wipe prior demo records before generating")
+    parser.add_argument("--db-url", type=str, default=None, help="Target database URL (defaults to separate data/demo.db)")
     args = parser.parse_args()
 
-    generate_synthetic_data(target_facts=args.size, reset=args.reset)
+    generate_synthetic_data(target_facts=args.size, reset=args.reset, db_url=args.db_url)

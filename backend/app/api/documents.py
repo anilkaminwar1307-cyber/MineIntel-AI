@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import desc
 
 from app.core.database import get_db
+from app.core.auth import require_analyst, require_admin
 from app.models.document import Document, DocumentChunk
 from app.models.processing import DocumentPage, DocumentSheet, DocumentTable, DocumentQuality, ProcessingLog
 from app.models.fact import ExtractedFact
@@ -94,7 +95,8 @@ async def upload_document(
     reporting_period: Optional[str] = Form(None),
     organization: Optional[str] = Form("CMPDI / CIL"),
     auto_process: bool = Form(False),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(require_analyst),
 ):
     """
     Uploads a mining/geological document.
@@ -142,12 +144,13 @@ async def upload_document(
     db.refresh(document)
 
     # 5. Create Audit Log
+    _actor = current_user.get("username", "unknown")
     log_audit_event(
         db=db,
         action=AuditAction.DOCUMENT_UPLOADED,
         entity_type="DOCUMENT",
         entity_id=document.id,
-        user="CMPDI Analyst",
+        user=_actor,
         details=f"Uploaded '{document.original_filename}' ({file_type.value if hasattr(file_type, 'value') else file_type}, {file_size} bytes)"
     )
 
@@ -175,7 +178,8 @@ async def batch_upload_documents(
     reporting_period: Optional[str] = Form(None),
     organization: Optional[str] = Form("CMPDI / CIL"),
     auto_process: bool = Form(True),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(require_analyst),
 ):
     """
     Batch upload 1-10 mining documents in a single request.
@@ -243,12 +247,13 @@ async def batch_upload_documents(
             db.commit()
             db.refresh(doc)
 
+            _batch_actor = current_user.get("username", "unknown")
             log_audit_event(
                 db=db,
                 action=AuditAction.DOCUMENT_UPLOADED,
                 entity_type="DOCUMENT",
                 entity_id=doc.id,
-                user="CMPDI Analyst",
+                user=_batch_actor,
                 details=f"Batch uploaded '{doc.original_filename}' ({doc.file_type}, {file_size} bytes)"
             )
 
@@ -487,7 +492,8 @@ def get_source_preview(document_id: str, db: Session = Depends(get_db)):
 def update_document_metadata(
     document_id: str,
     payload: MetadataUpdateRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(require_analyst),
 ):
     """Update document metadata (category, organization, reporting period) without re-processing."""
     doc = db.query(Document).filter(Document.id == document_id).first()
@@ -504,12 +510,13 @@ def update_document_metadata(
     db.commit()
     db.refresh(doc)
 
+    _meta_actor = current_user.get("username", "unknown")
     log_audit_event(
         db=db,
         action=AuditAction.FACT_EDITED,
         entity_type="DOCUMENT",
         entity_id=doc.id,
-        user="CMPDI Analyst",
+        user=_meta_actor,
         details=f"Metadata updated for '{doc.original_filename}'"
     )
     return DocumentResponse.model_validate(doc)
@@ -680,10 +687,14 @@ def get_document_validations(document_id: str, db: Session = Depends(get_db)):
 
 
 @router.delete("/{document_id}", status_code=status.HTTP_200_OK)
-def delete_document(document_id: str, db: Session = Depends(get_db)):
+def delete_document(
+    document_id: str,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(require_admin),
+):
     """
     Deletes a document from the database and removes its stored file on disk.
-    Records an audit log entry.
+    Requires Admin role. Records an audit log entry.
     """
     doc = db.query(Document).filter(Document.id == document_id).first()
     if not doc:
@@ -699,13 +710,14 @@ def delete_document(document_id: str, db: Session = Depends(get_db)):
     db.delete(doc)
     db.commit()
 
-    # Log audit event
+    # Log audit event — use authenticated Admin username
+    _del_actor = current_user.get("username", "unknown")
     log_audit_event(
         db=db,
         action=AuditAction.DOCUMENT_DELETED,
         entity_type="DOCUMENT",
         entity_id=document_id,
-        user="CMPDI Analyst",
+        user=_del_actor,
         details=f"Deleted document '{filename}' (ID: {document_id})"
     )
 

@@ -410,20 +410,66 @@ export interface QueryChart {
 }
 
 export interface QueryResponse {
+  query_id?: string;
   query: string;
-  status: 'SUCCESS' | 'INSUFFICIENT_EVIDENCE' | 'ERROR';
+  status: 'SUCCESS' | 'INSUFFICIENT_EVIDENCE' | 'ERROR' | string;
+  answer_status?: string;
+  intent?: string;
   answer: string;
-  sql_query?: string | null;
+  scope?: string;
+  response_mode?: string;
+  resolved_context?: {
+    subsidiary?: string | null;
+    subsidiaries?: string[];
+    mine?: string | null;
+    metric_code?: string | null;
+    metric_name?: string | null;
+    period?: string | null;
+    document_ids?: string[] | null;
+    was_inherited?: boolean;
+  } | null;
+  confidence?: number;
+  confidence_score: number;
+  confidence_level?: 'HIGH' | 'MEDIUM' | 'LOW';
+  confidence_reason?: string | null;
+  confidence_details?: Record<string, any> | null;
+  records_used?: number;
+  verified_facts_count: number;
+  verification_status?: string | null;
+  verification_result?: 'SUPPORTED' | 'CONFLICTING' | 'CONTRADICTED' | 'PARTIALLY_SUPPORTED' | 'INSUFFICIENT_EVIDENCE' | string | null;
+  citations?: EvidenceSourceCitation[];
+  sources: EvidenceSourceCitation[];
+  calculation?: string | null;
   calculation_steps?: string[] | null;
+  calculation_result?: CalculationResult | null;
   direct_metric_value?: number | null;
   metric_unit?: string | null;
-  verification_result?: 'SUPPORTED' | 'CONFLICTING' | 'PARTIALLY_SUPPORTED' | 'INSUFFICIENT_EVIDENCE' | null;
-  verified_facts_count: number;
-  confidence_score: number;
-  sources: EvidenceSourceCitation[];
+  sql_query?: string | null;
   chart?: QueryChart | null;
+  key_figures?: Array<{
+    subsidiary?: string;
+    metric_name?: string;
+    value?: number;
+    unit?: string;
+    period?: string;
+    verified?: boolean;
+  }> | null;
+  conflicts?: Array<{
+    id?: string;
+    metric_code?: string;
+    subsidiary?: string;
+    period?: string;
+    values?: any[];
+    discrepancy?: number;
+    discrepancy_detail?: string;
+    description?: string;
+  }> | null;
+  data_scope?: string;
+  is_demo?: boolean;
   suggestions?: string[] | null;
-  calculation_result?: CalculationResult | null;
+  suggested_followups?: string[] | null;
+  execution_time_ms?: number | null;
+  mode?: string | null;
 }
 
 export interface GeneratedReportItem {
@@ -815,6 +861,7 @@ export interface ParliamentaryBriefResponse {
   period: string;
   subsidiary: string;
   brief_text: string;
+  answer_markdown: string;
   status: string;
   records_used: number;
   confidence: number;
@@ -822,7 +869,15 @@ export interface ParliamentaryBriefResponse {
   direct_metric_value?: number | null;
   metric_unit?: string | null;
   calculation?: any;
+  verification_status?: string;
+  verification_result?: string;
+  chart?: any;
+  suggestions?: string[];
+  calculation_steps?: string[];
+  sql_query?: string;
+  mode?: string;
 }
+
 
 export interface ParliamentarySampleQuestion {
   id: string;
