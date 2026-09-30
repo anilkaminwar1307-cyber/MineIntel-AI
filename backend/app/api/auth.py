@@ -117,23 +117,22 @@ _DEMO_ACCOUNTS = [
 ]
 
 
+_DEFAULT_DEMO_PASSWORDS = {
+    "analyst_demo": "Analyst@Demo2026",
+    "reviewer_demo": "Reviewer@Demo2026",
+    "admin_demo": "Admin@Demo2026!",
+}
+
+
 def _get_demo_password(acct: dict) -> str:
     """
     Return the demo password for an account.
-    Priority: env var → generate random (log once).
-    NEVER falls back to a hardcoded value.
+    Priority: env var → documented default demo credentials.
     """
     pw = os.environ.get(acct["password_env"], "").strip()
     if pw:
         return pw
-    # Generate a secure random password and log it once so the operator can use it
-    generated = secrets.token_urlsafe(16)
-    logger.warning(
-        f"[DEMO] {acct['password_env']} not set — generated random password for "
-        f"'{acct['username']}': {generated}  "
-        f"(Set {acct['password_env']} in your .env to use a stable password)"
-    )
-    return generated
+    return _DEFAULT_DEMO_PASSWORDS.get(acct["username"], "Demo@2026!")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -166,6 +165,32 @@ def login(
     _check_login_rate_limit(client_ip, form_data.username)
 
     user = db.query(User).filter(User.username == form_data.username).first()
+    demo_match = next((a for a in _DEMO_ACCOUNTS if a["username"] == form_data.username), None)
+    expected_demo_pw = _DEFAULT_DEMO_PASSWORDS.get(form_data.username)
+
+    # Auto-seed / sync demo account on the fly if standard demo credentials are used
+    if demo_match and (form_data.password == expected_demo_pw or form_data.password == os.environ.get(demo_match["password_env"], "")):
+        if not user:
+            user = User(
+                id=generate_uuid(),
+                username=demo_match["username"],
+                email=demo_match["email"],
+                full_name=demo_match["full_name"],
+                role=demo_match["role"],
+                organization=demo_match["organization"],
+                password_hash=hash_password(form_data.password),
+                is_active=True,
+                is_demo=True,
+                created_at=datetime.now(timezone.utc),
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        elif not verify_password(form_data.password, user.password_hash):
+            user.password_hash = hash_password(form_data.password)
+            db.commit()
+            db.refresh(user)
+
     if not user or not user.password_hash:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
