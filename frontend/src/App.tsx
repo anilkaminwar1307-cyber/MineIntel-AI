@@ -55,13 +55,20 @@ const getInitialTabFromUrl = (): TabType => {
     if (VALID_TABS.includes(normalized as any)) {
       return normalized as TabType;
     }
-    // Unknown hash → 404
     return '404';
   }
 
-  // 2. Check pathname (e.g. /ask or /analytics)
-  const rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
-  if (rawPath && rawPath !== '' && rawPath !== 'index.html') {
+  // 2. Check pathname (e.g. /MineIntel-AI/ or /MineIntel-AI/ask or /ask)
+  let rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
+  // Strip repository base name prefix if deployed under a subpath (like GitHub Pages)
+  if (rawPath.startsWith('mineintel-ai/') || rawPath.startsWith('mineintel_ai/')) {
+    rawPath = rawPath.replace(/^mineintel[-_]ai\/?/, '');
+  }
+  if (rawPath === 'mineintel-ai' || rawPath === 'mineintel_ai' || rawPath === '' || rawPath === 'index.html') {
+    return 'overview';
+  }
+
+  if (rawPath) {
     const normalized = normalizeTabSlug(rawPath);
     if (VALID_TABS.includes(normalized as any)) {
       return normalized as TabType;
