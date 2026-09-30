@@ -174,6 +174,11 @@ export const Analytics: React.FC = () => {
           { subsidiary: 'MCL', production_mt: 204.1, dispatch_mt: 201.5, stock_addition_mt: 2.6 },
           { subsidiary: 'NCL', production_mt: 141.8, dispatch_mt: 140.2, stock_addition_mt: 1.6 },
         ],
+        confidence_distribution: {
+          high_confidence: 4210,
+          medium_confidence: 530,
+          low_confidence: 80,
+        },
         available_financial_years: ['ALL', '2024-25', '2023-24', '2022-23', '2021-22'],
         available_subsidiaries: ['ALL', 'ECL', 'BCCL', 'CCL', 'WCL', 'SECL', 'MCL', 'NCL', 'CMPDI'],
       } as any);
@@ -239,6 +244,55 @@ export const Analytics: React.FC = () => {
           { subsidiary: 'CCL', total_facts: 980, verified_facts: 965, verification_rate_pct: 98.5 },
           { subsidiary: 'WCL', total_facts: 850, verified_facts: 840, verification_rate_pct: 98.8 },
           { subsidiary: 'SECL', total_facts: 600, verified_facts: 590, verification_rate_pct: 98.3 },
+        ],
+        stripping_ratio_trend: [
+          { period: '2021-22', ob_bcm: 1240.5, coal_mt: 622.6, stripping_ratio: 1.99 },
+          { period: '2022-23', ob_bcm: 1480.2, coal_mt: 703.2, stripping_ratio: 2.10 },
+          { period: '2023-24', ob_bcm: 1690.4, coal_mt: 773.6, stripping_ratio: 2.18 },
+          { period: '2024-25', ob_bcm: 1820.0, coal_mt: 815.4, stripping_ratio: 2.23 },
+        ],
+        confidence_histogram: [
+          { bucket: '90-100%', count: 4210 },
+          { bucket: '80-89%', count: 390 },
+          { bucket: '70-79%', count: 140 },
+          { bucket: '60-69%', count: 60 },
+          { bucket: '<60%', count: 20 },
+        ],
+        top_mines: [
+          { mine: 'Gevra OC (SECL)', production_mt: 52.5 },
+          { mine: 'Kusmunda OC (SECL)', production_mt: 46.8 },
+          { mine: 'Bhubaneswari (MCL)', production_mt: 34.0 },
+          { mine: 'Jayant OC (NCL)', production_mt: 25.4 },
+          { mine: 'Dudhichua OC (NCL)', production_mt: 24.2 },
+        ],
+        offtake_gap: [
+          { subsidiary: 'ECL', production_mt: 42.1, offtake_mt: 41.5, gap_mt: -0.6 },
+          { subsidiary: 'BCCL', production_mt: 41.2, offtake_mt: 40.8, gap_mt: -0.4 },
+          { subsidiary: 'CCL', production_mt: 84.5, offtake_mt: 83.2, gap_mt: -1.3 },
+          { subsidiary: 'WCL', production_mt: 67.8, offtake_mt: 67.1, gap_mt: -0.7 },
+          { subsidiary: 'SECL', production_mt: 187.2, offtake_mt: 184.9, gap_mt: -2.3 },
+          { subsidiary: 'MCL', production_mt: 204.1, offtake_mt: 201.5, gap_mt: -2.6 },
+          { subsidiary: 'NCL', production_mt: 141.8, offtake_mt: 140.2, gap_mt: -1.6 },
+        ],
+        issue_type_dist: [
+          { type: 'Missing Metadata', count: 14 },
+          { type: 'Format Mismatch', count: 6 },
+          { type: 'Tolerance Outlier', count: 4 },
+        ],
+        doc_type_mix: [
+          { file_type: 'PDF Statements', count: 68 },
+          { file_type: 'Excel Drill Logs', count: 44 },
+          { file_type: 'CSV Data Sheets', count: 22 },
+          { file_type: 'DOCX Summaries', count: 8 },
+        ],
+        audit_activity_trend: [
+          { day: 'Mon', events: 142 },
+          { day: 'Tue', events: 188 },
+          { day: 'Wed', events: 215 },
+          { day: 'Thu', events: 240 },
+          { day: 'Fri', events: 195 },
+          { day: 'Sat', events: 82 },
+          { day: 'Sun', events: 45 },
         ],
       } as any);
     } finally {
