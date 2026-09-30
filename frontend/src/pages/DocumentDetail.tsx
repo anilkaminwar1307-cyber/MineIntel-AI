@@ -31,7 +31,9 @@ import {
   DocumentQualityItem,
   ProcessingLogItem,
   ExtractedFact,
-  FactSourceProvenance
+  FactSourceProvenance,
+  ExtractionSummaryResponse,
+  SourcePreviewResponse
 } from '../types';
 import { api } from '../services/api';
 import { StatusBadge } from '../components/common/StatusBadge';
@@ -42,7 +44,7 @@ interface DocumentDetailProps {
   onRefreshDocument?: (updated: DocumentItem) => void;
 }
 
-type TabType = 'overview' | 'content' | 'tables' | 'facts' | 'quality' | 'logs';
+type TabType = 'overview' | 'source' | 'content' | 'tables' | 'facts' | 'quality' | 'logs';
 
 export const DocumentDetail: React.FC<DocumentDetailProps> = ({
   document: initialDoc,
@@ -63,6 +65,8 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({
   const [quality, setQuality] = useState<DocumentQualityItem | null>(null);
   const [logs, setLogs] = useState<ProcessingLogItem[]>([]);
   const [chunks, setChunks] = useState<DocumentChunkItem[]>([]);
+  const [sourcePreview, setSourcePreview] = useState<SourcePreviewResponse | null>(null);
+  const [extractionSummary, setExtractionSummary] = useState<ExtractionSummaryResponse | null>(null);
 
   // UI helpers
   const [copied, setCopied] = useState(false);
@@ -94,7 +98,9 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({
         factsData,
         qualityData,
         logsData,
-        chunksData
+        chunksData,
+        previewData,
+        summaryData
       ] = await Promise.all([
         api.getDocument(docId).catch(() => doc),
         api.getDocumentPages(docId).catch(() => []),
@@ -102,7 +108,9 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({
         api.getDocumentFacts(docId).catch(() => []),
         api.getDocumentQuality(docId).catch(() => null),
         api.getDocumentProcessingLog(docId).catch(() => []),
-        api.getDocumentChunks(docId).catch(() => [])
+        api.getDocumentChunks(docId).catch(() => []),
+        api.getDocumentSourcePreview(docId).catch(() => null),
+        api.getDocumentExtractionSummary(docId).catch(() => null)
       ]);
 
       setDoc(latestDoc);
@@ -112,6 +120,8 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({
       setQuality(qualityData);
       setLogs(logsData);
       setChunks(chunksData);
+      setSourcePreview(previewData);
+      setExtractionSummary(summaryData);
 
       if (onRefreshDocument) {
         onRefreshDocument(latestDoc);
@@ -280,16 +290,16 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({
         )}
       </div>
 
-      {/* Tabs Navigation */}
       <div className="border-b border-slate-200 bg-white rounded-t-xl px-2">
-        <nav className="flex space-x-2">
+        <nav className="flex space-x-1 overflow-x-auto">
           {[
-            { id: 'overview', label: 'Overview & Metadata', icon: Compass },
-            { id: 'content', label: `Content & Pages (${pages.length || 1})`, icon: FileCode },
-            { id: 'tables', label: `Extracted Tables (${tables.length})`, icon: Table },
-            { id: 'facts', label: `Evidence Facts (${facts.length})`, icon: Database },
-            { id: 'quality', label: 'Quality & Enhancements', icon: Sliders },
-            { id: 'logs', label: `Pipeline Log (${logs.length})`, icon: Activity }
+            { id: 'overview', label: 'Overview', icon: Compass },
+            { id: 'source', label: `Source Preview`, icon: FileCode },
+            { id: 'content', label: `Pages (${pages.length || 1})`, icon: Eye },
+            { id: 'tables', label: `Tables (${tables.length})`, icon: Table },
+            { id: 'facts', label: `Facts (${facts.length})`, icon: Database },
+            { id: 'quality', label: 'Quality', icon: Sliders },
+            { id: 'logs', label: `Log (${logs.length})`, icon: Activity }
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -297,13 +307,13 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`flex items-center space-x-2 py-3 px-3.5 text-xs font-semibold border-b-2 transition-colors ${
+                className={`flex items-center space-x-1.5 py-3 px-3 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
                   isActive
                     ? 'border-amber-600 text-amber-700 bg-amber-50/50 rounded-t-md'
                     : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-amber-600' : 'text-slate-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-amber-600' : 'text-slate-400'}`} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -447,6 +457,135 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({
             <pre className="text-xs font-mono text-slate-800 bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-wrap leading-relaxed max-h-[500px] overflow-y-auto">
               {pages[selectedPageIdx]?.raw_text || 'No extracted text found for this page.'}
             </pre>
+          </div>
+        </div>
+      )}
+
+      {/* Source Preview Tab */}
+      {activeTab === 'source' && (
+        <div className="space-y-5">
+          {/* Extraction Summary Banner */}
+          {extractionSummary && (
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                Extraction Summary
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { label: 'Total Facts', value: extractionSummary.total_facts, color: 'amber' },
+                  { label: 'High Confidence', value: extractionSummary.high_confidence_facts, color: 'emerald' },
+                  { label: 'Needs Review', value: extractionSummary.needs_review_facts, color: 'orange' },
+                  { label: 'Conflicts', value: extractionSummary.conflicts_count, color: 'rose' },
+                ].map(item => (
+                  <div key={item.label} className={`bg-${item.color}-50 border border-${item.color}-200 rounded-lg p-3 text-center`}>
+                    <span className={`block text-xl font-bold text-${item.color}-700`}>{item.value}</span>
+                    <span className={`text-[10px] font-semibold text-${item.color}-600 uppercase`}>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+              {extractionSummary.duration_seconds !== null && extractionSummary.duration_seconds !== undefined && (
+                <p className="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  Pipeline completed in {extractionSummary.duration_seconds.toFixed(2)}s
+                  {extractionSummary.quality_score !== null && extractionSummary.quality_score !== undefined && (
+                    <span className="ml-2">• Quality Score: {(extractionSummary.quality_score * 100).toFixed(0)}%</span>
+                  )}
+                </p>
+              )}
+              {extractionSummary.warnings.length > 0 && (
+                <div className="mt-3 space-y-1">
+                  {extractionSummary.warnings.map((w, i) => (
+                    <div key={i} className="flex items-start space-x-1.5 text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded border border-amber-200">
+                      <AlertTriangle className="w-3 h-3 flex-shrink-0 mt-0.5" />
+                      <span>{w}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Source Preview Content */}
+          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-1.5">
+              <FileCode className="w-4 h-4 text-blue-600" />
+              Raw Source Preview — {doc.file_type}
+            </h3>
+
+            {!sourcePreview ? (
+              <div className="text-center py-12 text-slate-400 text-xs">
+                <RefreshCw className="w-6 h-6 mx-auto mb-2 text-slate-300" />
+                No source preview available. Process the document first.
+              </div>
+            ) : doc.file_type === 'PDF' && sourcePreview.pages.length > 0 ? (
+              <div className="space-y-4">
+                {sourcePreview.pages.map(page => (
+                  <div key={page.page_number} className="rounded-lg border border-slate-200 overflow-hidden">
+                    <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-200">
+                      <span className="text-xs font-semibold text-slate-700">Page {page.page_number}</span>
+                      <div className="flex items-center space-x-2 text-[11px] text-slate-500">
+                        {page.is_ocr_page && <span className="px-1.5 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded font-semibold">OCR</span>}
+                        {page.ocr_confidence !== null && page.ocr_confidence !== undefined && (
+                          <span>Confidence: {(page.ocr_confidence * 100).toFixed(0)}%</span>
+                        )}
+                      </div>
+                    </div>
+                    <pre className="text-xs font-mono text-slate-800 bg-white p-4 whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
+                      {page.raw_text || '(No text extracted from this page)'}
+                    </pre>
+                  </div>
+                ))}
+              </div>
+            ) : (doc.file_type === 'XLSX' || doc.file_type === 'XLS') && sourcePreview.sheets.length > 0 ? (
+              <div className="space-y-5">
+                {sourcePreview.sheets.map(sheet => (
+                  <div key={sheet.sheet_name} className="rounded-lg border border-slate-200 overflow-hidden">
+                    <div className="px-3 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                      <span className="text-xs font-semibold text-slate-700">📊 {sheet.sheet_name}</span>
+                      <span className="text-[11px] text-slate-500">{sheet.row_count} rows × {sheet.col_count} cols {sheet.used_range && `(${sheet.used_range})`}</span>
+                    </div>
+                    {sheet.headers.length > 0 ? (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs text-left">
+                          <thead className="bg-slate-100 border-b border-slate-200">
+                            <tr>
+                              {sheet.headers.map((h, i) => (
+                                <th key={i} className="px-3 py-2 font-semibold text-slate-700 whitespace-nowrap">{h || `Col ${i + 1}`}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {sheet.rows.slice(0, 8).map((row, ri) => (
+                              <tr key={ri} className="hover:bg-slate-50">
+                                {row.map((cell, ci) => (
+                                  <td key={ci} className="px-3 py-1.5 text-slate-700 whitespace-nowrap max-w-[200px] truncate" title={String(cell)}>
+                                    {cell !== null && cell !== undefined ? String(cell) : '—'}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {sheet.rows.length > 8 && (
+                          <p className="text-[11px] text-slate-400 px-3 py-2 bg-slate-50 border-t border-slate-100">
+                            Showing 8 of {sheet.row_count} rows
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-400 px-4 py-6 text-center">No structured data found in this sheet.</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : sourcePreview.text_preview ? (
+              <pre className="text-xs font-mono text-slate-800 bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-wrap leading-relaxed max-h-[500px] overflow-y-auto">
+                {sourcePreview.text_preview}
+              </pre>
+            ) : (
+              <div className="text-center py-8 text-slate-400 text-xs">No preview content available for this document type.</div>
+            )}
           </div>
         </div>
       )}

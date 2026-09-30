@@ -48,3 +48,20 @@ class AIProvider(ABC):
     ) -> str:
         """Generate narrative text based strictly on verified structured facts from the Evidence Ledger."""
         pass
+
+    @abstractmethod
+    async def generate_parliamentary_brief(
+        self,
+        query: str,
+        period: str,
+        subsidiary: str,
+        direct_answer: str,
+        verified_facts: List[Dict[str, Any]],
+        supporting_context: List[str],
+        numbersafe_status: str,
+        confidence_score: float,
+        records_used: int,
+        calculation_formula: Optional[str] = None,
+    ) -> str:
+        """Generate official Lok Sabha / Rajya Sabha parliamentary brief grounded strictly on verified facts."""
+        pass

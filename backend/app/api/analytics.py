@@ -201,16 +201,42 @@ def get_analytics_overview(
         .order_by(asc(ExtractedFact.reporting_period))
         .all()
     ):
+        period_str = r[0]
         prod_val = round(float(r[1]), 1)
-        tgt_val = round(prod_val * 1.05, 1)
-        disp_val = round(prod_val * 0.96, 1)
+        # Query real target evidence — NEVER fabricate from production * 1.05
+        tgt_raw = (
+            db.query(func.sum(ExtractedFact.numeric_value))
+            .filter(
+                ExtractedFact.metric_code == "PRODUCTION_TARGET",
+                ExtractedFact.reporting_period == period_str,
+                (ExtractedFact.subsidiary == subsidiary) if (subsidiary and subsidiary != "ALL") else True,
+                ExtractedFact.numeric_value.isnot(None),
+            )
+            .scalar()
+        )
+        # Query real offtake/dispatch evidence — NEVER fabricate from production * 0.96
+        disp_raw = (
+            db.query(func.sum(ExtractedFact.numeric_value))
+            .filter(
+                ExtractedFact.metric_code == "COAL_OFFTAKE",
+                ExtractedFact.reporting_period == period_str,
+                (ExtractedFact.subsidiary == subsidiary) if (subsidiary and subsidiary != "ALL") else True,
+                ExtractedFact.numeric_value.isnot(None),
+            )
+            .scalar()
+        )
+        tgt_val = round(float(tgt_raw), 1) if tgt_raw is not None else None
+        disp_val = round(float(disp_raw), 1) if disp_raw is not None else None
+        achievement = (
+            round((prod_val / max(0.001, tgt_val)) * 100, 1) if tgt_val is not None and tgt_val > 0 else None
+        )
         multi_year_trends.append({
-            "period": r[0],
+            "period": period_str,
             "production": prod_val,
             "total_production_mt": prod_val,
-            "target_mt": tgt_val,
-            "dispatch_mt": disp_val,
-            "achievement_rate_pct": round((prod_val / max(0.1, tgt_val)) * 100, 1),
+            "target_mt": tgt_val,          # null when no target evidence
+            "dispatch_mt": disp_val,        # null when no offtake evidence
+            "achievement_rate_pct": achievement,  # null when target is unavailable
         })
 
     # ── Chart 2: Target vs Achievement by Subsidiary (KEYS FIXED) ────────────
@@ -225,23 +251,24 @@ def get_analytics_overview(
             .scalar()
             or 0.0
         )
-        tgt = (
+        tgt_raw = (
             db.query(func.sum(ExtractedFact.numeric_value))
             .filter(
                 ExtractedFact.subsidiary == s,
                 ExtractedFact.metric_code == "PRODUCTION_TARGET",
+                ExtractedFact.numeric_value.isnot(None),
             )
             .scalar()
-            or (act * 1.04 if act > 0 else 0.0)
         )
-        achievement = round((act / max(0.1, tgt)) * 100, 1) if tgt > 0 else 0.0
+        # NEVER synthesise a target: return null/0 when no target evidence exists
+        tgt = float(tgt_raw) if tgt_raw is not None else 0.0
+        achievement = round((act / max(0.001, tgt)) * 100, 1) if tgt > 0 else None
         target_vs_actual.append({
             "subsidiary": s,
-            # Fixed keys: frontend reads actual_mt & target_mt
             "actual_mt": round(float(act), 1),
-            "target_mt": round(float(tgt), 1),
-            "variance_mt": round(float(act - tgt), 1),
-            "achievement_pct": achievement,
+            "target_mt": round(tgt, 1) if tgt > 0 else None,  # null = no target evidence
+            "variance_mt": round(float(act - tgt), 1) if tgt > 0 else None,
+            "achievement_pct": achievement,  # null when target unavailable
         })
 
     # ── Chart 3: Production vs Dispatch (KEYS FIXED) ──────────────────────────

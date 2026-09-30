@@ -195,6 +195,44 @@ class FactExtractor:
                             "row_number": row_num,
                             "column_name": value_col_name,
                             "cell_reference": cell_ref,
+                            "source_context": source_context
+                        })
+                        continue
+                    elif not metric_info and metric_str and num_val is not None and len(metric_str.strip()) > 1:
+                        canonical_unit = row_unit
+                        if not canonical_unit:
+                            canonical_unit, _ = UnitNormalizer.normalize(val_str)
+
+                        subsidiary = row_subsidiary or table_subsidiary or global_entities.get("subsidiary")
+                        period = row_period or table_period or global_entities.get("period")
+                        cell_ref = cls._cell_prop(val_cell, "cell_reference")
+                        row_num = cls._cell_prop(val_cell, "row_number", r_idx + 2)
+
+                        source_context = f"{sheet_name} | Row {row_num}: " + " | ".join(
+                            f"{k}: {cls._cell_val(v)}" for k, v in row.items()
+                        )
+
+                        facts.append({
+                            "document_id": document_id,
+                            "metric_name": f"Unmapped Metric: {metric_str}",
+                            "metric_code": "UNMAPPED",
+                            "raw_metric_name": metric_str,
+                            "numeric_value": num_val,
+                            "unit": canonical_unit or "count",
+                            "raw_unit": canonical_unit,
+                            "reporting_period": period,
+                            "subsidiary": subsidiary,
+                            "mine": row_mine or global_entities.get("mine"),
+                            "location": global_entities.get("project"),
+                            "confidence_score": 0.65,
+                            "confidence_rationale": "Unmapped metric field — requires analyst normalization review",
+                            "validation_status": "NEEDS_REVIEW",
+                            "extraction_method": ExtractionMethod.STRUCTURED_TABLE.value,
+                            "page_number": page_num,
+                            "sheet_name": sheet_name,
+                            "row_number": row_num,
+                            "column_name": value_col_name,
+                            "cell_reference": cell_ref,
                             "table_reference": sheet_name,
                             "source_context": source_context
                         })

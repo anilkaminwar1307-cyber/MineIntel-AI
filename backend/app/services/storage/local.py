@@ -14,6 +14,7 @@ EXTENSION_MAP = {
     ".pdf": FileType.PDF,
     ".xlsx": FileType.XLSX,
     ".xls": FileType.XLS,
+    ".docx": getattr(FileType, "DOCX", FileType.TXT),
     ".csv": FileType.CSV,
     ".txt": FileType.TXT,
     ".png": FileType.PNG,
@@ -25,12 +26,41 @@ MIME_MAP = {
     FileType.PDF: ["application/pdf"],
     FileType.XLSX: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
     FileType.XLS: ["application/vnd.ms-excel"],
+    getattr(FileType, "DOCX", FileType.TXT): [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword"
+    ],
     FileType.CSV: ["text/csv", "text/plain", "application/csv"],
     FileType.TXT: ["text/plain"],
     FileType.PNG: ["image/png"],
     FileType.JPG: ["image/jpeg"],
     FileType.JPEG: ["image/jpeg"],
 }
+
+
+def verify_magic_bytes(content: bytes, ext: str) -> bool:
+    """Verify file magic signatures to prevent executable and extension spoofing."""
+    if not content:
+        return False
+    if ext == ".pdf":
+        return content.startswith(b"%PDF-")
+    elif ext in (".xlsx", ".docx"):
+        return content.startswith(b"PK\x03\x04")
+    elif ext == ".xls":
+        return content.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1") or content.startswith(b"PK\x03\x04")
+    elif ext == ".png":
+        return content.startswith(b"\x89PNG\r\n\x1a\n")
+    elif ext in (".jpg", ".jpeg"):
+        return content.startswith(b"\xff\xd8\xff")
+    elif ext in (".csv", ".txt"):
+        # Disallow Windows PE / Linux ELF executables masquerading as text/csv
+        if content.startswith(b"MZ") or content.startswith(b"\x7fELF"):
+            return False
+        return True
+    return True
+
+
+import hashlib
 
 
 class LocalStorageService:
@@ -54,6 +84,12 @@ class LocalStorageService:
         clean_name = self.sanitize_filename(filename)
         ext = os.path.splitext(clean_name)[1].lower()
 
+        if file_size == 0:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Empty file rejected. '{clean_name}' contains 0 bytes."
+            )
+
         if ext not in EXTENSION_MAP:
             allowed = ", ".join(EXTENSION_MAP.keys())
             raise HTTPException(
@@ -71,10 +107,10 @@ class LocalStorageService:
         file_type = EXTENSION_MAP[ext]
         return file_type, clean_name
 
-    async def save_file(self, upload_file: UploadFile) -> Tuple[str, str, int, FileType]:
+    async def save_file(self, upload_file: UploadFile) -> Tuple[str, str, int, FileType, str]:
         """
         Saves UploadFile safely into storage.
-        Returns: (stored_filename, absolute_storage_path, file_size_bytes, file_type)
+        Returns: (stored_filename, absolute_storage_path, file_size_bytes, file_type, sha256_hash)
         """
         # Read content to measure size and validate
         content = await upload_file.read()
@@ -86,9 +122,37 @@ class LocalStorageService:
             file_size
         )
 
+        ext = os.path.splitext(clean_name)[1].lower()
+
+        # Security check: Validate magic bytes to stop MIME spoofing
+        if not verify_magic_bytes(content, ext):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Security violation: File header signatures do not match declared extension '{ext}'."
+            )
+
+        # Security check: Password-protected or encrypted PDFs
+        if ext == ".pdf":
+            try:
+                import fitz
+                pdf_doc = fitz.open(stream=content, filetype="pdf")
+                if pdf_doc.is_encrypted:
+                    pdf_doc.close()
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Password-protected / encrypted PDFs cannot be processed. Please decrypt '{clean_name}' before uploading."
+                    )
+                pdf_doc.close()
+            except HTTPException:
+                raise
+            except Exception as e:
+                logger.warning(f"PDF pre-inspection notice for {clean_name}: {e}")
+
+        # Compute SHA-256 fingerprint
+        sha256_hash = hashlib.sha256(content).hexdigest()
+
         # Generate unique storage filename to avoid collisions and directory tampering
         file_id = str(uuid.uuid4())
-        ext = os.path.splitext(clean_name)[1].lower()
         base = os.path.splitext(clean_name)[0][:40]  # truncate overly long names
         stored_filename = f"{file_id}_{base}{ext}"
 
@@ -101,8 +165,16 @@ class LocalStorageService:
         async with aiofiles.open(destination_path, "wb") as f:
             await f.write(content)
 
-        logger.info(f"Stored file '{clean_name}' as '{stored_filename}' ({file_size} bytes)")
-        return stored_filename, str(destination_path), file_size, file_type
+        logger.info(f"Stored file '{clean_name}' as '{stored_filename}' ({file_size} bytes, sha256={sha256_hash[:8]}...)")
+        return stored_filename, str(destination_path), file_size, file_type, sha256_hash
+
+    def compute_sha256(self, storage_path: str) -> str:
+        """Compute SHA-256 of a file already on disk."""
+        h = hashlib.sha256()
+        with open(storage_path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                h.update(chunk)
+        return h.hexdigest()
 
     def delete_file(self, stored_filename: str) -> bool:
         """Safely delete file from storage."""

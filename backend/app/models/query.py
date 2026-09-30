@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Text
+from sqlalchemy import Column, String, DateTime, Text, Float, Integer
 from app.core.database import Base
 from app.models.base import generate_uuid, _utcnow
 
@@ -15,5 +15,10 @@ class QueryHistory(Base):
     response_mode = Column(String(50), nullable=False, default="STANDARD")  # STANDARD, OFFICIAL, PARLIAMENTARY
     answer_text = Column(Text, nullable=True)
     evidence_citations = Column(Text, nullable=True)  # JSON serialized list of fact citations
+    intent = Column(String(50), nullable=True)
+    confidence = Column(Float, nullable=True)
+    status = Column(String(50), nullable=True)
+    records_used = Column(Integer, nullable=True)
+    execution_time_ms = Column(Float, nullable=True)
     user_name = Column(String(100), default="CMPDI Analyst")
     created_at = Column(DateTime, default=_utcnow, nullable=False)

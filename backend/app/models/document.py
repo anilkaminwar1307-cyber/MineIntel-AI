@@ -37,8 +37,19 @@ class Document(Base):
     processing_message = Column(String(255), nullable=True)
     processing_error = Column(Text, nullable=True)
 
-    # Derived counters
+    # Fingerprinting & Versioning (Prompt 2)
+    sha256 = Column(String(64), nullable=True, index=True)
+    source_version = Column(String(50), default="v1.0", nullable=True)
+    revision_number = Column(Integer, default=1, nullable=False)
+    supersedes_document_id = Column(String(36), nullable=True, index=True)
+    is_latest_version = Column(Boolean, default=True, nullable=False)
+    revision_date = Column(DateTime, nullable=True)
+    pipeline_version = Column(String(50), default="2.0", nullable=True)
+
+    # Derived counters & tracking
     fact_count = Column(Integer, default=0)
+    real_fact_count = Column(Integer, default=0)
+    warning_count = Column(Integer, default=0)
     topic_count = Column(Integer, default=0)
 
     # Demo / synthetic data flag (set by seed_large.py)
@@ -47,6 +58,8 @@ class Document(Base):
     # Timestamps
     created_at = Column(DateTime, default=_utcnow, nullable=False)
     processed_at = Column(DateTime, nullable=True)
+    processing_started_at = Column(DateTime, nullable=True)
+    processing_completed_at = Column(DateTime, nullable=True)
 
     # Relationships
     chunks = relationship("DocumentChunk", back_populates="document", cascade="all, delete-orphan")

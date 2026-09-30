@@ -62,6 +62,7 @@ class DocumentProcessor:
             return doc
 
         cls.log_stage(db, doc.id, "INITIALIZATION", f"Starting document processing for {doc.original_filename} ({doc.file_type})")
+        doc.processing_started_at = datetime.now(timezone.utc)
         warnings_encountered = []
 
         try:
@@ -430,6 +431,10 @@ class DocumentProcessor:
             doc.processing_progress = 100
             doc.processing_error = None
             doc.processed_at = datetime.now(timezone.utc)
+            doc.processing_completed_at = datetime.now(timezone.utc)
+            if not doc.is_demo:
+                doc.real_fact_count = doc.fact_count
+            doc.warning_count = len(warnings_encountered)
 
             audit = AuditEvent(
                 action=AuditAction.DOCUMENT_PROCESSED.value,

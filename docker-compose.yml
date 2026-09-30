@@ -1,26 +1,38 @@
 version: '3.8'
 
+# ─────────────────────────────────────────────────────────────────────────────
+# MineIntel Docker Compose — Local / SIH Demo Stack
+# Prerequisites: Docker Desktop, .env file with all required variables set.
+# Run: docker compose up --build
+# Stop: docker compose down
+# Reset data: docker compose down -v
+# ─────────────────────────────────────────────────────────────────────────────
+
 services:
-  # Relational Database for Enterprise Deployment
+  # ── Relational Database (PostgreSQL) ────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
     container_name: mineintel_postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-mineintel_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mineintel_password}
+      # NEVER use the default password in production. Set POSTGRES_PASSWORD in .env.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
       POSTGRES_DB: ${POSTGRES_DB:-mineintel_db}
-    ports:
-      - "5432:5432"
+    # ⚠️ PostgreSQL port is NOT exposed publicly by default.
+    # Uncomment the lines below only for local debugging with a DB client.
+    # ports:
+    #   - "127.0.0.1:5432:5432"   # Bound to localhost only for safety
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mineintel_user} -d ${POSTGRES_DB:-mineintel_db}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+    # No published ports: backend accesses via internal Docker network only
 
-  # FastAPI Backend Service
+  # ── FastAPI Backend ──────────────────────────────────────────────────────────
   backend:
     build:
       context: ./backend
@@ -30,12 +42,29 @@ services:
     environment:
       APP_NAME: MineIntel
       APP_ENV: production
-      DATABASE_URL: postgresql://${POSTGRES_USER:-mineintel_user}:${POSTGRES_PASSWORD:-mineintel_password}@postgres:5432/${POSTGRES_DB:-mineintel_db}
+      DEBUG: "false"
+      # Database — PostgreSQL via internal Docker network
+      DATABASE_URL: postgresql://${POSTGRES_USER:-mineintel_user}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/${POSTGRES_DB:-mineintel_db}
+      DATA_DIR: /app/data
       UPLOAD_DIR: /app/data/uploads
       REPORT_DIR: /app/data/reports
+      MAX_UPLOAD_SIZE_MB: "50"
+      # JWT — MUST be set in .env for production
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set in .env}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-480}
+      # Demo user passwords
+      DEMO_ANALYST_PASSWORD: ${DEMO_ANALYST_PASSWORD:-Analyst@Demo2026}
+      DEMO_REVIEWER_PASSWORD: ${DEMO_REVIEWER_PASSWORD:-Reviewer@Demo2026}
+      DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-Admin@Demo2026!}
+      # CORS
+      CORS_ORIGINS: "http://localhost:5173,http://localhost:80,http://localhost:3000"
+      # Gemini (optional)
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
-      CORS_ORIGINS: http://localhost:5173,http://localhost:80,http://localhost:3000
+      # Mode
+      DEMO_MODE: "true"
+      AUTO_PROCESS_UPLOADS: "false"
     volumes:
       - backend_uploads:/app/data/uploads
       - backend_reports:/app/data/reports
@@ -45,7 +74,7 @@ services:
       postgres:
         condition: service_healthy
 
-  # Frontend Web Client
+  # ── React Frontend (served via Nginx) ───────────────────────────────────────
   frontend:
     build:
       context: ./frontend

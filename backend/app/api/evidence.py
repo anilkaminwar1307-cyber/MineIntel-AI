@@ -138,3 +138,62 @@ def get_fact_source_provenance(fact_id: str, db: Session = Depends(get_db)):
             "extraction_method": fact.extraction_method,
         }
     }
+
+
+# ─── Central Provenance Service Endpoints (EvidenceChain 2.0) ───────────────
+
+@router.get("/{fact_id}/provenance", summary="Get universal fact provenance dossier")
+def get_universal_provenance(fact_id: str, db: Session = Depends(get_db)):
+    """
+    Returns complete Sections A-H dossier for the universal EvidenceDrawer.
+    """
+    from app.services.evidence.provenance_service import ProvenanceService
+    return ProvenanceService.get_fact_provenance(db, fact_id)
+
+
+@router.get("/{fact_id}/context", summary="Get surrounding source preview")
+def get_surrounding_source_context(fact_id: str, db: Session = Depends(get_db)):
+    """
+    Retrieves surrounding source document context:
+    - Excel/CSV: surrounding table rows with highlighted cell
+    - PDF: page text snippet with highlighted context
+    - Missing source / legacy coordinates handling
+    """
+    from app.services.evidence.provenance_service import ProvenanceService
+    return ProvenanceService.get_surrounding_source(db, fact_id)
+
+
+@router.get("/{fact_id}/conflicts", summary="Get conflicts involving this fact")
+def get_fact_conflicts(fact_id: str, db: Session = Depends(get_db)):
+    """
+    Returns any cross-document contradictions involving this fact.
+    """
+    from app.services.evidence.provenance_service import ProvenanceService
+    return {"conflicts": ProvenanceService.get_related_conflicts(db, fact_id)}
+
+
+@router.get("/{fact_id}/history", summary="Get immutable human review history")
+def get_fact_review_history(fact_id: str, db: Session = Depends(get_db)):
+    """
+    Returns full chronological audit trail of human review actions on this fact.
+    """
+    from app.services.evidence.provenance_service import ProvenanceService
+    return {"history": ProvenanceService.get_review_history(db, fact_id)}
+
+
+@router.get("/{fact_id}/usage", summary="Get calculations and reports using this fact")
+def get_fact_usage(fact_id: str, db: Session = Depends(get_db)):
+    """
+    Returns all calculations, reports, and queries where this fact is cited.
+    """
+    from app.services.evidence.provenance_service import ProvenanceService
+    return ProvenanceService.get_usage_history(db, fact_id)
+
+
+@router.get("/{fact_id}/related", summary="Get related entity and temporal evidence")
+def get_related_evidence(fact_id: str, limit: int = Query(8, ge=1, le=25), db: Session = Depends(get_db)):
+    """
+    Returns related facts across entity hierarchy, adjacent periods, and complementary metrics.
+    """
+    from app.services.evidence.provenance_service import ProvenanceService
+    return {"related": ProvenanceService.get_related_evidence(db, fact_id, limit=limit)}

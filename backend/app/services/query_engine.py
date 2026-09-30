@@ -16,6 +16,65 @@ from app.models.validation import ValidationIssue, EvidenceConflict
 from app.models.enums import ValidationStatus
 from app.providers.ai.gemini import get_ai_provider
 from app.core.logging import logger
+from app.services.calculations.calculation_engine import (
+    CalculationEngine, EvidenceScope, CalcError, CalculationResult
+)
+from app.services.calculations.metric_semantics import AggOp
+from app.services.calculations.lineage import persist_calculation
+from app.schemas.calculation import CalculationResultSchema, IncludedFactSchema, ExclusionSchema
+
+
+def _calc_to_schema(res: Optional[CalculationResult]) -> Optional[CalculationResultSchema]:
+    if not res:
+        return None
+    return CalculationResultSchema(
+        success=res.success,
+        error_code=res.error_code,
+        error_message=res.error_message,
+        result=res.result,
+        unit=res.unit,
+        calculation_method=res.calculation_method,
+        formula=res.formula,
+        metric_code=res.metric_code,
+        filters_applied=res.filters_applied,
+        evidence_count_total=res.evidence_count_total,
+        evidence_count_used=res.evidence_count_used,
+        excluded_count=res.excluded_count,
+        verified_count=res.verified_count,
+        verified_pct=res.verified_pct,
+        is_demo_scope=res.is_demo_scope,
+        included_facts=[
+            IncludedFactSchema(
+                fact_id=f.fact_id,
+                metric_code=f.metric_code,
+                subsidiary=f.subsidiary,
+                mine=f.mine,
+                reporting_period=f.reporting_period,
+                numeric_value=f.numeric_value,
+                unit=f.unit,
+                confidence_score=f.confidence_score,
+                validation_status=f.validation_status,
+                is_demo=f.is_demo,
+                document_id=f.document_id,
+                page_number=f.page_number,
+                sheet_name=f.sheet_name,
+                cell_reference=f.cell_reference,
+                source_context=f.source_context,
+            )
+            for f in res.included_facts
+        ],
+        exclusions=[
+            ExclusionSchema(
+                fact_id=e.fact_id,
+                reason=e.reason,
+                excluded_in_favour_of=e.excluded_in_favour_of,
+            )
+            for e in res.exclusions
+        ],
+        warnings=res.warnings,
+        sql_description=res.sql_description,
+        lineage_id=res.lineage_id,
+    )
 
 
 class NumberSafeQueryEngine:
@@ -26,71 +85,111 @@ class NumberSafeQueryEngine:
         query_text: str,
         scope: str = "ALL_EVIDENCE",
         response_mode: str = "STANDARD",
-        document_ids: Optional[List[str]] = None
+        document_ids: Optional[List[str]] = None,
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         """
         Executes query deterministically using SQL for numbers and RAG for narrative.
+        Defaults to is_demo == False for both ExtractedFact and Document.
         """
         q_lower = query_text.strip().lower()
+        data_scope_val = "DEMO DATA" if include_demo else "REAL UPLOADED DATA"
 
         # 1. Claim Verification Check (e.g. "SECL production in FY 2024-25 was 50 MT" or "Verify claim: ...")
         if "verify" in q_lower or "claim" in q_lower or (any(w in q_lower for w in ["was", "is", "were", "achieved", "exceeded", "produced", "dispatched", "drilled", "stood", "reached"]) and re.search(r'\b\d+(?:\.\d+)?\s*(?:mt|bcm|m|%|inr|cr)\b', q_lower)):
-            claim_result = cls._handle_claim_verification(db, query_text, scope, document_ids)
+            claim_result = cls._handle_claim_verification(db, query_text, scope, document_ids, include_demo=include_demo)
             if claim_result:
+                claim_result["data_scope"] = data_scope_val
+                claim_result["is_demo"] = include_demo
                 return claim_result
 
+        def _wb(s: str) -> bool:
+            """Word-boundary check on q_lower to avoid substring false positives."""
+            return bool(re.search(rf'\b{re.escape(s)}\b', q_lower))
+
         # 2. Unresolved conflicts query
-        if "conflict" in q_lower or "discrepanc" in q_lower or "contradiction" in q_lower:
-            return cls._handle_conflicts_query(db, query_text)
+        if _wb("conflict") or _wb("discrepancy") or _wb("contradiction"):
+            res = cls._handle_conflicts_query(db, query_text)
+        elif _wb("review") or "require review" in q_lower or _wb("unverified"):
+            res = cls._handle_review_records_query(db, query_text)
+        elif (_wb("target") and (_wb("achievement") or _wb("actual") or _wb("vs") or _wb("compare"))) or "highest target achievement" in q_lower:
+            res = cls._handle_target_vs_achievement(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif _wb("trend") or "over time" in q_lower or _wb("yearly") or _wb("history"):
+            res = cls._handle_trend_query(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif (_wb("highest") or _wb("lowest") or _wb("rank") or _wb("compare") or _wb("between")) and any(
+            _wb(sub) for sub in ["subsidiary", "subsidiaries", "mcl", "secl", "ncl", "ecl", "bccl", "ccl", "wcl", "cmpdi"]
+        ):
+            res = cls._handle_subsidiary_comparison(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif (_wb("top") or _wb("rank")) and any(
+            _wb(sub) for sub in ["subsidiary", "subsidiaries", "mcl", "secl", "ncl", "ecl", "bccl", "ccl", "wcl"]
+        ):
+            res = cls._handle_subsidiary_comparison(db, query_text, scope, document_ids, include_demo=include_demo)
+        elif cls._identify_metric(q_lower):
+            metric_match = cls._identify_metric(q_lower)
+            res = cls._handle_metric_aggregate(db, query_text, metric_match, scope, document_ids, include_demo=include_demo)
+        elif _wb("quality") or _wb("confidence") or _wb("provenance"):
+            res = cls._handle_evidence_quality_query(db)
+        else:
+            res = cls._handle_narrative_rag(db, query_text, scope, response_mode, document_ids, include_demo=include_demo)
 
-        # 3. Review Queue / Validation issues query
-        if "review" in q_lower or "require review" in q_lower or "validation issue" in q_lower or "unverified" in q_lower:
-            return cls._handle_review_records_query(db, query_text)
+        res["data_scope"] = data_scope_val
+        res["is_demo"] = include_demo
+        return res
 
-        # 4. Target vs Achievement comparison query
-        if ("target" in q_lower and ("achievement" in q_lower or "actual" in q_lower or "vs" in q_lower or "compare" in q_lower)) or "highest target achievement" in q_lower:
-            return cls._handle_target_vs_achievement(db, query_text, scope, document_ids)
-
-        # 5. Trend query (e.g. "5 year production trend", "production trend")
-        if "trend" in q_lower or "over time" in q_lower or "yearly" in q_lower or "history" in q_lower:
-            return cls._handle_trend_query(db, query_text, scope, document_ids)
-
-        # 6. Highest / Lowest subsidiary comparison (e.g. "Which subsidiary had highest production?", "Compare MCL and SECL")
-        if ("highest" in q_lower or "lowest" in q_lower or "top" in q_lower or "rank" in q_lower or "compare" in q_lower or "between" in q_lower) and any(sub in q_lower for sub in ["subsidiary", "mcl", "secl", "ncl", "ecl", "bccl", "ccl", "wcl", "cmpdi"]):
-            return cls._handle_subsidiary_comparison(db, query_text, scope, document_ids)
-
-        # 7. Specific metric aggregation (Drilling, Production, Offtake, Reserves, OB Removal, Capex)
-        metric_match = cls._identify_metric(q_lower)
-        if metric_match:
-            return cls._handle_metric_aggregate(db, query_text, metric_match, scope, document_ids)
-
-        # 8. Evidence quality distribution query
-        if "quality" in q_lower or "confidence" in q_lower or "provenance" in q_lower:
-            return cls._handle_evidence_quality_query(db)
-
-        # 9. Fallback: Semantic / Keyword RAG across document chunks
-        return cls._handle_narrative_rag(db, query_text, scope, response_mode, document_ids)
+    # ── Word-boundary compiled patterns for metric identification (Step 4 fix) ──
+    # Using \b..\b prevents false positives:
+    #   - "is" inside "this" → should NOT trigger claim verification
+    #   - "top" inside "stopped" → should NOT trigger subsidiary comparison
+    #   - "obr" inside "october" → should NOT trigger OBR metric
+    _METRIC_PATTERNS: list = []  # initialized below class body
 
     @classmethod
     def _identify_metric(cls, q_lower: str) -> Optional[Tuple[str, str, str]]:
-        """Identifies standard mining metrics from user queries."""
-        if "drill" in q_lower or "coring" in q_lower:
-            return ("DRILLING", "Exploratory Drilling Progress", "m")
-        elif "overburden" in q_lower or "obr" in q_lower or "stripping" in q_lower:
-            return ("OVERBURDEN_REMOVAL", "Overburden Removal (OBR)", "Mm3")
-        elif "dispatch" in q_lower or "offtake" in q_lower or "rake" in q_lower:
-            return ("COAL_OFFTAKE", "Coal Dispatch / Offtake", "MT")
-        elif "reserve" in q_lower or "geological" in q_lower:
-            return ("GEOLOGICAL_RESERVES", "Proved Geological Reserves", "MT")
-        elif "target" in q_lower and "achievement" not in q_lower:
-            return ("PRODUCTION_TARGET", "Production Target", "MT")
-        elif "capex" in q_lower or "capital" in q_lower or "expenditure" in q_lower:
-            return ("CAPITAL_EXPENDITURE", "Capital Expenditure (Capex)", "INR Cr")
-        elif "stock" in q_lower:
-            return ("COAL_STOCK", "Closing Pithead Coal Stock", "MT")
-        elif "borehole" in q_lower:
+        """
+        Identifies standard mining metrics using word-boundary patterns.
+        Returns (metric_code, metric_name, unit) or None.
+        Word-boundary matching prevents false positives (Step 4).
+
+        Handles common inflections: plurals (-s), past tense (-ed), gerund (-ing).
+        Uses re.search with alternation groups to match word-stems at word boundaries.
+        """
+        def wbany(*terms: str) -> bool:
+            """
+            Return True if ANY of the terms matches as a whole word (or word-prefix stem).
+            Each term is tested with \\bterm\\b (exact) OR \\bterm[a-z]*\\b (stem match for
+            inflections like plural/past-tense), but NOT as mid-word substrings.
+            Example: wbany("borehole") matches "boreholes" but NOT "bore" in "boredom".
+            """
+            for t in terms:
+                # Exact word boundary match (catches "drill", "drilling", "drilled" if listed)
+                if re.search(rf'\b{re.escape(t)}\b', q_lower):
+                    return True
+                # Stem match: term immediately followed by common inflections only
+                if re.search(rf'\b{re.escape(t)}(?:s|es|ed|ing|er|ers)?\b', q_lower):
+                    return True
+            return False
+
+        # Most specific / less ambiguous patterns first
+
+        # Borehole check BEFORE drill to avoid "drilled boreholes" going to DRILLING
+        if wbany("borehole"):
             return ("EXPLORATION_BOREHOLES", "Exploration Boreholes Drilled", "Count")
-        elif "production" in q_lower or "output" in q_lower or "mined" in q_lower or "extracted" in q_lower or "total coal" in q_lower:
+        if wbany("drill", "drilling", "coring"):
+            return ("DRILLING", "Exploratory Drilling Progress", "m")
+        if wbany("overburden", "obr", "stripping"):
+            return ("OVERBURDEN_REMOVAL", "Overburden Removal (OBR)", "Mm3")
+        if wbany("dispatch", "offtake", "rake"):
+            return ("COAL_OFFTAKE", "Coal Dispatch / Offtake", "MT")
+        if wbany("reserve", "geological"):
+            return ("GEOLOGICAL_RESERVES", "Proved Geological Reserves", "MT")
+        # 'target' alone (without achievement) → production target
+        if wbany("target") and not wbany("achievement"):
+            return ("PRODUCTION_TARGET", "Production Target", "MT")
+        if wbany("capex", "capital", "expenditure"):
+            return ("CAPITAL_EXPENDITURE", "Capital Expenditure (Capex)", "INR Cr")
+        if wbany("stock"):
+            return ("COAL_STOCK", "Closing Pithead Coal Stock", "MT")
+        if wbany("production", "output", "mined", "extracted") or "total coal" in q_lower:
             return ("COAL_PRODUCTION", "Raw Coal Production", "MT")
         return None
 
@@ -122,111 +221,120 @@ class NumberSafeQueryEngine:
         query: str,
         metric: Tuple[str, str, str],
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         metric_code, metric_name, unit = metric
         period, sub = cls._extract_period_and_sub(query)
 
-        q = db.query(ExtractedFact).filter(
-            ExtractedFact.metric_code == metric_code,
-            ExtractedFact.numeric_value.isnot(None)
+        scope_obj = EvidenceScope(
+            metric_code=metric_code,
+            subsidiary=sub,
+            reporting_period=period,
+            only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
+            only_demo=False,
+            document_ids=document_ids if scope == "SELECTED_DOCUMENTS" else None,
+            exclude_consolidated=True if (sub and sub.upper() not in ("CIL", "COAL INDIA", "CONSOLIDATED")) else False,
         )
 
-        if scope == "SELECTED_DOCUMENTS" and document_ids:
-            q = q.filter(ExtractedFact.document_id.in_(document_ids))
-        if sub:
-            q = q.filter(ExtractedFact.subsidiary == sub)
-        if period:
-            q = q.filter(ExtractedFact.reporting_period.ilike(f"%{period.replace('FY ', '')}%") | (ExtractedFact.reporting_period == period))
+        calc_result = CalculationEngine.calculate(db, scope_obj, operation=AggOp.SUM)
+        persist_calculation(db, calc_result, operation=AggOp.SUM, initiated_by="Ask MineIntel")
+        try:
+            db.commit()
+        except Exception:
+            db.rollback()
 
-        # Prefer verified, but count all
-        records = q.order_by(desc(ExtractedFact.confidence_score)).limit(100).all()
-        total_count = q.count()
-
-        if total_count == 0:
+        if not calc_result.success or calc_result.result is None:
             return {
                 "query": query,
                 "status": "SUCCESS",
-                "answer": f"No records found for {metric_name}" + (f" under {sub}" if sub else "") + (f" in {period}" if period else "") + ".",
-                "calculation": "SQL SUM query yielded 0 matches in Evidence Ledger.",
+                "answer": (
+                    f"**No verified evidence records found** for **{metric_name}**"
+                    + (f" under subsidiary **{sub}**" if sub else "")
+                    + (f" during **{period}**" if period else "")
+                    + f".\n\n*(Engine status: {calc_result.error_message or 'no verified evidence'})*"
+                ),
+                "calculation": calc_result.sql_description or "Calculation returned 0 qualifying evidence records.",
                 "records_used": 0,
-                "verification_status": "NO_EVIDENCE",
+                "verification_status": "NO_VERIFIED_EVIDENCE",
+                "verification_result": "INSUFFICIENT_EVIDENCE",
                 "confidence": 0.0,
                 "citations": [],
                 "chart": None,
                 "scope": scope,
-                "response_mode": "STANDARD"
+                "response_mode": "STANDARD",
+                "direct_metric_value": None,
+                "metric_unit": unit,
+                "calculation_result": _calc_to_schema(calc_result),
+                "data_scope": "DEMO DATA" if include_demo else "REAL UPLOADED DATA",
+                "is_demo": include_demo,
             }
 
-        # Calculate exact SQL SUM
-        agg_val = db.query(func.sum(ExtractedFact.numeric_value)).filter(
-            ExtractedFact.id.in_([r.id for r in records])
-        ).scalar() or 0.0
+        agg_val = calc_result.result
+        used_unit = calc_result.unit or unit
+        v_status = "100% VERIFIED" if calc_result.verified_pct >= 99.9 else f"{int(calc_result.verified_pct)}% VERIFIED"
 
-        # Also get subsidiary breakdown for chart
-        sub_breakdown = (
-            db.query(
-                ExtractedFact.subsidiary,
-                func.sum(ExtractedFact.numeric_value).label("val")
-            )
-            .filter(
-                ExtractedFact.metric_code == metric_code,
-                ExtractedFact.numeric_value.isnot(None)
-            )
+        answer_str = (
+            f"**{metric_name}: {round(agg_val, 2):,} {used_unit}**\n\n"
+            f"Based on grounded evidence across **{calc_result.evidence_count_used}** qualifying records"
+            + (f" for subsidiary **{sub}**" if sub else " across all Coal India subsidiaries")
+            + (f" during **{period}**" if period else "")
+            + f" ({calc_result.verified_pct}% verified coverage; {calc_result.excluded_count} duplicate/overlap records excluded)."
+            + f"\n\nTotal deterministic sum calculated: **{round(agg_val, 2):,} {used_unit}**."
         )
-        if period:
-            sub_breakdown = sub_breakdown.filter(ExtractedFact.reporting_period.ilike(f"%{period.replace('FY ', '')}%") | (ExtractedFact.reporting_period == period))
-        sub_rows = sub_breakdown.group_by(ExtractedFact.subsidiary).all()
 
+        # Build chart by subsidiary if multiple subsidiaries present
         chart_data = None
-        if len(sub_rows) > 1:
+        sub_groups = CalculationEngine.calculate_grouped_subsidiaries(
+            db, metric_code=metric_code, reporting_period=period,
+            only_verified=(scope == "VERIFIED_ONLY")
+        )
+        if len(sub_groups) > 1:
             chart_data = {
                 "type": "bar",
                 "title": f"{metric_name} by Subsidiary ({period or 'Consolidated'})",
                 "xAxis": "name",
-                "series": [{"dataKey": "value", "name": f"{metric_name} ({unit})", "color": "#d97706"}],
-                "data": [{"name": r[0] or "Other", "value": round(float(r[1]), 2)} for r in sub_rows if r[0]]
+                "series": [{"dataKey": "value", "name": f"{metric_name} ({used_unit})", "color": "#d97706"}],
+                "data": [{"name": g["subsidiary"], "value": round(float(g["value"]), 2)} for g in sub_groups]
             }
 
-        verified_c = sum(1 for r in records if r.validation_status == ValidationStatus.VERIFIED.value)
-        v_status = "100% VERIFIED" if verified_c == len(records) else f"{int(verified_c/len(records)*100)}% VERIFIED"
+        citations = cls._build_citations(db, calc_result.included_facts[:12], calculation_id=calc_result.lineage_id)
 
-        answer_str = (
-            f"**{metric_name}: {round(agg_val, 2):,} {unit}**\n\n"
-            f"Based on grounded evidence across {len(records)} records"
-            + (f" for subsidiary **{sub}**" if sub else " across all Coal India subsidiaries")
-            + (f" during **{period}**" if period else "")
-            + f". Total deterministic sum calculated: {round(agg_val, 2):,} {unit}."
-        )
-
-        citations = cls._build_citations(db, records[:6])
-        sql_str = (
-            f"SELECT SUM(numeric_value) FROM extracted_facts"
-            f" WHERE metric_code='{metric_code}'"
-            + (f" AND subsidiary='{sub}'" if sub else "")
-            + (f" AND reporting_period LIKE '%{period.replace('FY ', '')}%'" if period else "")
-        )
+        avg_fact_conf = (
+            sum(f.confidence_score for f in calc_result.included_facts) / len(calc_result.included_facts)
+        ) if calc_result.included_facts else 0.95
+        confidence_val = round(min(0.99, max(0.85, (avg_fact_conf * 0.7 + (calc_result.verified_pct / 100.0) * 0.3))), 2)
 
         return {
             "query": query,
             "status": "SUCCESS",
             "answer": answer_str,
-            "calculation": f"SUM of {len(records)} evidence rows matching metric='{metric_code}'" + (f" AND subsidiary='{sub}'" if sub else "") + (f" AND period='{period}'" if period else ""),
-            "records_used": len(records),
+            "calculation": calc_result.formula or f"SUM of {calc_result.evidence_count_used} deduplicated evidence rows",
+            "records_used": calc_result.evidence_count_used,
             "verification_status": v_status,
-            "confidence": 0.98 if verified_c == len(records) else 0.91,
+            "verification_result": "SUPPORTED" if calc_result.verified_pct >= 50.0 else "PARTIALLY_SUPPORTED",
+            "confidence": confidence_val,
             "citations": citations,
             "chart": chart_data,
             "scope": scope,
             "response_mode": "STANDARD",
             "direct_metric_value": round(float(agg_val), 2),
-            "metric_unit": unit,
-            "sql_query": sql_str,
+            "metric_unit": used_unit,
+            "sql_query": calc_result.sql_description,
+            "calculation_steps": [
+                f"1. Target scope: metric='{metric_code}'" + (f", subsidiary='{sub}'" if sub else "") + (f", period='{period}'" if period else ""),
+                f"2. Retrieved {calc_result.evidence_count_total} candidate facts from Evidence Ledger (no LIMIT applied)",
+                f"3. Excluded {calc_result.excluded_count} duplicate / overlapping observations",
+                f"4. Deterministic {calc_result.calculation_method}: {calc_result.formula}",
+                f"5. Provenance audit: {calc_result.is_demo_scope} ({calc_result.verified_pct}% verified coverage)"
+            ],
             "suggestions": [
                 f"Show trend for {metric_name} over all years",
                 f"Compare all subsidiaries for {metric_name}",
-                f"Show conflicting evidence for {metric_name}"
-            ]
+                f"Show target achievement for {period or 'FY 2024-25'}"
+            ],
+            "calculation_result": _calc_to_schema(calc_result),
         }
 
     @classmethod
@@ -235,83 +343,79 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         period, _ = cls._extract_period_and_sub(query)
         period_filter = period or "FY 2024-25"
 
-        rows = (
-            db.query(
-                ExtractedFact.subsidiary,
-                func.sum(ExtractedFact.numeric_value).label("total_prod"),
-                func.count(ExtractedFact.id).label("fact_cnt")
-            )
-            .filter(
-                ExtractedFact.metric_code == "COAL_PRODUCTION",
-                ExtractedFact.numeric_value.isnot(None),
-                ExtractedFact.subsidiary.isnot(None),
-                ExtractedFact.subsidiary != "CIL",
-                ExtractedFact.subsidiary != "CMPDI"
-            )
+        sub_results = CalculationEngine.calculate_grouped_subsidiaries(
+            db,
+            metric_code="COAL_PRODUCTION",
+            reporting_period=period,
+            only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
         )
-        if period:
-            rows = rows.filter(ExtractedFact.reporting_period.ilike(f"%{period.replace('FY ', '')}%") | (ExtractedFact.reporting_period == period))
-        
-        results = rows.group_by(ExtractedFact.subsidiary).order_by(desc("total_prod")).all()
 
-        if not results:
+        if not sub_results:
             return {
                 "query": query,
                 "status": "SUCCESS",
-                "answer": "No comparative subsidiary production figures recorded in database for this period.",
-                "calculation": "GROUP BY subsidiary query returned 0 rows.",
+                "answer": "No verified evidence comparative subsidiary production figures recorded in database for this period.",
+                "calculation": "Deterministic subsidiary calculation returned 0 valid groups.",
                 "records_used": 0,
-                "verification_status": "NO_EVIDENCE",
+                "verification_status": "NO_VERIFIED_EVIDENCE",
                 "confidence": 0.0,
                 "citations": [],
-                "chart": None
+                "chart": None,
+                "calculation_result": None,
+                "data_scope": "DEMO DATA" if include_demo else "REAL UPLOADED DATA",
+                "is_demo": include_demo,
             }
 
-        top_sub = results[0]
+        top_sub = sub_results[0]
         chart_data = {
             "type": "bar",
             "title": f"Subsidiary Raw Coal Production ({period or 'Consolidated'})",
             "xAxis": "name",
             "series": [{"dataKey": "value", "name": "Production (MT)", "color": "#0284c7"}],
-            "data": [{"name": r[0], "value": round(float(r[1]), 2)} for r in results]
+            "data": [{"name": r["subsidiary"], "value": round(float(r["value"]), 2)} for r in sub_results]
         }
 
-        # Build detailed answer
-        ranking_lines = [f"{i+1}. **{r[0]}**: {round(float(r[1]), 1)} MT ({r[2]} evidence facts)" for i, r in enumerate(results)]
+        total_used = sum(r["evidence_count"] for r in sub_results)
+        ranking_lines = [
+            f"{i+1}. **{r['subsidiary']}**: {round(float(r['value']), 1)} MT ({r['evidence_count']} facts, {r['verified_pct']}% verified)"
+            for i, r in enumerate(sub_results)
+        ]
         answer_str = (
-            f"**Highest Producing Subsidiary:** **{top_sub[0]}** with **{round(float(top_sub[1]), 1)} MT** recorded in the Evidence Ledger.\n\n"
+            f"**Highest Producing Subsidiary:** **{top_sub['subsidiary']}** with **{round(float(top_sub['value']), 1)} MT** recorded in the Evidence Ledger.\n\n"
             f"**Full Subsidiary Production Ranking ({period_filter}):**\n" + "\n".join(ranking_lines) +
-            f"\n\nAll figures represent deterministic SQL aggregations from primary mining production logs."
+            f"\n\nAll figures represent deterministic aggregations with duplicate and CIL-consolidated overlap protection."
         )
 
-        sample_facts = db.query(ExtractedFact).filter(
-            ExtractedFact.metric_code == "COAL_PRODUCTION",
-            ExtractedFact.subsidiary == top_sub[0]
-        ).limit(5).all()
+        sample_calc = top_sub.get("calc_result")
+        citations = cls._build_citations(db, sample_calc.included_facts[:6] if sample_calc else [])
+        avg_v = round(sum(r["verified_pct"] for r in sub_results) / max(1, len(sub_results)), 1)
 
         return {
             "query": query,
             "status": "SUCCESS",
             "answer": answer_str,
-            "calculation": f"SELECT subsidiary, SUM(numeric_value) FROM extracted_facts WHERE metric_code='COAL_PRODUCTION' GROUP BY subsidiary ORDER BY 2 DESC",
-            "sql_query": "SELECT subsidiary, SUM(numeric_value) AS total_production FROM extracted_facts WHERE metric_code='COAL_PRODUCTION' GROUP BY subsidiary ORDER BY total_production DESC",
-            "records_used": sum(r[2] for r in results),
-            "verification_status": "100% VERIFIED",
-            "confidence": 0.99,
-            "citations": cls._build_citations(db, sample_facts),
+            "calculation": "Deterministic sum across subsidiaries excluding consolidated CIL and duplicate records",
+            "sql_query": "SELECT subsidiary, SUM(numeric_value) FROM extracted_facts WHERE metric_code='COAL_PRODUCTION' GROUP BY subsidiary",
+            "records_used": total_used,
+            "verification_status": f"{int(avg_v)}% VERIFIED",
+            "confidence": round(max(0.70, (avg_v / 100.0) * 0.99), 2),
+            "citations": citations,
             "chart": chart_data,
             "scope": scope,
             "response_mode": "STANDARD",
             "suggestions": [
-                f"Show 5-year production trend for {top_sub[0]}",
+                f"Show 5-year production trend for {top_sub['subsidiary']}",
                 f"Show target vs achievement for {period_filter}",
                 "Compare raw coal dispatch across subsidiaries"
-            ]
+            ],
+            "calculation_result": _calc_to_schema(sample_calc) if sample_calc else None,
         }
 
     @classmethod
@@ -320,53 +424,63 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         _, sub = cls._extract_period_and_sub(query)
         metric_info = cls._identify_metric(query.lower()) or ("COAL_PRODUCTION", "Raw Coal Production", "MT")
         metric_code, metric_name, unit = metric_info
 
-        # Group by reporting_period for financial years
-        q = (
-            db.query(
-                ExtractedFact.reporting_period,
-                func.sum(ExtractedFact.numeric_value).label("total_val")
-            )
-            .filter(
-                ExtractedFact.metric_code == metric_code,
-                ExtractedFact.reporting_period.like("FY%"),
-                ExtractedFact.numeric_value.isnot(None)
-            )
+        trend_points = CalculationEngine.calculate_historical_trend(
+            db,
+            metric_code=metric_code,
+            subsidiary=sub,
+            only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
         )
-        if sub:
-            q = q.filter(ExtractedFact.subsidiary == sub)
 
-        rows = q.group_by(ExtractedFact.reporting_period).order_by(asc(ExtractedFact.reporting_period)).all()
+        if not trend_points:
+            return {
+                "query": query,
+                "status": "SUCCESS",
+                "answer": f"No verified evidence historical trend found for {metric_name}" + (f" ({sub})" if sub else "") + ".",
+                "calculation": "No valid financial year periods found for trend analysis.",
+                "records_used": 0,
+                "verification_status": "NO_VERIFIED_EVIDENCE",
+                "confidence": 0.0,
+                "citations": [],
+                "chart": None,
+                "data_scope": "DEMO DATA" if include_demo else "REAL UPLOADED DATA",
+                "is_demo": include_demo,
+            }
 
         chart_data = {
             "type": "line",
             "title": f"Historical {metric_name} Trend" + (f" ({sub})" if sub else " (Consolidated)"),
             "xAxis": "name",
             "series": [{"dataKey": "value", "name": f"{metric_name} ({unit})", "color": "#059669"}],
-            "data": [{"name": r[0], "value": round(float(r[1]), 2)} for r in rows]
+            "data": [{"name": p["period"], "value": round(float(p["value"]), 2)} for p in trend_points]
         }
 
-        trend_lines = [f"- **{r[0]}**: {round(float(r[1]), 1)} {unit}" for r in rows]
+        trend_lines = [f"- **{p['period']}**: {round(float(p['value']), 1)} {unit} ({p['evidence_count']} facts)" for p in trend_points]
+        total_facts = sum(p["evidence_count"] for p in trend_points)
+        avg_v = round(sum(p["verified_pct"] for p in trend_points) / max(1, len(trend_points)), 1)
+
         answer_str = (
             f"**Historical {metric_name} Trend**" + (f" for **{sub}**" if sub else " across Coal India Limited") + ":\n\n"
             + "\n".join(trend_lines) +
-            f"\n\nContinuous year-over-year production growth demonstrated, backed by verifiable ledger documentation."
+            f"\n\nEach period's figure is deterministically calculated without monthly/annual double counting."
         )
 
         return {
             "query": query,
             "status": "SUCCESS",
             "answer": answer_str,
-            "calculation": f"GROUP BY reporting_period ORDER BY reporting_period ASC on metric_code='{metric_code}'",
+            "calculation": f"Annual trend evaluation for {metric_code} with temporal overlap protection",
             "sql_query": f"SELECT reporting_period, SUM(numeric_value) FROM extracted_facts WHERE metric_code='{metric_code}' AND reporting_period LIKE 'FY%' GROUP BY reporting_period ORDER BY reporting_period ASC",
-            "records_used": len(rows) * 150,
-            "verification_status": "100% VERIFIED",
-            "confidence": 0.98,
+            "records_used": total_facts,
+            "verification_status": f"{int(avg_v)}% VERIFIED",
+            "confidence": round(max(0.75, (avg_v / 100.0) * 0.99), 2),
             "citations": [],
             "chart": chart_data,
             "scope": scope,
@@ -384,71 +498,179 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         period, sub = cls._extract_period_and_sub(query)
         period_filter = period or "FY 2024-25"
 
-        # Compare target vs actual by subsidiary
-        subsidiaries = ["ECL", "BCCL", "CCL", "WCL", "SECL", "MCL", "NCL"]
+        # Case 1: Specific Subsidiary target achievement query
         if sub:
-            subsidiaries = [sub]
+            actual_scope = EvidenceScope(
+                metric_code="COAL_PRODUCTION",
+                subsidiary=sub,
+                reporting_period=period_filter,
+                only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
+            )
+            target_scope = EvidenceScope(
+                metric_code="PRODUCTION_TARGET",
+                subsidiary=sub,
+                reporting_period=period_filter,
+                only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
+            )
 
+            achieve_res = CalculationEngine.calculate_achievement(db, actual_scope, target_scope)
+            persist_calculation(db, achieve_res, operation="RATIO", initiated_by="Ask MineIntel")
+            try:
+                db.commit()
+            except Exception:
+                db.rollback()
+
+            if not achieve_res.success:
+                actual_calc = CalculationEngine.calculate(db, actual_scope, AggOp.SUM)
+                actual_val_str = f"**{actual_calc.result} MT**" if actual_calc.success and actual_calc.result is not None else "Not Recorded"
+                return {
+                    "query": query,
+                    "status": "SUCCESS",
+                    "answer": (
+                        f"**Target Achievement for {sub} ({period_filter}): Cannot Safely Calculate**\n\n"
+                        f"Actual production in Evidence Ledger: {actual_val_str}.\n\n"
+                        f"**Reason:** {achieve_res.error_message}\n\n"
+                        f"In accordance with Rule 1 (Zero Hallucination), a synthetic target (e.g. actual × 1.04) "
+                        f"has been strictly refused. Please upload official target documentation for {sub} in {period_filter}."
+                    ),
+                    "calculation": achieve_res.sql_description or "Calculation refused due to missing comparable target evidence.",
+                    "records_used": achieve_res.evidence_count_used,
+                    "verification_status": "MISSING_TARGET",
+                    "verification_result": "INSUFFICIENT_EVIDENCE",
+                    "confidence": 0.0,
+                    "citations": cls._build_citations(db, achieve_res.included_facts[:6]),
+                    "chart": None,
+                    "scope": scope,
+                    "response_mode": "STANDARD",
+                    "calculation_result": _calc_to_schema(achieve_res),
+                }
+
+            citations = cls._build_citations(db, achieve_res.included_facts[:8], calculation_id=achieve_res.lineage_id)
+            return {
+                "query": query,
+                "status": "SUCCESS",
+                "answer": (
+                    f"**Target Achievement for {sub} ({period_filter}): {achieve_res.result}%**\n\n"
+                    f"Deterministic formula: `{achieve_res.formula}`\n"
+                    f"Verified evidence coverage: **{achieve_res.verified_pct}%** across {achieve_res.evidence_count_used} evidence records."
+                ),
+                "calculation": achieve_res.formula,
+                "records_used": achieve_res.evidence_count_used,
+                "verification_status": f"{int(achieve_res.verified_pct)}% VERIFIED",
+                "verification_result": "SUPPORTED" if achieve_res.verified_pct >= 50 else "PARTIALLY_SUPPORTED",
+                "confidence": round(max(0.75, (achieve_res.verified_pct / 100.0) * 0.99), 2),
+                "citations": citations,
+                "chart": None,
+                "scope": scope,
+                "response_mode": "STANDARD",
+                "direct_metric_value": achieve_res.result,
+                "metric_unit": "%",
+                "sql_query": achieve_res.sql_description,
+                "calculation_result": _calc_to_schema(achieve_res),
+            }
+
+        # Case 2: Multi-subsidiary comparison
+        subsidiaries = ["ECL", "BCCL", "CCL", "WCL", "SECL", "MCL", "NCL"]
         comparison_data = []
+        valid_achievers = []
+        total_used_facts = 0
+        total_verified_facts = 0
+
         for s in subsidiaries:
-            actual = db.query(func.sum(ExtractedFact.numeric_value)).filter(
-                ExtractedFact.subsidiary == s,
-                ExtractedFact.metric_code == "COAL_PRODUCTION",
-                ExtractedFact.reporting_period.ilike(f"%{period_filter.replace('FY ', '')}%")
-            ).scalar() or 0.0
+            act_scope = EvidenceScope(
+                metric_code="COAL_PRODUCTION",
+                subsidiary=s,
+                reporting_period=period_filter,
+                only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
+            )
+            tgt_scope = EvidenceScope(
+                metric_code="PRODUCTION_TARGET",
+                subsidiary=s,
+                reporting_period=period_filter,
+                only_verified=(scope == "VERIFIED_ONLY"),
+                only_real=not include_demo,
+            )
+            act_res = CalculationEngine.calculate(db, act_scope, AggOp.SUM)
+            tgt_res = CalculationEngine.calculate(db, tgt_scope, AggOp.SUM)
 
-            target = db.query(func.sum(ExtractedFact.numeric_value)).filter(
-                ExtractedFact.subsidiary == s,
-                ExtractedFact.metric_code == "PRODUCTION_TARGET",
-                ExtractedFact.reporting_period.ilike(f"%{period_filter.replace('FY ', '')}%")
-            ).scalar() or (actual * 1.04)
+            act_val = act_res.result if act_res.success and act_res.result is not None else 0.0
+            tgt_val = tgt_res.result if tgt_res.success and tgt_res.result is not None else None
 
-            pct = round((actual / max(0.1, target)) * 100, 1)
-            comparison_data.append({
-                "subsidiary": s,
-                "actual": round(actual, 1),
-                "target": round(target, 1),
-                "achievement": pct
-            })
+            if act_res.success:
+                total_used_facts += act_res.evidence_count_used
+                total_verified_facts += act_res.verified_count
+            if tgt_res.success:
+                total_used_facts += tgt_res.evidence_count_used
+                total_verified_facts += tgt_res.verified_count
 
-        comparison_data.sort(key=lambda x: x["achievement"], reverse=True)
+            if tgt_val is not None and tgt_val > 0.0:
+                pct = round((act_val / tgt_val) * 100, 1)
+                item = {
+                    "subsidiary": s,
+                    "actual": round(act_val, 1),
+                    "target": round(tgt_val, 1),
+                    "achievement": pct,
+                    "has_target": True,
+                }
+                comparison_data.append(item)
+                valid_achievers.append(item)
+            else:
+                comparison_data.append({
+                    "subsidiary": s,
+                    "actual": round(act_val, 1),
+                    "target": "Not Recorded",
+                    "achievement": "N/A",
+                    "has_target": False,
+                })
 
-        chart_data = {
-            "type": "bar",
-            "title": f"Target vs Achievement ({period_filter})",
-            "xAxis": "name",
-            "series": [
-                {"dataKey": "value", "name": "Achievement %", "color": "#d97706"}
-            ],
-            "data": [{"name": r["subsidiary"], "value": r["achievement"]} for r in comparison_data]
-        }
+        valid_achievers.sort(key=lambda x: x["achievement"], reverse=True)
+        chart_data = None
+        if valid_achievers:
+            chart_data = {
+                "type": "bar",
+                "title": f"Target vs Achievement ({period_filter})",
+                "xAxis": "name",
+                "series": [{"dataKey": "value", "name": "Achievement %", "color": "#d97706"}],
+                "data": [{"name": r["subsidiary"], "value": r["achievement"]} for r in valid_achievers]
+            }
 
-        top_achiever = comparison_data[0]
         table_rows = [
-            f"| **{r['subsidiary']}** | {r['target']} MT | {r['actual']} MT | **{r['achievement']}%** |"
+            f"| **{r['subsidiary']}** | {r['target'] if isinstance(r['target'], str) else str(r['target']) + ' MT'} | {r['actual']} MT | **{str(r['achievement']) + ('%' if r['has_target'] else '')}** |"
             for r in comparison_data
         ]
         table_md = "| Subsidiary | Target | Actual | Achievement % |\n|---|---|---|---|\n" + "\n".join(table_rows)
 
+        if valid_achievers:
+            top_achiever = valid_achievers[0]
+            header_msg = f"**Highest Target Achievement:** **{top_achiever['subsidiary']}** at **{top_achiever['achievement']}%** ({top_achiever['actual']} MT vs verified target of {top_achiever['target']} MT)."
+        else:
+            header_msg = f"**Target vs Actual ({period_filter}):** Target figures are unavailable for the selected period."
+
+        v_pct = round(total_verified_facts / max(1, total_used_facts) * 100, 1)
         answer_str = (
-            f"**Highest Target Achievement:** **{top_achiever['subsidiary']}** at **{top_achiever['achievement']}%** ({top_achiever['actual']} MT vs target of {top_achiever['target']} MT).\n\n"
+            f"{header_msg}\n\n"
             f"{table_md}\n\n"
-            f"Target achievement percentages are calculated via deterministic formula `(Actual / Target) * 100`."
+            f"Target achievement percentages are calculated via deterministic formula `(Actual / Target) * 100`. "
+            f"Subsidiaries without verified target records in evidence are displayed as **N/A** (synthetic targets strictly refused)."
         )
 
         return {
             "query": query,
             "status": "SUCCESS",
             "answer": answer_str,
-            "calculation": "SQL SUM of actual production divided by SQL SUM of production targets per subsidiary",
-            "records_used": len(comparison_data) * 20,
-            "verification_status": "100% VERIFIED",
-            "confidence": 0.99,
+            "calculation": "Deterministic actual divided by target per subsidiary (synthetic fallbacks refused)",
+            "records_used": total_used_facts,
+            "verification_status": f"{int(v_pct)}% VERIFIED",
+            "confidence": round(max(0.70, (v_pct / 100.0) * 0.99), 2),
             "citations": [],
             "chart": chart_data,
             "scope": scope,
@@ -540,7 +762,8 @@ class NumberSafeQueryEngine:
         db: Session,
         query: str,
         scope: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Optional[Dict[str, Any]]:
         """
         Adheres to section 38: Claim Verification against 50K DB.
@@ -561,22 +784,19 @@ class NumberSafeQueryEngine:
 
         claimed_val = float(num_match.group(1))
 
-
-        # Query actual database
-        q = db.query(ExtractedFact).filter(
-            ExtractedFact.metric_code == metric_code,
-            ExtractedFact.numeric_value.isnot(None)
+        # Query actual database using CalculationEngine (no LIMIT 100 bug)
+        scope_obj = EvidenceScope(
+            metric_code=metric_code,
+            subsidiary=sub,
+            reporting_period=period,
+            only_verified=(scope == "VERIFIED_ONLY"),
+            only_real=not include_demo,
+            document_ids=document_ids if scope == "SELECTED_DOCUMENTS" else None,
+            exclude_consolidated=True if (sub and sub.upper() not in ("CIL", "COAL INDIA", "CONSOLIDATED")) else False,
         )
-        if sub:
-            q = q.filter(ExtractedFact.subsidiary == sub)
-        if period:
-            q = q.filter(ExtractedFact.reporting_period.ilike(f"%{period.replace('FY ', '')}%") | (ExtractedFact.reporting_period == period))
+        calc_res = CalculationEngine.calculate(db, scope_obj, operation=AggOp.SUM)
 
-        actual_val = db.query(func.sum(ExtractedFact.numeric_value)).filter(
-            ExtractedFact.id.in_([f.id for f in q.limit(100).all()])
-        ).scalar()
-
-        if actual_val is None or actual_val == 0.0:
+        if not calc_res.success or calc_res.result is None:
             return {
                 "query": query,
                 "status": "SUCCESS",
@@ -585,36 +805,41 @@ class NumberSafeQueryEngine:
                 "records_used": 0,
                 "verification_status": "INSUFFICIENT_EVIDENCE",
                 "confidence": 0.0,
-                "citations": []
+                "citations": [],
+                "calculation_result": _calc_to_schema(calc_res),
             }
 
+        actual_val = calc_res.result
+        used_unit = calc_res.unit or unit
+
         diff = abs(actual_val - claimed_val)
-        diff_pct = round((diff / actual_val) * 100, 1)
+        diff_pct = round((diff / max(0.001, actual_val)) * 100, 1)
 
         if diff_pct < 2.0:
             claim_status = "SUPPORTED"
-            explanation = f"The claim that {sub or 'CIL'} {metric_name} was {claimed_val} {unit} is **SUPPORTED** by the Evidence Ledger. Grounded SQL sum: **{round(actual_val, 2)} {unit}** (variance: {diff_pct}%)."
+            explanation = f"The claim that {sub or 'CIL'} {metric_name} was {claimed_val} {used_unit} is **SUPPORTED** by the Evidence Ledger. Grounded SQL sum: **{round(actual_val, 2)} {used_unit}** (variance: {diff_pct}%)."
         elif diff_pct < 10.0:
             claim_status = "PARTIALLY_SUPPORTED"
-            explanation = f"The claim of {claimed_val} {unit} is **PARTIALLY SUPPORTED**. The exact verified evidence shows **{round(actual_val, 2)} {unit}** (variance: {diff_pct}%)."
+            explanation = f"The claim of {claimed_val} {used_unit} is **PARTIALLY SUPPORTED**. The exact verified evidence shows **{round(actual_val, 2)} {used_unit}** (variance: {diff_pct}%)."
         else:
             claim_status = "CONFLICTING"
-            explanation = f"The claim of {claimed_val} {unit} is **CONFLICTING** with ground truth. The verified relational Evidence Ledger records **{round(actual_val, 2)} {unit}** (discrepancy of {diff_pct}%)."
+            explanation = f"The claim of {claimed_val} {used_unit} is **CONFLICTING** with ground truth. The verified relational Evidence Ledger records **{round(actual_val, 2)} {used_unit}** (discrepancy of {diff_pct}%)."
 
-        citations = cls._build_citations(db, q.limit(5).all())
+        citations = cls._build_citations(db, calc_res.included_facts[:6])
 
         return {
             "query": query,
             "status": "SUCCESS",
             "answer": f"### Verification Verdict: **{claim_status}**\n\n{explanation}\n\nFull provenance chain confirmed via NumberSafe relational audit.",
-            "calculation": f"Grounded SQL sum = {round(actual_val, 2)} {unit} vs Claimed = {claimed_val} {unit} (Diff: {round(diff, 2)} {unit}, {diff_pct}%)",
-            "records_used": q.count(),
+            "calculation": f"Grounded sum = {round(actual_val, 2)} {used_unit} vs Claimed = {claimed_val} {used_unit} (Diff: {round(diff, 2)} {used_unit}, {diff_pct}%)",
+            "records_used": calc_res.evidence_count_used,
             "verification_status": claim_status,
             "verification_result": claim_status,
-            "confidence": 0.99,
+            "confidence": 0.99 if calc_res.verified_pct >= 90 else 0.85,
             "citations": citations,
             "direct_metric_value": round(float(actual_val), 2),
-            "metric_unit": unit
+            "metric_unit": used_unit,
+            "calculation_result": _calc_to_schema(calc_res),
         }
 
     @classmethod
@@ -667,10 +892,18 @@ class NumberSafeQueryEngine:
         query: str,
         scope: str,
         response_mode: str,
-        document_ids: Optional[List[str]]
+        document_ids: Optional[List[str]],
+        include_demo: bool = False,
     ) -> Dict[str, Any]:
         """
         Narrative answers using grounded chunk retrieval + Gemini (or extractive template fallback).
+
+        Step 5 fixes:
+        - confidence_score derived from retrieval hit count, never hardcoded
+        - human_verified is always False for chunk citations (chunks are not human-reviewed)
+        - No asyncio.run() — uses concurrent.futures.ThreadPoolExecutor for thread-safety
+        - Returns INSUFFICIENT_EVIDENCE when no chunks are found
+        - Only uses chunks from real documents unless include_demo=True
         """
         words = [w for w in re.findall(r'\b\w{4,}\b', query.lower()) if w not in ["what", "which", "where", "show", "tell", "summarize", "about", "coal", "india"]]
         chunks_query = db.query(DocumentChunk)
@@ -678,32 +911,87 @@ class NumberSafeQueryEngine:
         if scope == "SELECTED_DOCUMENTS" and document_ids:
             chunks_query = chunks_query.filter(DocumentChunk.document_id.in_(document_ids))
 
-        # Heuristic keyword match
+        # Filter by demo/real scope via joined Document.is_demo
+        if not include_demo:
+            chunks_query = chunks_query.join(Document, Document.id == DocumentChunk.document_id)\
+                .filter(Document.is_demo == False)  # noqa: E712
+
+        # Heuristic keyword match — collect unique chunks by id
+        seen_ids: set = set()
         matched_chunks = []
-        for word in words[:3]:
-            res = chunks_query.filter(DocumentChunk.content.ilike(f"%{word}%")).limit(5).all()
-            matched_chunks.extend(res)
+        for word in words[:4]:
+            results = chunks_query.filter(DocumentChunk.content.ilike(f"%{word}%")).limit(6).all()
+            for r in results:
+                if r.id not in seen_ids:
+                    matched_chunks.append(r)
+                    seen_ids.add(r.id)
 
+        # Step 5: return INSUFFICIENT_EVIDENCE when nothing found (no arbitrary fallback chunks)
         if not matched_chunks:
-            matched_chunks = chunks_query.limit(4).all()
+            return {
+                "query": query,
+                "status": "INSUFFICIENT_EVIDENCE",
+                "answer": (
+                    "No relevant context was found in the indexed document repository for this query. "
+                    "Please upload related CMPDI/CIL operational documents to enable grounded answers."
+                ),
+                "calculation": "Keyword retrieval returned 0 matching chunks above threshold.",
+                "records_used": 0,
+                "verification_status": "INSUFFICIENT_EVIDENCE",
+                "confidence": 0.0,
+                "citations": [],
+                "chart": None,
+                "scope": scope,
+                "response_mode": response_mode,
+            }
 
-        context_texts = [c.content for c in matched_chunks[:5]]
+        context_texts = [c.content for c in matched_chunks[:6]]
+        # Confidence derived from retrieval hit count (not hardcoded)
+        retrieval_confidence = round(min(0.85, 0.50 + len(matched_chunks) * 0.05), 2)
 
         ai_provider = get_ai_provider()
         gemini_status = ai_provider.get_status()
+        answer_text: str
+        generation_mode = "extractive_no_llm"
 
         if gemini_status.get("status") == "configured":
             try:
+                import concurrent.futures
                 import asyncio
-                answer_text = asyncio.run(ai_provider.answer_from_context(query, context_texts, response_mode))
+
+                def _run_async() -> str:
+                    """Execute async Gemini call safely from a sync context."""
+                    loop = asyncio.new_event_loop()
+                    try:
+                        return loop.run_until_complete(
+                            asyncio.wait_for(
+                                ai_provider.answer_from_context(query, context_texts, response_mode),
+                                timeout=20,
+                            )
+                        )
+                    finally:
+                        loop.close()
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(_run_async)
+                    try:
+                        answer_text = future.result(timeout=25)
+                        generation_mode = "gemini_llm"
+                    except concurrent.futures.TimeoutError:
+                        logger.warning("Gemini answer_from_context timed out — falling back to extractive.")
+                        answer_text = cls._extractive_narrative_fallback(query, context_texts)
+                        generation_mode = "extractive_no_llm"
             except Exception as e:
                 logger.error(f"Gemini generation error: {e}")
                 answer_text = cls._extractive_narrative_fallback(query, context_texts)
+                generation_mode = "extractive_no_llm"
         else:
             answer_text = cls._extractive_narrative_fallback(query, context_texts)
+            generation_mode = "extractive_no_llm"
 
+        # Build citations — human_verified is always False for chunks (Step 5)
         citations = []
-        for c in matched_chunks[:4]:
+        for c in matched_chunks[:5]:
             doc = db.query(Document).filter(Document.id == c.document_id).first()
             citations.append({
                 "fact_id": f"chunk-{c.id}",
@@ -721,8 +1009,10 @@ class NumberSafeQueryEngine:
                 "column_name": None,
                 "cell_reference": None,
                 "source_context": c.content[:150] if c.content else None,
-                "confidence_score": 0.90,
-                "human_verified": True,
+                # Step 5: confidence comes from retrieval, NOT hardcoded
+                "confidence_score": retrieval_confidence,
+                # Step 5: chunks are NOT human-verified — never hardcode True here
+                "human_verified": False,
                 "value": c.content[:80] + "..." if c.content else ""
             })
 
@@ -733,11 +1023,12 @@ class NumberSafeQueryEngine:
             "calculation": "Grounded semantic retrieval across indexed document chunks",
             "records_used": len(matched_chunks),
             "verification_status": "GROUNDED_CONTEXT",
-            "confidence": 0.90,
+            "confidence": retrieval_confidence,
             "citations": citations,
             "chart": None,
             "scope": scope,
-            "response_mode": response_mode
+            "response_mode": response_mode,
+            "mode": generation_mode,
         }
 
     @classmethod
@@ -754,38 +1045,67 @@ class NumberSafeQueryEngine:
         )
 
     @classmethod
-    def _build_citations(cls, db: Session, facts: List[ExtractedFact]) -> List[Dict[str, Any]]:
+    def _build_citations(cls, db: Session, facts: List[Any], calculation_id: Optional[str] = None) -> List[Dict[str, Any]]:
         """
         Builds full EvidenceSourceCitation-compatible dicts for all retrieved facts.
-        Includes all provenance coordinates required by the frontend table.
+        Includes all provenance coordinates required by the universal EvidenceDrawer.
+        Supports both ExtractedFact and IncludedFact instances.
         """
         citations = []
-        doc_cache: Dict[str, str] = {}
+        doc_cache: Dict[str, Any] = {}
         for f in facts:
-            if f.document_id not in doc_cache:
-                doc = db.query(Document).filter(Document.id == f.document_id).first()
-                doc_cache[f.document_id] = doc.original_filename if doc else "Document"
+            doc_id = getattr(f, "document_id", "")
+            doc = None
+            if doc_id and doc_id not in doc_cache:
+                doc = db.query(Document).filter(Document.id == doc_id).first()
+                doc_cache[doc_id] = doc
+            else:
+                doc = doc_cache.get(doc_id)
+
+            doc_name = doc.original_filename if doc else "Document"
+            is_demo = bool(getattr(f, "is_demo", False) or (doc.is_demo if doc else False))
+
+            fid = getattr(f, "fact_id", None) or getattr(f, "id", "")
+            val = getattr(f, "numeric_value", 0.0)
+            u = getattr(f, "unit", "") or ""
+            is_ver = getattr(f, "validation_status", "") == ValidationStatus.VERIFIED.value or bool(getattr(f, "human_verified", False))
+
+            # Build readable location coordinates
+            loc_parts = []
+            if getattr(f, "sheet_name", None):
+                loc_parts.append(f"Sheet: {f.sheet_name}")
+            if getattr(f, "cell_reference", None):
+                loc_parts.append(f"Cell: {f.cell_reference}")
+            if getattr(f, "page_number", None):
+                loc_parts.append(f"Page: {f.page_number}")
+            if getattr(f, "row_number", None) is not None:
+                loc_parts.append(f"Row: {f.row_number}")
+            loc_str = " · ".join(loc_parts) if loc_parts else "Coordinates tracked in Evidence Ledger"
 
             citations.append({
-                # Required by EvidenceSourceCitation interface in frontend
-                "fact_id": str(f.id),
-                "document_id": str(f.document_id),
-                "document_name": doc_cache[f.document_id],
-                "metric_code": f.metric_code,
-                "metric_name": f.metric_name or f.metric_code,
-                "numeric_value": float(f.numeric_value) if f.numeric_value is not None else 0.0,
-                "unit": f.unit or "",
-                "subsidiary": f.subsidiary,
-                "reporting_period": f.reporting_period,
-                "page_number": f.page_number,
-                "sheet_name": f.sheet_name,
-                "row_number": f.row_number,
-                "column_name": f.column_name,
-                "cell_reference": f.cell_reference,
-                "source_context": f.source_context,
-                "confidence_score": float(f.confidence_score) if f.confidence_score is not None else 0.0,
-                "human_verified": bool(f.human_verified),
-                # Legacy key for CitationItem compatibility
-                "value": f"{f.numeric_value} {f.unit or ''}"
+                "fact_id": str(fid),
+                "document_id": str(doc_id),
+                "document_name": doc_name,
+                "document_type": (doc.file_type if doc else "PDF").upper(),
+                "metric_code": getattr(f, "metric_code", "EVIDENCE"),
+                "metric_name": getattr(f, "metric_name", None) or getattr(f, "metric_code", "Evidence Fact"),
+                "numeric_value": float(val) if val is not None else 0.0,
+                "unit": u,
+                "subsidiary": getattr(f, "subsidiary", None),
+                "reporting_period": getattr(f, "reporting_period", None),
+                "page_number": getattr(f, "page_number", None),
+                "sheet_name": getattr(f, "sheet_name", None),
+                "row_number": getattr(f, "row_number", None),
+                "column_name": getattr(f, "column_name", None),
+                "cell_reference": getattr(f, "cell_reference", None),
+                "source_location": loc_str,
+                "source_context": getattr(f, "source_context", None),
+                "confidence_score": float(getattr(f, "confidence_score", 1.0)),
+                "human_verified": is_ver,
+                "validation_status": getattr(f, "validation_status", "VERIFIED" if is_ver else "EXTRACTED"),
+                "is_demo": is_demo,
+                "data_scope": "DEMO DATA" if is_demo else "REAL UPLOADED DATA",
+                "calculation_id": calculation_id,
+                "value": f"{val} {u}"
             })
         return citations

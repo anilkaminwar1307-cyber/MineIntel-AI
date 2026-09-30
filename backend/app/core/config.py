@@ -1,7 +1,11 @@
 import os
+import secrets
 from typing import List, Union
 from pydantic_settings import BaseSettings
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
+
+
+_DEFAULT_JWT_SENTINEL = "CHANGE_ME_INSECURE_DEFAULT_SENTINEL"
 
 
 class Settings(BaseSettings):
@@ -48,8 +52,16 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = Field(default="", description="Google Gemini API key")
     GEMINI_MODEL: str = "gemini-2.5-flash"
 
-    # Operational Modes
-    DEMO_MODE: bool = True
+    # JWT Authentication — NO hardcoded default; must be set in non-development environments
+    JWT_SECRET_KEY: str = Field(
+        default=_DEFAULT_JWT_SENTINEL,
+        description="JWT HMAC secret — MUST be set via environment variable in non-development"
+    )
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 480
+
+    # Operational Modes — DEMO_MODE is False by default; enable only in .env.example / demo envs
+    DEMO_MODE: bool = False
     AUTO_PROCESS_UPLOADS: bool = False  # Phase 1 only uploads without triggering auto extraction
 
     model_config = {
@@ -58,6 +70,25 @@ class Settings(BaseSettings):
         "case_sensitive": True,
         "extra": "ignore"
     }
+
+    @model_validator(mode="after")
+    def validate_jwt_secret(self) -> "Settings":
+        """
+        In non-development environments the JWT_SECRET_KEY MUST be explicitly set
+        to a strong random value. Fail fast at startup if the sentinel is still present.
+        """
+        if self.APP_ENV != "development" and self.JWT_SECRET_KEY in (
+            _DEFAULT_JWT_SENTINEL, "", "mineintel-secret-development-key-change-in-prod-32bytes"
+        ):
+            raise ValueError(
+                "JWT_SECRET_KEY must be set to a strong random value in non-development "
+                "environments. Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
+            )
+        # In development mode, silently replace the sentinel with a per-boot random key
+        # so tests can run without a configured secret.
+        if self.JWT_SECRET_KEY == _DEFAULT_JWT_SENTINEL:
+            object.__setattr__(self, "JWT_SECRET_KEY", secrets.token_hex(32))
+        return self
 
 
 settings = Settings()

@@ -66,7 +66,13 @@ class ReviewRejectRequest(BaseModel):
 class ReviewEditRequest(BaseModel):
     numeric_value: Optional[float] = None
     corrected_value: Optional[float] = None
+    metric_code: Optional[str] = None
+    metric_name: Optional[str] = None
     unit: Optional[str] = None
+    reporting_period: Optional[str] = None
+    subsidiary: Optional[str] = None
+    mine: Optional[str] = None
+    coalfield: Optional[str] = None
     notes: Optional[str] = "Value corrected by CMPDI Analyst"
     reviewer_name: Optional[str] = "CMPDI Analyst"
 
@@ -78,12 +84,48 @@ class ReviewEditRequest(BaseModel):
         return 0.0
 
 
+class FactEditAndApproveRequest(BaseModel):
+    numeric_value: float
+    metric_code: Optional[str] = None
+    metric_name: Optional[str] = None
+    unit: Optional[str] = None
+    reporting_period: Optional[str] = None
+    organization: Optional[str] = None
+    subsidiary: Optional[str] = None
+    coalfield: Optional[str] = None
+    mine: Optional[str] = None
+    notes: Optional[str] = "Corrected and verified by CMPDI Analyst"
+    reviewer_name: Optional[str] = "CMPDI Analyst"
+
+
 class ConflictResolveRequest(BaseModel):
     winning_fact_id: Optional[str] = None
     chosen_fact_id: Optional[str] = None
+    resolution_action: Optional[str] = "ACCEPT_CHOSEN"  # ACCEPT_CHOSEN, MARK_SUPERSEDED, MARK_DUPLICATE, MANUAL_OVERRIDE
     resolution_notes: str = "Conflict resolved by CMPDI Analyst"
     reviewer_name: Optional[str] = "CMPDI Analyst"
+    corrected_value: Optional[float] = None
 
     def get_winning_id(self) -> str:
         return self.winning_fact_id or self.chosen_fact_id or ""
+
+
+class ReviewActionResponse(BaseModel):
+    id: str
+    fact_id: Optional[str] = None
+    conflict_id: Optional[str] = None
+    reviewer_name: str
+    action: str
+    previous_value: Optional[str] = None
+    new_value: Optional[str] = None
+    previous_metric: Optional[str] = None
+    new_metric: Optional[str] = None
+    previous_unit: Optional[str] = None
+    new_unit: Optional[str] = None
+    previous_status: Optional[str] = None
+    new_status: Optional[str] = None
+    notes: Optional[str] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
 

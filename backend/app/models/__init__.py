@@ -1,5 +1,8 @@
 from app.core.database import Base
-from app.models.enums import DocumentStatus, SourceType, ValidationStatus, AuditAction, FileType, ExtractionMethod
+from app.models.enums import (
+    DocumentStatus, SourceType, ValidationStatus, AuditAction, FileType, ExtractionMethod,
+    ClaimType, ClaimSupportStatus, ReportGuardStatus, DataScope
+)
 from app.models.user import User
 from app.models.document import Document, DocumentChunk
 from app.models.fact import ExtractedFact
@@ -11,6 +14,8 @@ from app.models.query import QueryHistory
 from app.models.audit import AuditEvent
 from app.models.system import SystemSetting
 from app.models.processing import DocumentPage, DocumentSheet, DocumentTable, DocumentQuality, ProcessingLog
+from app.models.calculation import CalculationRun, CalculationInput
+from app.models.claim import Claim, ClaimEvidenceLink
 
 __all__ = [
     "Base",
@@ -20,6 +25,10 @@ __all__ = [
     "AuditAction",
     "FileType",
     "ExtractionMethod",
+    "ClaimType",
+    "ClaimSupportStatus",
+    "ReportGuardStatus",
+    "DataScope",
     "User",
     "Document",
     "DocumentChunk",
@@ -38,5 +47,9 @@ __all__ = [
     "DocumentSheet",
     "DocumentTable",
     "DocumentQuality",
+    "CalculationRun",
+    "CalculationInput",
     "ProcessingLog",
+    "Claim",
+    "ClaimEvidenceLink",
 ]

@@ -35,16 +35,23 @@ export const ReportStudio: React.FC = () => {
   const [generating, setGenerating] = useState<boolean>(false);
   const [selectedReport, setSelectedReport] = useState<GeneratedReportItem | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [loadingReports, setLoadingReports] = useState<boolean>(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   const fetchReports = async () => {
     try {
+      setLoadingReports(true);
+      setFetchError(null);
       const data = await api.getReports();
       setReports(data.items);
       if (data.available_templates && data.available_templates.length > 0) {
         setTemplates(data.available_templates);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error fetching reports:', err);
+      setFetchError(err.response?.data?.detail || 'Failed to load generated reports archive.');
+    } finally {
+      setLoadingReports(false);
     }
   };
 
@@ -345,7 +352,26 @@ export const ReportStudio: React.FC = () => {
           </button>
         </div>
 
-        {reports.length === 0 ? (
+        {loadingReports ? (
+          <div className="p-8 flex items-center justify-center space-x-2 text-slate-500 text-xs">
+            <RefreshCw className="w-4 h-4 animate-spin text-amber-600" />
+            <span>Loading generated reports archive...</span>
+          </div>
+        ) : fetchError ? (
+          <div className="p-4 bg-rose-50 border border-rose-200 rounded-lg flex items-center justify-between text-xs text-rose-900">
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+              <span>{fetchError}</span>
+            </div>
+            <button
+              onClick={fetchReports}
+              className="inline-flex items-center space-x-1 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold"
+            >
+              <RefreshCw className="w-3 h-3" />
+              <span>Retry</span>
+            </button>
+          </div>
+        ) : reports.length === 0 ? (
           <EmptyState
             icon={FileSpreadsheet}
             title="No Reports Generated Yet"

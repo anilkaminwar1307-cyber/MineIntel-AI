@@ -30,6 +30,7 @@ import {
 import { api } from '../services/api';
 import { QueryResponse, EvidenceSourceCitation } from '../types';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import { CalculationTrace } from '../components/evidence/CalculationTrace';
 
 const SUGGESTED_PROMPTS = [
   "What was SECL's raw coal production in FY 2024-25?",
@@ -138,7 +139,14 @@ export const AskMineIntel: React.FC = () => {
 
   const getVerificationBadge = (result?: string | null) => {
     const status = (result || '').toUpperCase();
-    if (status.includes('SUPPORTED') && !status.includes('PARTIAL')) {
+    if (status === 'CONTRADICTED') {
+      return (
+        <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded bg-rose-700 text-white text-xs font-bold border border-rose-900">
+          <AlertTriangle className="w-3.5 h-3.5" />
+          <span>CLAIM CONTRADICTED — FIGURES DO NOT MATCH</span>
+        </span>
+      );
+    } else if (status.includes('SUPPORTED') && !status.includes('PARTIAL')) {
       return (
         <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold border border-emerald-300">
           <CheckCircle2 className="w-3.5 h-3.5" />
@@ -168,6 +176,29 @@ export const AskMineIntel: React.FC = () => {
       );
     }
     return null;
+  };
+
+  /** Maps machine intent name to a readable label + colour */
+  const getIntentBadge = (intent?: string | null) => {
+    if (!intent) return null;
+    const intentMap: Record<string, { label: string; cls: string }> = {
+      METRIC_LOOKUP:      { label: 'Metric Lookup',       cls: 'bg-blue-50 text-blue-800 border-blue-200' },
+      COMPARISON:         { label: 'Multi-Subsidiary Comparison', cls: 'bg-purple-50 text-purple-800 border-purple-200' },
+      FACT_VERIFICATION:  { label: 'Claim Verification',  cls: 'bg-rose-50 text-rose-800 border-rose-200' },
+      CALCULATION:        { label: 'NumberSafe Calc',     cls: 'bg-amber-50 text-amber-800 border-amber-200' },
+      DOCUMENT_QUERY:     { label: 'Evidence Search',     cls: 'bg-teal-50 text-teal-800 border-teal-200' },
+      CONFLICT_QUERY:     { label: 'Conflict Audit',      cls: 'bg-orange-50 text-orange-800 border-orange-200' },
+      PARLIAMENTARY_QUERY:{ label: 'Parliamentary Brief', cls: 'bg-indigo-50 text-indigo-800 border-indigo-200' },
+      GREETING:           { label: 'Greeting',            cls: 'bg-slate-50 text-slate-600 border-slate-200' },
+      HELP:               { label: 'Help',                cls: 'bg-slate-50 text-slate-600 border-slate-200' },
+      CAPABILITY_QUERY:   { label: 'Capabilities',        cls: 'bg-slate-50 text-slate-600 border-slate-200' },
+    };
+    const cfg = intentMap[intent.toUpperCase()] || { label: intent, cls: 'bg-slate-50 text-slate-600 border-slate-200' };
+    return (
+      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border ${cfg.cls}`}>
+        {cfg.label}
+      </span>
+    );
   };
 
   const sourcesList: EvidenceSourceCitation[] = Array.isArray(response?.sources)
@@ -210,7 +241,7 @@ export const AskMineIntel: React.FC = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span className="text-xs font-semibold text-slate-700">Database Ledger: 50,000+ Facts Active</span>
+          <span className="text-xs font-semibold text-slate-700">Evidence Ledger: Active</span>
         </div>
       </div>
 
@@ -345,20 +376,57 @@ export const AskMineIntel: React.FC = () => {
         <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm space-y-5">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-200 gap-2">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-amber-600" />
+            <div className="flex flex-wrap items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Synthesized Intelligence</h3>
+              {response.intent && getIntentBadge(response.intent)}
               {response.verification_result && getVerificationBadge(response.verification_result)}
+              {response.mode && (
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold border ${
+                  response.mode === 'gemini_llm'
+                    ? 'bg-purple-50 text-purple-700 border-purple-200'
+                    : 'bg-slate-100 text-slate-700 border-slate-300'
+                }`}>
+                  mode: {response.mode}
+                </span>
+              )}
             </div>
             <div className="flex items-center space-x-3 text-xs text-slate-500">
               <span>
-                Evidence Facts: <strong className="text-slate-800">{safeFormatNumber(response.verified_facts_count, 0)}</strong>
+                Records used: <strong className="text-slate-800">{safeFormatNumber(response.records_used ?? response.verified_facts_count, 0)}</strong>
               </span>
               <span>
                 Confidence: <strong className="text-emerald-700 font-mono">{safeFormatPercent(response.confidence_score)}</strong>
               </span>
             </div>
           </div>
+
+          {/* Resolved Query Context — shows analyst what the AI understood */}
+          {response.resolved_context && (
+            <div className="flex flex-wrap gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-[11px]">
+              <span className="font-semibold text-slate-500 uppercase tracking-wider self-center">Understood:</span>
+              {response.resolved_context.subsidiary && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 font-semibold">
+                  🏭 {response.resolved_context.subsidiary}
+                </span>
+              )}
+              {response.resolved_context.metric_name && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 font-semibold">
+                  📊 {response.resolved_context.metric_name}
+                </span>
+              )}
+              {response.resolved_context.period && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold">
+                  📅 {response.resolved_context.period}
+                </span>
+              )}
+              {response.resolved_context.was_inherited && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 font-medium">
+                  ↩ Context Inherited from Previous Query
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Metric KPI Card (if direct single metric) */}
           {response.direct_metric_value !== null && response.direct_metric_value !== undefined && (
@@ -378,6 +446,18 @@ export const AskMineIntel: React.FC = () => {
                   <span>PROVENANCE VERIFIED</span>
                 </span>
               </div>
+            </div>
+          )}
+
+          {/* NumberSafe 2.0 Calculation Audit Card */}
+          {response.calculation_result && (
+            <div className="pt-1">
+              <ErrorBoundary isCompact fallbackMessage="Calculation trace unavailable.">
+                <CalculationTrace
+                  result={response.calculation_result}
+                  label={`NumberSafe Result — ${response.calculation_result.metric_code}`}
+                />
+              </ErrorBoundary>
             </div>
           )}
 

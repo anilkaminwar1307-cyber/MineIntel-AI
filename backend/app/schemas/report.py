@@ -40,6 +40,7 @@ class GenerateReportRequest(BaseModel):
     document_ids: Optional[List[str]] = None
     only_verified: bool = True
     generated_by: Optional[str] = "CMPDI Senior Analyst"
+    draft_override: bool = False  # Allows exporting DRAFT — UNVERIFIED if ReportGuard is BLOCKED
 
 
 class GeneratedReportListResponse(BaseModel):
@@ -53,5 +54,19 @@ class ReportGuardRequest(BaseModel):
     subsidiary: Optional[str] = "ALL"
     period: Optional[str] = "ALL"
     only_verified: Optional[bool] = True
+    document_ids: Optional[List[str]] = None
+
+
+class EvidenceRegisterItem(BaseModel):
+    evidence_id: str
+    claim_metric: str
+    value: float
+    unit: str
+    document_name: str
+    source_location: str
+    validation_status: str
+    human_verified: bool
+    calculation_id: Optional[str] = None
+    fact_id: str
 
 
