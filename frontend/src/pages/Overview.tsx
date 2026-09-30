@@ -50,24 +50,23 @@ export const Overview: React.FC<OverviewProps> = ({ onNavigate }) => {
           facts_extracted: 4820,
           verified_evidence: 4690,
           pending_reviews: 24,
-          average_confidence: 98.4,
+          average_confidence: 0.984,
           reports_generated: 18,
         },
-        monthly_trends: [
-          { month: 'Apr', extracted_facts: 520, verified_facts: 505 },
-          { month: 'May', extracted_facts: 680, verified_facts: 660 },
-          { month: 'Jun', extracted_facts: 810, verified_facts: 790 },
-          { month: 'Jul', extracted_facts: 940, verified_facts: 915 },
-          { month: 'Aug', extracted_facts: 1100, verified_facts: 1070 },
-          { month: 'Sep', extracted_facts: 1250, verified_facts: 1220 },
+        subsidiaries: [
+          { subsidiary: 'ECL', fact_count: 1240, coalfield_count: 6, document_count: 38 },
+          { subsidiary: 'BCCL', fact_count: 1150, coalfield_count: 5, document_count: 32 },
+          { subsidiary: 'CCL', fact_count: 980, coalfield_count: 7, document_count: 28 },
+          { subsidiary: 'WCL', fact_count: 850, coalfield_count: 4, document_count: 24 },
+          { subsidiary: 'SECL', fact_count: 600, coalfield_count: 3, document_count: 20 },
         ],
-        subsidiary_breakdown: [
-          { subsidiary: 'ECL', facts_count: 1240, confidence_avg: 98.6 },
-          { subsidiary: 'BCCL', facts_count: 1150, confidence_avg: 97.9 },
-          { subsidiary: 'CCL', facts_count: 980, confidence_avg: 98.1 },
-          { subsidiary: 'WCL', facts_count: 850, confidence_avg: 99.0 },
-          { subsidiary: 'SECL', facts_count: 600, confidence_avg: 98.4 },
+        top_metrics: [
+          { metric_code: 'COAL_PROD', metric_name: 'Raw Coal Production', count: 1840 },
+          { metric_code: 'OBR', metric_name: 'Overburden Removal', count: 1210 },
+          { metric_code: 'DISPATCH', metric_name: 'Off-take / Dispatch', count: 960 },
+          { metric_code: 'RESERVE', metric_name: 'Proved Geological Reserve', count: 810 },
         ],
+        recent_activity_count: 42,
       } as any);
       setRecentDocs([
         {
