@@ -420,6 +420,58 @@ export const api = {
     return data;
   },
 
+  // ── Data Quality API ─────────────────────────────────────────────────────────
+
+  /** List data quality issues with filtering */
+  getDataQualityIssues: async (params?: {
+    page?: number;
+    page_size?: number;
+    severity?: string;
+    status?: string;
+    issue_type?: string;
+    subsidiary?: string;
+    document_id?: string;
+    is_resolved?: boolean;
+    q?: string;
+  }): Promise<{ total: number; page: number; page_size: number; items: any[] }> => {
+    const { data } = await apiClient.get('/data-quality/issues', { params });
+    return data;
+  },
+
+  /** Get data quality stats summary */
+  getDataQualityStats: async (): Promise<any> => {
+    const { data } = await apiClient.get('/data-quality/stats');
+    return data;
+  },
+
+  /** Resolve a data quality issue */
+  resolveDataQualityIssue: async (
+    issueId: string,
+    payload: { resolution_notes?: string }
+  ): Promise<any> => {
+    const { data } = await apiClient.post(`/data-quality/issues/${issueId}/resolve`, payload);
+    return data;
+  },
+
+  /** Assign a data quality issue to a reviewer */
+  assignDataQualityIssue: async (
+    issueId: string,
+    payload: { assigned_to: string }
+  ): Promise<any> => {
+    const { data } = await apiClient.post(`/data-quality/issues/${issueId}/assign`, payload);
+    return data;
+  },
+
+  /** List evidence conflicts */
+  getDataQualityConflicts: async (params?: {
+    page?: number;
+    page_size?: number;
+    status?: string;
+  }): Promise<any> => {
+    const { data } = await apiClient.get('/data-quality/conflicts', { params });
+    return data;
+  },
+
   // Query
   submitQuery: async (payload: {
     query: string;
