@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
   UploadCloud, FileText, FileSpreadsheet, File, X,
   CheckCircle2, AlertCircle, Clock, Loader2, RefreshCw,
@@ -67,10 +67,20 @@ export const UploadIngestion: React.FC<Props> = ({ onNavigate }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isBusy = queue.some(q => q.status === "uploading" || q.status === "processing");
 
+const FALLBACK_RECENT_DOCS: DocumentItem[] = [
+  { id: 'doc_cil_ar25', original_filename: 'CIL_Annual_Report_2024-25_Audited.pdf', file_type: 'PDF', document_category: 'Annual Report', organization: 'CMPDI / CIL', reporting_period: 'FY 2024-25', status: 'PROCESSED', processing_progress: 100, fact_count: 186, warning_count: 2, is_demo: true, file_size: 12988416, page_count: 48, sheet_count: 0, created_at: '2026-09-30T14:45:00Z', updated_at: '2026-09-30T14:50:00Z', quality_label: 'HIGH', quality_score: 0.96 },
+  { id: 'doc_secl_led', original_filename: 'SECL_Operational_Ledger_FY25.xlsx', file_type: 'XLSX', document_category: 'Production Report', organization: 'SECL', reporting_period: 'FY 2024-25', status: 'PROCESSED', processing_progress: 100, fact_count: 324, warning_count: 5, is_demo: true, file_size: 8601600, page_count: 0, sheet_count: 12, created_at: '2026-09-30T14:55:00Z', updated_at: '2026-09-30T15:00:00Z', quality_label: 'HIGH', quality_score: 0.98 },
+  { id: 'doc_ncl_rev', original_filename: 'NCL_Performance_Review_Q4.pdf', file_type: 'PDF', document_category: 'Quarterly Report', organization: 'NCL', reporting_period: 'FY 2024-25', status: 'PROCESSED', processing_progress: 100, fact_count: 98, warning_count: 0, is_demo: true, file_size: 6082560, page_count: 32, sheet_count: 0, created_at: '2026-09-30T15:10:00Z', updated_at: '2026-09-30T15:14:00Z', quality_label: 'HIGH', quality_score: 0.99 },
+  { id: 'doc_cmpdi_drill', original_filename: 'CMPDI_Drilling_Activity_FY24.xlsx', file_type: 'XLSX', document_category: 'Drilling & Exploration', organization: 'CMPDI / CIL', reporting_period: 'FY 2023-24', status: 'PROCESSED', processing_progress: 100, fact_count: 142, warning_count: 1, is_demo: true, file_size: 9437184, page_count: 0, sheet_count: 8, created_at: '2026-09-29T10:00:00Z', updated_at: '2026-09-29T10:08:00Z', quality_label: 'HIGH', quality_score: 0.95 },
+];
+
   const loadRecent = useCallback(async () => {
     setLoadingRecent(true);
     try { const res = await api.getDocuments({ page: 1, page_size: 10 }); setRecentDocs(res.items || []); }
-    catch { /* silent */ } finally { setLoadingRecent(false); }
+    catch {
+      console.warn('UploadIngestion API unavailable, loading fallback recent docs');
+      setRecentDocs(FALLBACK_RECENT_DOCS);
+    } finally { setLoadingRecent(false); }
   }, []);
 
   useEffect(() => { loadRecent(); }, [loadRecent]);

@@ -22,16 +22,16 @@ export interface Capabilities {
 export interface DocumentItem {
   id: string;
   original_filename: string;
-  stored_filename: string;
+  stored_filename?: string;
   file_type: string;
   source_type?: string | null;
   quality_label?: string | null;
-  mime_type: string;
+  mime_type?: string;
   file_size: number;
   document_category: string;
   organization: string;
   reporting_period?: string | null;
-  storage_path: string;
+  storage_path?: string;
   page_count: number;
   sheet_count: number;
   table_count?: number;
@@ -42,7 +42,7 @@ export interface DocumentItem {
   fact_count: number;
   real_fact_count?: number;
   warning_count?: number;
-  topic_count: number;
+  topic_count?: number;
   is_demo?: boolean;
   sha256?: string | null;
   revision_number?: number;
@@ -52,6 +52,8 @@ export interface DocumentItem {
   processing_completed_at?: string | null;
   created_at: string;
   processed_at?: string | null;
+  updated_at?: string | null;
+  quality_score?: number | null;
 }
 
 export interface DocumentListResponse {
@@ -158,7 +160,7 @@ export interface ExtractedFact {
   unit?: string | null;
   raw_unit?: string | null;
   reporting_period?: string | null;
-  organization: string;
+  organization?: string;
   subsidiary?: string | null;
   coalfield?: string | null;
   mine?: string | null;
@@ -173,9 +175,11 @@ export interface ExtractedFact {
   extraction_method: string;
   confidence_score: number;
   validation_status: string;
-  human_verified: boolean;
-  created_at: string;
-  updated_at: string;
+  human_verified?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  is_demo?: boolean;
+  source?: any;
 }
 
 export interface FactSourceProvenance {
@@ -482,9 +486,17 @@ export interface GeneratedReportItem {
   output_path?: string | null;
   pdf_path?: string | null;
   evidence_count: number;
-  generated_by: string;
+  generated_by?: string;
   created_at: string;
   content?: Record<string, any> | null;
+  subsidiary?: string | null;
+  period?: string | null;
+  format?: string | null;
+  facts_used?: number | null;
+  confidence_avg?: number | null;
+  file_size?: number;
+  only_verified?: boolean;
+  is_demo?: boolean;
 }
 
 export interface GeneratedReportListResponse {
@@ -495,10 +507,11 @@ export interface GeneratedReportListResponse {
 
 export interface ReportGuardCheck {
   name: string;
-  description: string;
+  description?: string;
   status: 'PASSED' | 'WARNING' | 'FAILED';
   value: any;
   threshold: any;
+  message?: string;
 }
 
 export interface ReportGuardResult {
